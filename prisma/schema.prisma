@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id              Int          @id @default(autoincrement())
+  createdAt       DateTime     @default(now())
+  email           String       @unique
+  name            String?      @unique
+  password        String?
+  role            UserRole     @default(USER)
+  solvedTests     SolvedTest[] @relation("solver")
+  topicsCompleted Int          @default(0)
+}
+
+model SolvedTest {
+  id       Int      @id @default(autoincrement())
+  solvedAt DateTime @default(now())
+  user     User     @relation("solver", fields: [userId], references: [id])
+  userId   Int
+  test     Test     @relation(fields: [testId], references: [id])
+  testId   Int
+  score    Float
+}
+
+model Test {
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  topicId     Int
+  questions   Question[]
+  solvedUsers SolvedTest[]
+}
+
+model Question {
+  id      Int      @id @default(autoincrement())
+  text    String
+  test    Test     @relation(fields: [testId], references: [id])
+  testId  Int
+  answers Answer[]
+}
+
+model Answer {
+  id           Int      @id @default(autoincrement())
+  text         String
+  isCorrect    Boolean
+  answerNumber Int
+  question     Question @relation(fields: [questionId], references: [id])
+  questionId   Int
+}

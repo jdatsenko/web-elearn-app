@@ -1,13 +1,12 @@
 import Topics from "@/app/components/topics/Topics"
 
-export const Home = () => {
-  
+const Home = () => {
   return (
-    <div >
-        <h1>Home</h1>
+    <div>
+      <h1>Home</h1>
       <Topics />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -1,38 +1,38 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { testInfo, questions } = await req.json();
     if (!testInfo || !questions) {
-      return {
+      return NextResponse.json({
         status: 400,
         body: {
           error: "Test info and questions are required"
         }
-      };
+      });
     }
     for (const question of questions) {
       if (!question.text || !question.answers) {
-        return {
+        return NextResponse.json({
           status: 400,
           body: {
             error: "Question text and answers are required"
           }
-        };
+        });
       }
       for (const answer of question.answers) {
         if (!answer.text || answer.isCorrect === undefined) {
-          return {
+          return NextResponse.json({
             status: 400,
             body: {
               error: "Answer text and isCorrect are required"
             }
-          };
+          });
         }
       }
     }
-    // Create the test
     const test = await prisma.test.create({
       data: {
         ...testInfo,
@@ -55,25 +55,25 @@ export async function POST(req: Request) {
       include: {
         questions: {
           include: {
-            answers: true // Ensure that the created answers are included in the response
+            answers: true 
           }
         }
       }
     });
 
-    return {
+    return NextResponse.json({
       status: 201,
       body: {
         test
       }
-    };
+    });
   } catch (error) {
     console.error("Error creating test:", error);
-    return {
+    return NextResponse.json({
       status: 500,
       body: {
         error: "Internal Server Error"
       }
-    };
+    });
   }
 }

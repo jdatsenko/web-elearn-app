@@ -18,9 +18,13 @@ import { useRef } from "react";
 import TestControll from "../controll/page";
 import axios from "axios";
 import { TestResponse } from "@/lib/types";
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation";
 
 
 const Topic1 = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const topicStep = +(
     searchParams.get("step") ||
@@ -213,9 +217,10 @@ const Topic1 = () => {
     { questionId: number; answer: number; answerId: number }[]
   >([]);
 
+  
+
   return (
     <>
-    
       <ScrollArea className="h-full max-h-screen w-full rounded-md  p-4 px-32">
         <div ref={headerRef} className="title text-4xl font-extrabold tracking-tight lg:text-5xl text-center my-[40px]">
           {" "}

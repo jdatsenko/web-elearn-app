@@ -10,10 +10,9 @@ const Admin = () => {
   const { data: session, status } = useSession();
   const [progress, setProgress] = useState<number>(0);
 
+
+
   useEffect(() => {
-    if (!session) {
-      return;
-    }
     axios.get("/api/user/test/solved").then((response) => {
       setSolvedTests(response.data);
     });
@@ -33,17 +32,26 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    let newProgress = 0;
-
+    const totalTopics = Object.values(groupTestsByTopic()).length;
+    let completedTopics = 0;
+  
     Object.values(groupTestsByTopic()).forEach((tests) => {
       const topicCompleted = tests.every((test) => test.score === 100);
       if (topicCompleted) {
-        newProgress += 17;
+        completedTopics++;
       }
     });
-
+  
+    const newProgress = (completedTopics / totalTopics) * 100;
     setProgress(newProgress);
   }, [solvedTests]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+  if (!session) {
+    return <div>Unauthorized</div>;
+  }
 
   return (
     <div className="container mx-auto p-4">

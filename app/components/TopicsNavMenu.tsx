@@ -2,6 +2,7 @@ import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function TopicsNavMenu() {
   const topics = [
@@ -127,9 +128,11 @@ export default function TopicsNavMenu() {
     },
   ];
 
+  const router = useRouter();
   const { data: session } = useSession();
-
-  console.log(session?.user.topicsCompleted)
+  // if (!session) {
+  //   router.push('.././');
+  // }
 
   return (
     <div className={`pb-4 min-h-[40.5rem] max-h-[40.5rem] overflow-y-scroll `}>

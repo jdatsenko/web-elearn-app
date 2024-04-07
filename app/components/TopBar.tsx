@@ -4,16 +4,17 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { useState, useEffect, use } from "react";
 import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 
 const TopBar = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const { theme, setTheme } = useTheme();
+  const router = useRouter();
 
   useEffect(() => {
     if (status === "loading") {
@@ -23,8 +24,17 @@ const TopBar = () => {
     }
   }, [status]);
 
+  const handleSignOut = async () => {
+    await signOut({
+      redirect: true,
+      callbackUrl: "/",
+    });
+  }
+
+
+
   if (loading) {
-    return <div className="text-center mt-4 text-lg">Loading...</div>; // Apply Tailwind CSS classes
+    return <div className="text-center mt-4 text-lg">Loading...</div>;
   }
 
   return (
@@ -63,7 +73,7 @@ const TopBar = () => {
             </>
           ) : (
             <>
-              {!loading && <Button onClick={() => signOut()}>Odhlásiť sa</Button>}
+              {!loading && <Button onClick={handleSignOut}>Odhlásiť sa</Button>}
             </>
           )}
 

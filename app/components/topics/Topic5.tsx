@@ -11,6 +11,7 @@ import { useRef } from "react";
 import TestControll from "../controll/page";
 import axios from "axios";
 import { TestResponse } from "@/lib/types";
+import { useSession } from "next-auth/react";
 
 const Topic5 = () => {
   const searchParams = useSearchParams();
@@ -20,7 +21,6 @@ const Topic5 = () => {
     1
   );
   const [step, setStep] = useState(topicStep);
-
 
   useEffect(() => {
     console.log("Setting step", step);
@@ -63,6 +63,14 @@ const Topic5 = () => {
     { questionId: number; answer: number; answerId: number }[]
   >([]);
 
+  const { data: session } = useSession();
+  if (session?.user.topicsCompleted! < 4) {
+    return (
+      <div className="text-center text-2xl">
+        Pre prístup k tejto téme musíte najprv dokončiť predchádzajúcu tému.
+      </div>
+    );
+  }
 
   const topicParts = [
     {
@@ -351,7 +359,7 @@ const Topic5 = () => {
               ))}
 
             <div className="flex justify-center">
-            {test && <TestControll answers={answers} />}
+              {test && <TestControll answers={answers} testId={5} />}
             </div>
           </>
         )}

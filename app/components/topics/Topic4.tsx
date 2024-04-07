@@ -11,6 +11,7 @@ import { useRef } from "react";
 import TestControll from "../controll/page";
 import axios from "axios";
 import { TestResponse } from "@/lib/types";
+import { useSession } from "next-auth/react";
 
 const Topic4 = () => {
   const searchParams = useSearchParams();
@@ -206,6 +207,15 @@ const Topic4 = () => {
     { questionId: number; answer: number; answerId: number }[]
   >([]);
 
+  const { data: session } = useSession();
+  if (session?.user.topicsCompleted! < 3) {
+    return (
+      <div className="text-center text-2xl">
+        Pre prístup k tejto téme musíte najprv dokončiť predchádzajúcu tému.
+      </div>
+    );
+  }
+
   return (
     <>
       <ScrollArea className="h-full min-h-screen w-full rounded-md border p-4 px-32">
@@ -300,7 +310,7 @@ const Topic4 = () => {
               ))}
 
             <div className="flex justify-center">
-            {test && <TestControll answers={answers} />}
+              {test && <TestControll answers={answers} testId={4} />}
             </div>
           </>
         )}

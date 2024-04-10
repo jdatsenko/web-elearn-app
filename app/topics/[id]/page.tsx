@@ -9,12 +9,11 @@ import { useSession } from "next-auth/react"
 
 export default function Topic({ params }: { params: { id: string } }) {
     const { data: session } = useSession();
-    if (!session) {
-      return <div>Unauthorized</div>;
-    }
+    // if (!session ) {
+    //     return <div>Unauthorized</div>;
+    //   }
     return (
         <div className="h-full overflow-y-auto">
-            {/* <h1>Topic {params.id}</h1> */}
             {params.id === '1' && <Topic1 />}
             {params.id === '2' && <Topic2 />}
             {params.id === '3' && <Topic3 />}

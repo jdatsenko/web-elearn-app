@@ -79,21 +79,12 @@ const Topics = () => {
                 <CardDescription>{topic.description}</CardDescription>
               </CardContent>
               <CardFooter className="flex justify-center">
-                {session && session.user ? (
                   <Link
                     className={buttonVariants({ variant: "default" })}
                     href={`/topics/${topic.id}`}
                   >
                     Pozrieť
                   </Link>
-                ) : (
-                  <Link
-                    className={buttonVariants({ variant: "default" })}
-                    href="/auth/login"
-                  >
-                    Pozrieť
-                  </Link>
-                )}
               </CardFooter>
             </Card>
           ))}

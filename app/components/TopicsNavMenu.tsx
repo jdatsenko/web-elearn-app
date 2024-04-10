@@ -139,19 +139,17 @@ export default function TopicsNavMenu() {
           <h5 className="title m-[20px]">{topic.title}</h5>
           {topic.items.map((item) => (
             <div key={item.title}>
-              {!session && topic.items.length === item.step ? (
-                <Link href="/auth/login">
-                  <span
-                    className={cn(
-                      buttonVariants({ variant: "ghost" }),
-                      "w-[300px] justify-start my-[3px] mx-[8px] border hover:border-blue-500 hover:border-solid hover:border-1"
-                    )}
-                  >
-                    <span className="text-left text-muted-foreground">
-                      {item.title}
-                    </span>
+              {item.title.startsWith("Test") && session && session.user.topicsCompleted + 1 < topic.id ? (
+                <span
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "w-[300px] justify-start my-[3px] mx-[8px] border hover:border-blue-500 hover:border-solid hover:border-1 text-red-500 cursor-not-allowed"
+                  )}
+                >
+                  <span className="text-left text-muted-foreground">
+                    {item.title}
                   </span>
-                </Link>
+                </span>
               ) : (
                 <Link href={`/topics/${topic.id}?step=${item.step}`}>
                   <span
@@ -172,4 +170,5 @@ export default function TopicsNavMenu() {
       ))}
     </div>
   );
+  
 }

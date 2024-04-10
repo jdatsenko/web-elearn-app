@@ -100,8 +100,6 @@ const Topic2 = () => {
     },
   ];
 
-
-
   useEffect(() => {
     console.log("Setting step", step);
     window.localStorage.setItem("topic2-step", step.toString());
@@ -141,13 +139,6 @@ const Topic2 = () => {
   >([]);
 
   const { data: session } = useSession();
-  if (session?.user.topicsCompleted! < 1) {
-    return (
-      <div className="text-center text-2xl">
-        Pre prístup k tejto téme musíte najprv dokončiť predchádzajúcu tému.
-      </div>
-    );
-  }
 
   return (
     <>
@@ -225,49 +216,67 @@ const Topic2 = () => {
         ))}
 
         {step === 3 && (
-         <>
-         {!session ? (
-           <div className="text-center">
-             <p className="text-red-500 font-bold text-3xl">
-             Musíte sa prihlásiť, aby ste mohli začať testovanie.
-             </p>
-           </div>
-         ) : (
-           <>
-             <Progress className="mb-10" value={67} />
-             {test &&
-               test.questions.map((question, i) => (
-                 <RadioGroup key={question.id} className="flex flex-col space-y-1 mb-2 border-solid border-2 border-sky-600 m-5 rounded-md p-3">
-                   <h3 className="text-xl font-semibold">{question.text}</h3>
-                   {question.answers.map((answer, j) => (
-                     <div className="flex gap-2 items-center " key={answer.id}>
-                       <RadioGroupItem
-                         key={i}
-                         value={answer.text}
-                         checked={answers[i].answer == j + 1}
-                         onClick={(e) => {
-                           const newAnswers = [...answers];
-                           newAnswers[i] = {
-                             questionId: question.id,
-                             answerId: answer.id,
-                             answer: j + 1,
-                           };
-                           setAnswers(newAnswers);
-                           console.log(newAnswers);
-                         }}
-                       />
-                       <span>{answer.text}</span>
-                     </div>
-                   ))}
-                 </RadioGroup>
-               ))}
-             <div className="flex justify-center">
-               {test && <TestControll answers={answers} testId={2} />}
-             </div>
-           </>
-         )}
-       </>
-       
+          <>
+            {!session ? (
+              <div className="text-center">
+                <p className="text-red-500 font-bold text-3xl">
+                  Musíte sa prihlásiť, aby ste mohli začať testovanie.
+                </p>
+              </div>
+            ) : (
+              <>
+                {session && session.user.topicsCompleted + 1 < 2 ? (
+                  <div className="text-center">
+                    <p className="text-red-500 font-bold text-3xl">
+                      Aby ste sa dostali k tomuto testu, musíte absolvovať
+                      predchádzajúce témy.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <Progress className="mb-10" value={67} />
+                    {test &&
+                      test.questions.map((question, i) => (
+                        <RadioGroup
+                          key={question.id}
+                          className="flex flex-col space-y-1 mb-2 border-solid border-2 border-sky-600 m-5 rounded-md p-3"
+                        >
+                          <h3 className="text-xl font-semibold">
+                            {question.text}
+                          </h3>
+                          {question.answers.map((answer, j) => (
+                            <div
+                              className="flex gap-2 items-center "
+                              key={answer.id}
+                            >
+                              <RadioGroupItem
+                                key={i}
+                                value={answer.text}
+                                checked={answers[i].answer == j + 1}
+                                onClick={(e) => {
+                                  const newAnswers = [...answers];
+                                  newAnswers[i] = {
+                                    questionId: question.id,
+                                    answerId: answer.id,
+                                    answer: j + 1,
+                                  };
+                                  setAnswers(newAnswers);
+                                  console.log(newAnswers);
+                                }}
+                              />
+                              <span>{answer.text}</span>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      ))}
+                    <div className="flex justify-center">
+                      {test && <TestControll answers={answers} testId={2} />}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </>
         )}
       </ScrollArea>
     </>

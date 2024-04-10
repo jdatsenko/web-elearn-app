@@ -40,17 +40,9 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    const totalTopics = Object.values(groupTestsByTopic()).length;
-    let completedTopics = 0;
-
-    Object.values(groupTestsByTopic()).forEach((tests) => {
-      const topicCompleted = tests.every((test) => test.score === 100);
-      if (topicCompleted) {
-        completedTopics++;
-      }
-    });
-
-    const newProgress = (completedTopics / totalTopics) * 100;
+    const completed = Object.values(groupTestsByTopic()).length;
+    const newProgress = (completed / 6) * 100;
+    console.log(completed);
     setProgress(newProgress);
   }, [solvedTests]);
 

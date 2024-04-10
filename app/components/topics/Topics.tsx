@@ -73,7 +73,7 @@ const Topics = () => {
           {topics.map((topic) => (
             <Card key={topic.id} className="w-[25rem]">
               <CardHeader>
-                <CardTitle>{topic.title}</CardTitle>
+              <CardTitle style={{ lineHeight: '1.5' }}>{topic.title}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>{topic.description}</CardDescription>

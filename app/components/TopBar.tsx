@@ -50,7 +50,7 @@ const TopBar = () => {
           {session && !loading && (
             <>
               <Link className={buttonVariants()} href={"/admin"}>
-                My account
+              Moje konto
               </Link>
             </>
           )}

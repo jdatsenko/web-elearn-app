@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -28,6 +29,7 @@ const formSchema = z.object({
 
 const FormLogin = () => {
   const router = useRouter();
+  const [error, setError] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,22 +48,30 @@ const FormLogin = () => {
       });
       console.log("log", loginData);
 
-      if (loginData === null) {
-        console.error("Authentication failed: Invalid credentials");
+      if (loginData?.status === 401) {
+        setError("Invalid username or password. Please try again.");
       } else {
         router.refresh();
         router.push(".././");
         console.log("Authentication successful:", loginData);
       }
-    } catch (error) {
-      console.error("An error occurred during authentication:", error);
+    } catch (error: unknown) {
+      console.error("An unexpected error occurred:", error);
+      setError("An unexpected error occurred. Please try again later.");
     }
   };
+
   return (
     <>
       <div className="flex justify-center my-5 text-xl font-semibold">
         <h1>Prihlásenie</h1>
       </div>
+
+      {error && (
+        <div className="text-red-500 font-bold text-center mb-4">
+          {error}
+        </div>
+      )}
 
       <Form {...form}>
         <form

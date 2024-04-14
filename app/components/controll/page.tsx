@@ -3,14 +3,10 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -53,19 +49,24 @@ const TestControll = (props: any) => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Here are your results.</DialogTitle>
-            
+            <DialogTitle>
+              <h2 className="text-2xl font-bold mb-4">Výsledky testovania:</h2>
+            </DialogTitle>
           </DialogHeader>
           {results.results.map((result, i) => (
-            <div key={i}>
-              <span>{`Question ${i + 1}`}</span>
-              {result.correct ? <span> Right</span> : <span> Not right</span>}
+            <div key={i} className="mb-4">
+              <p className="font-bold">Odpoveď {i + 1}</p>
+              <p className={result.correct ? 'text-green-600' : 'text-red-600'}>
+                {result.correct ? 'Správna' : 'Nesprávna'}
+              </p>
             </div>
           ))}
         </DialogContent>
       </Dialog>
     </>
   );
+  
 };
 
 export default TestControll;
+

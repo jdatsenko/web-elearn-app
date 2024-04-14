@@ -62,9 +62,6 @@ const Admin = () => {
         </h2>
       </div>
 
-      <h1 className="text-2xl font-bold mb-4">
-        Vyriešené témy: {Object.values(groupTestsByTopic()).length}
-      </h1>
       <div className="mb-5">
         <Progress value={progress} />
       </div>

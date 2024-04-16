@@ -13,7 +13,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { tests } from "@/mock/tests";
 import { useRef } from "react";
 import TestControll from "../controll/page";
 import axios from "axios";

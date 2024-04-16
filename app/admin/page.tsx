@@ -5,6 +5,8 @@ import { SolvedTest } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const topics = [
   "LPWAN: technológie a aplikácie",
@@ -19,6 +21,7 @@ const Admin = () => {
   const [solvedTests, setSolvedTests] = useState<SolvedTest[]>([]);
   const { data: session, status } = useSession();
   const [progress, setProgress] = useState<number>(0);
+  const router = useRouter();
 
   useEffect(() => {
     axios.get("/api/user/test/solved").then((response) => {
@@ -55,16 +58,29 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-4">
+      
       <div className="text-center">
+        
         <h2 className="text-4xl font-bold my-9">
           {" "}
           Váš priebeh štúdia, {session?.user?.name}
         </h2>
       </div>
+      
 
       <div className="mb-5">
         <Progress value={progress} />
       </div>
+
+      <div className="ml-auto my-7">
+          <Button
+            onClick={() => {
+              router.push("admin/password");
+            }}
+          >
+            Zmeniť heslo
+          </Button>
+        </div>
 
       <Separator />
       {Object.entries(groupTestsByTopic()).map(([topic, tests]) => {
@@ -85,7 +101,7 @@ const Admin = () => {
                         <div key={index} className="border mb-6 rounded-lg p-4 bg-green-600">
                           <p className="mb-2">Pokus: {i++}</p>{" "}
                           <p className="mb-2">Úspech: {test.score} %</p>
-                          <p className="text-green-900 font-bold">Topic Completed!</p>
+                          <p className="text-green-900 font-bold">Téma ukončená!</p>
                         </div>
                       );
                     } else {
@@ -104,7 +120,9 @@ const Admin = () => {
           </div>
         );
       })}
+       
     </div>
+    
   );
 };
 

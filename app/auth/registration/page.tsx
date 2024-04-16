@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as z from "zod";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,7 @@ const formSchema: z.Schema<any> = z
   });
 
 const FormRegister = () => {
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,6 +62,7 @@ const FormRegister = () => {
       router.push("/auth/login");
     } else {
       console.error("Failed to create user");
+      setErrorMessage("Tento e-mail / používateľské meno je už obsadené.");
     }
   };
 
@@ -145,6 +148,10 @@ const FormRegister = () => {
         <a href="/auth/login" className="text-red-500 font-bold ml-3 underline">
           Prihlásiť sa
         </a>
+        
+      </div>
+      <div className="flex justify-center mt-5">
+          {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
       </div>
     </>
   );

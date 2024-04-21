@@ -69,7 +69,7 @@ const Topics = () => {
           Webová e-learningová aplikácia pre LPWAN
         </h1>
         <h1 className="text-4xl font-bold text-center m-[20px]">Témy</h1>
-        <div className="flex flex-row flex-wrap gap-6 mx-auto justify-center">
+        <div className="flex flex-row flex-wrap gap-10 mx-auto justify-center">
           {topics.map((topic) => (
             <Card key={topic.id} className="w-[25rem]">
               <CardHeader>

@@ -133,7 +133,7 @@ export default function TopicsNavMenu() {
   const { data: session, status } = useSession();
 
   return (
-    <div className="pb-4 min-h-[40.5rem] max-h-[40.5rem] overflow-y-scroll">
+    <div className="pb-4 min-h-[40.5rem] max-h-[45.5rem] overflow-y-scroll">
       {topics.map((topic) => (
         <div key={topic.title}>
           <h5 className="title m-[20px]">{topic.title}</h5>

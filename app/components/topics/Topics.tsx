@@ -64,39 +64,39 @@ const Topics = () => {
   const { data: session, status } = useSession();
   return (
     <>
-      <section className="px-16 flex flex-col gap-4">
-        <h1 className="text-4xl font-bold text-center mt-[40px]">
+      <section className="px-4 sm:px-16 flex flex-col gap-4">
+        <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[40px]">
           Webová e-learningová aplikácia pre LPWAN
         </h1>
-        <h1 className="text-4xl font-bold text-center m-[20px]">Témy</h1>
-        <div className="flex flex-row flex-wrap gap-10 mx-auto justify-center">
+        <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">Témy</h1>
+        <div className="flex flex-col gap-10 mx-auto">
           {topics.map((topic) => (
-            <Card key={topic.id} className="w-[25rem]">
+            <Card key={topic.id} className="w-full max-w-[25rem] mx-auto">
               <CardHeader>
-              <CardTitle style={{ lineHeight: '1.5' }}>{topic.title}</CardTitle>
+                <CardTitle style={{ lineHeight: '1.5' }}>{topic.title}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>{topic.description}</CardDescription>
               </CardContent>
               <CardFooter className="flex justify-center">
-                  <Link
-                    className={buttonVariants({ variant: "default" })}
-                    href={`/topics/${topic.id}`}
-                  >
-                    Pozrieť
-                  </Link>
+                <Link
+                  className={buttonVariants({ variant: "default" })}
+                  href={`/topics/${topic.id}`}
+                >
+                  Pozrieť
+                </Link>
               </CardFooter>
             </Card>
           ))}
         </div>
 
-        <Separator className="my-[40px]" />
+        <Separator className="my-8 sm:my-[40px]" />
 
-        <h1 className="text-4xl font-bold text-center my-[20px]">
+        <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
           Prečo by sme mali vedieť, čo je LPWAN?
         </h1>
 
-        <Accordion type="single" collapsible className="mx-[100px] mb-[30px]">
+        <Accordion type="single" collapsible className="mx-auto sm:mx-[100px] mb-8 sm:mb-[30px]">
           <AccordionItem value="item-1">
             <AccordionTrigger className="text-base hover:no-underline text-red-600">
               1. Lepšie porozumenie technologickému prostrediu.
@@ -148,7 +148,7 @@ const Topics = () => {
           </AccordionItem>
         </Accordion>
 
-        <p className="mx-[100px] pb-[50px]">
+        <p className="mx-auto max-w-lg pb-8 sm:pb-[50px]">
           Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv na
           rôzne aspekty každodenného života, je dôležité, aby obyčajní
           obyvatelia mali základné pochopenie tejto technológie, aby mohli
@@ -165,3 +165,4 @@ const Topics = () => {
 };
 
 export default Topics;
+

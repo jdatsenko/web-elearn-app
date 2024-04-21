@@ -9,7 +9,6 @@ import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-
 const TopBar = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
@@ -31,52 +30,51 @@ const TopBar = () => {
     });
   }
 
-
-
   if (loading) {
     return <div className="text-center mt-4 text-lg">Loading...</div>;
   }
 
   return (
     <>
-      <header className="p-4 flex w-full justify-between border-b">
-        <div className="flex gap-3 self-start">
-          <Link
-            className={cn(buttonVariants({ variant: "secondary" }))}
-            href={"/."}
-          >
-            Domov
-          </Link>
-          {session && !loading && (
-            <>
+      <header className="p-4 flex flex-col sm:flex-row w-full justify-between border-b">
+        <div className="flex flex-grow justify-between">
+          <div className="flex gap-3 self-start">
+            <Link
+              className={cn(buttonVariants({ variant: "secondary" }))}
+              href={"/."}
+            >
+              Domov
+            </Link>
+            {session && !loading && (
               <Link className={buttonVariants()} href={"/admin"}>
-              Moje konto
+                Moje konto
               </Link>
-            </>
-          )}
+            )}
+          </div>
+          <div className="flex gap-3 self-end">
+            {!session && !loading ? (
+              <>
+                <Link
+                  href="/auth/login/"
+                  className={cn(buttonVariants({ variant: "default" }))}
+                >
+                  Prihlásenie
+                </Link>
+                <Link
+                  href="/auth/registration/"
+                  className={cn(buttonVariants({ variant: "secondary" }))}
+                >
+                  Registrácia
+                </Link>
+              </>
+            ) : (
+              <>
+                {!loading && <Button onClick={handleSignOut}>Odhlásiť sa</Button>}
+              </>
+            )}
+          </div>
         </div>
-        <div className="flex gap-3 self-end">
-          {!session && !loading ? (
-            <>
-              <Link
-                href="/auth/login/"
-                className={cn(buttonVariants({ variant: "default" }))}
-              >
-                Prihlásenie
-              </Link>
-              <Link
-                href="/auth/registration/"
-                className={cn(buttonVariants({ variant: "secondary" }))}
-              >
-                Registrácia
-              </Link>
-            </>
-          ) : (
-            <>
-              {!loading && <Button onClick={handleSignOut}>Odhlásiť sa</Button>}
-            </>
-          )}
-
+        <div className="flex items-center justify-center mt-4 sm:mt-0">
           <Button
             variant="outline"
             size="icon"

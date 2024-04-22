@@ -248,7 +248,7 @@ const Topic5 = () => {
   ];
   return (
     <>
-      <ScrollArea className="h-full min-h-screen w-full rounded-md border p-4 px-32">
+      <ScrollArea className="h-full min-h-screen w-full rounded-md p-4 sm:px-2 md:px-40">
         <div
           ref={headerRef}
           className="title scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center my-[40px]"

@@ -74,7 +74,7 @@ const TopBar = () => {
             )}
           </div>
         </div>
-        <div className="flex items-center justify-center mt-4 sm:mt-0">
+        <div className="flex items-center justify-center ml-4 mt-4 sm:mt-0">
           <Button
             variant="outline"
             size="icon"

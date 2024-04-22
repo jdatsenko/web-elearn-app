@@ -69,7 +69,7 @@ const Topics = () => {
           Webová e-learningová aplikácia pre LPWAN
         </h1>
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">Témy</h1>
-        <div className="flex flex-col gap-10 mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 mx-auto">
           {topics.map((topic) => (
             <Card key={topic.id} className="w-full max-w-[25rem] mx-auto">
               <CardHeader>
@@ -89,9 +89,9 @@ const Topics = () => {
             </Card>
           ))}
         </div>
-
+  
         <Separator className="my-8 sm:my-[40px]" />
-
+  
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
           Prečo by sme mali vedieť, čo je LPWAN?
         </h1>

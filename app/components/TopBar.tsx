@@ -28,7 +28,7 @@ const TopBar = () => {
       redirect: true,
       callbackUrl: "/",
     });
-  }
+  };
 
   if (loading) {
     return <div className="text-center mt-4 text-lg">Loading...</div>;
@@ -46,9 +46,14 @@ const TopBar = () => {
               Domov
             </Link>
             {session && !loading && (
-              <Link className={buttonVariants()} href={"/admin"}>
-                Moje konto
-              </Link>
+              <div className="space-x-3">
+                <Link className={buttonVariants()} href={"/admin"}>
+                  Moje konto
+                </Link>
+                <Link className={buttonVariants()} href={"/adminForm"}>
+                  Teacher
+                </Link>
+              </div>
             )}
           </div>
           <div className="flex gap-3 self-end">
@@ -69,7 +74,9 @@ const TopBar = () => {
               </>
             ) : (
               <>
-                {!loading && <Button onClick={handleSignOut}>Odhlásiť sa</Button>}
+                {!loading && (
+                  <Button onClick={handleSignOut}>Odhlásiť sa</Button>
+                )}
               </>
             )}
           </div>

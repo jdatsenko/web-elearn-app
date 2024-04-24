@@ -74,15 +74,15 @@ const FormRegister = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full ">
-          <div className="space-y-2 w-1/5 m-auto">
+          <div className="space-y-2 w-1/2 sm:w-1/5 m-auto">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Prihlasovacie meno</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe" {...field} />
+                    <Input placeholder="vickysmith" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,7 +106,7 @@ const FormRegister = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Heslo</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -123,7 +123,7 @@ const FormRegister = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Re-Enter your password</FormLabel>
+                  <FormLabel>Zadajte znova svoje heslo</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Re-Enter your password"

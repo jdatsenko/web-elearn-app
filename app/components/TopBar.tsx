@@ -35,6 +35,7 @@ const TopBar = () => {
   }
 
   const isAdmin = session?.user?.role === "ADMIN";
+  const isTeacher = session?.user?.role === "TEACHER"; 
 
   return (
     <>
@@ -52,16 +53,7 @@ const TopBar = () => {
                 <Link className={buttonVariants()} href={"/admin"}>
                   Moje konto
                 </Link>
-                {!isAdmin && (
-                <Link className={buttonVariants()} href={"/adminForm"}>
-                  Teacher
-                </Link>
-                )}
-                {isAdmin && (
-                <Link className={buttonVariants()} href={"/adminPanel"}>
-                  Admin Panel
-                </Link>
-                )}
+                
               </div>
             )}
           </div>

@@ -17,8 +17,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-//jdats
-//22833722
+
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -80,13 +79,13 @@ const FormLogin = () => {
           className="w-full "
           method="POST"
         >
-          <div className="space-y-2 w-1/5 m-auto">
+          <div className="space-y-2 w-1/2 sm:w-1/5 m-auto">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Prihlasovacie meno</FormLabel>
                   <FormControl>
                     <Input placeholder="johndoe" {...field} />
                   </FormControl>
@@ -100,7 +99,7 @@ const FormLogin = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Heslo</FormLabel>
                   <FormControl>
                     <Input
                       type="password"

@@ -11,6 +11,7 @@ const TeacherRequestForm: React.FC = () => {
   });
 
   const [error, setError] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -34,9 +35,12 @@ const TeacherRequestForm: React.FC = () => {
       .post("/api/user/teacherRequest", formData)
       .then((response) => {
         console.log(response.data);
+        setSuccessMessage("Request sent successfully! Wait for approval.");
+        setError(""); // Clear any previous error messages
       })
       .catch((error: any) => {
         setError(error.response.data.message)
+        setSuccessMessage("");
       });
   };
 
@@ -46,12 +50,12 @@ const TeacherRequestForm: React.FC = () => {
         Teacher Request Form
       </h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-        <div className="mb-4">
+        <div className="mb-4 mx-7">
           <label
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
-            Name
+            Meno
           </label>
           <input
             type="text"
@@ -63,12 +67,12 @@ const TeacherRequestForm: React.FC = () => {
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 mx-7">
           <label
             htmlFor="surname"
             className="block text-sm font-medium text-gray-700"
           >
-            Surname
+            Priezvisko
           </label>
           <input
             type="text"
@@ -80,12 +84,12 @@ const TeacherRequestForm: React.FC = () => {
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 mx-7">
           <label
             htmlFor="qualification"
             className="block text-sm font-medium text-gray-700"
           >
-            Qualifications
+            Kvalifikácie
           </label>
           <textarea
             id="qualification"
@@ -96,12 +100,12 @@ const TeacherRequestForm: React.FC = () => {
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
           ></textarea>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 mx-7">
           <label
             htmlFor="experience"
             className="block text-sm font-medium text-gray-700"
           >
-            Experience
+            Skúsenosti
           </label>
           <textarea
             id="experience"
@@ -117,10 +121,15 @@ const TeacherRequestForm: React.FC = () => {
             type="submit"
             className="bg-red-500 text-white px-4 py-2 mb-8 rounded-md hover:bg-red-600"
           >
-            Submit
+            Odoslať
           </button>
         </div>
-        {error}
+        {error && (
+          <p className="text-red-600 text-center mb-4">{error}</p>
+        )}
+        {successMessage && (
+          <p className="text-green-600 text-center mb-4">{successMessage}</p>
+        )}
       </form>
     </div>
   );

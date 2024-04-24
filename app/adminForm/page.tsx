@@ -1,13 +1,12 @@
 "use client"
+import axios from 'axios';
 import React, { useState } from 'react';
 
 const TeacherRequestForm: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
-    email: '',
-    phone: '',
-    qualifications: '',
+    qualification: '',
     experience: '',
   });
 
@@ -21,15 +20,13 @@ const TeacherRequestForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     setFormData({
       name: '',
       surname: '',
-      email: '',
-      phone: '',
-      qualifications: '',
+      qualification: '',
       experience: '',
     });
+    axios.post('/api/user/teacherRequest', formData);
   };
 
   return (
@@ -45,16 +42,8 @@ const TeacherRequestForm: React.FC = () => {
         <input type="text" id="surname" name="surname" value={formData.surname} onChange={handleChange} required className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
       </div>
       <div className="mb-4">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
-        <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="qualifications" className="block text-sm font-medium text-gray-700">Qualifications</label>
-        <textarea id="qualifications" name="qualifications" value={formData.qualifications} onChange={handleChange} required className="mt-1 p-2 border border-gray-300 rounded-md w-full"></textarea>
+        <label htmlFor="qualification" className="block text-sm font-medium text-gray-700">Qualifications</label>
+        <textarea id="qualification" name="qualification" value={formData.qualification} onChange={handleChange} required className="mt-1 p-2 border border-gray-300 rounded-md w-full"></textarea>
       </div>
       <div className="mb-4">
         <label htmlFor="experience" className="block text-sm font-medium text-gray-700">Experience</label>

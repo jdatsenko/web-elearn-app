@@ -34,6 +34,8 @@ const TopBar = () => {
     return <div className="text-center mt-4 text-lg">Loading...</div>;
   }
 
+  const isAdmin = session?.user?.role === "ADMIN";
+
   return (
     <>
       <header className="p-4 flex flex-col sm:flex-row w-full justify-between border-b">
@@ -50,9 +52,16 @@ const TopBar = () => {
                 <Link className={buttonVariants()} href={"/admin"}>
                   Moje konto
                 </Link>
+                {!isAdmin && (
                 <Link className={buttonVariants()} href={"/adminForm"}>
                   Teacher
                 </Link>
+                )}
+                {isAdmin && (
+                <Link className={buttonVariants()} href={"/adminPanel"}>
+                  Admin Panel
+                </Link>
+                )}
               </div>
             )}
           </div>

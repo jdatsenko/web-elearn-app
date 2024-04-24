@@ -10,6 +10,7 @@ datasource db {
 enum UserRole {
   USER
   ADMIN
+  TEACHER
 }
 
 model User {
@@ -56,4 +57,15 @@ model Answer {
   answerNumber Int
   question     Question @relation(fields: [questionId], references: [id])
   questionId   Int
+}
+
+model TeacherRequests {
+  id            Int    @id @default(autoincrement())
+  userId        Int    @unique
+  name          String
+  surname       String
+  email         String
+  qualification String
+  experience    String
+  status        String @default("pending") // pending, accepted, rejected
 }

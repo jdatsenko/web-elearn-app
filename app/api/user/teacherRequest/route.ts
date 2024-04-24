@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     },
   });
 
-  if (teacherRequestExists) {
+  if (teacherRequestExists && teacherRequestExists.status == 'pending') {
     return NextResponse.json(
       { message: "Teacher request already exists" },
       { status: 400 }

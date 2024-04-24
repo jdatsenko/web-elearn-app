@@ -44,7 +44,7 @@ export default function TopicLayout({
           {children}
         </div>
         <button
-          className="fixed right-4 top-20 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
+          className="fixed right-4 top-20 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg"
           onClick={toggleTopicsNav}
         >
           {isTopicsNavOpen ? "Skryť" : "Témy"}

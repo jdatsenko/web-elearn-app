@@ -69,3 +69,11 @@ model TeacherRequests {
   experience    String
   status        String @default("pending") // pending, accepted, rejected
 }
+
+model Content {
+  id          Int      @id @default(autoincrement())
+  topicNumber Int      @unique
+  content     String[]
+  title       String
+  description String
+}

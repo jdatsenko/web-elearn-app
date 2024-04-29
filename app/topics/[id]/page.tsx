@@ -5,21 +5,43 @@ import Topic3 from "@/app/components/topics/Topic3"
 import Topic4 from "@/app/components/topics/Topic4"
 import Topic5 from "@/app/components/topics/Topic5"
 import Topic6 from "@/app/components/topics/Topic6"
+import axios from "axios";
 import { useSession } from "next-auth/react"
+import { useEffect, useRef, useState } from "react";
+
+import EditorJS from "@editorjs/editorjs";
+// @ts-ignore
+import SimpleImage from "@editorjs/simple-image";
 
 export default function Topic({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession(); // Assuming you use useSession hook
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+
+  const topicId = parseInt(params.id);
+
+  const [editorData, setEditorData] = useState<any>({});
+  const editor = useRef<EditorJS>();
+
+  useEffect(() => {
+    axios.get(`/api/topic/get?id=${topicId}`).then((response) => {
+      setEditorData(response.data);
+      const e = new EditorJS({
+        holder: "editorjs",
+        onReady: () => {
+          console.log("Editor.js is ready to work!");
+          editor.current = e as EditorJS;
+          editor.current.render({ blocks: response.data.data.content.map((e: string) => JSON.parse(e)) });
+        },
+        readOnly: true,
+        tools: {
+          image: SimpleImage,
+        },
+      });
+    });
+  }, []);
+
   return (
     <div className="h-full w-full overflow-y-auto">
-      {params.id === '1' && <Topic1 />}
-      {params.id === '2' && <Topic2 />}
-      {params.id === '3' && <Topic3 />}
-      {params.id === '4' && <Topic4 />}
-      {params.id === '5' && <Topic5 />}
-      {params.id === '6' && <Topic6 />}
+        <div id="editorjs"></div>
 
       {/* Responsive Styling */}
       <style jsx>{`

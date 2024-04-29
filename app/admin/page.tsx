@@ -62,16 +62,16 @@ const Admin = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-end">
-      {!isAdmin && (
-        <Link className={buttonVariants()} href={"/adminForm"}>
-          Učiteľ
-        </Link>
-      )}
-      {isAdmin && (
-        <Link className={buttonVariants()} href={"/adminPanel"}>
-          Admin Panel
-        </Link>
-      )}
+        {!isAdmin && !isTeacher && (
+          <Link className={buttonVariants()} href={"/adminForm"}>
+            Učiteľ
+          </Link>
+        )}
+        {isAdmin && (
+          <Link className={buttonVariants()} href={"/adminPanel"}>
+            Admin Panel
+          </Link>
+        )}
       </div>
 
       <div className="text-center">
@@ -84,7 +84,7 @@ const Admin = () => {
       {isTeacher && (
         <div className="text-center">
           <h3 className="text-2xl font-bold my-9">
-            Your request was approved, now you are a teacher!
+            Vaša žiadosť bola schválená, teraz ste učiteľom!
           </h3>
         </div>
       )}

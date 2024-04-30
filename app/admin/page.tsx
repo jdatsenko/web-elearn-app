@@ -72,6 +72,11 @@ const Admin = () => {
             Admin Panel
           </Link>
         )}
+        {isTeacher && (
+          <Link className={buttonVariants()} href={"./teacher"}>
+          Upravit tému
+        </Link>
+        )}
       </div>
 
       <div className="text-center">
@@ -87,6 +92,7 @@ const Admin = () => {
             Vaša žiadosť bola schválená, teraz ste učiteľom!
           </h3>
         </div>
+        
       )}
 
       <div className="mb-5">

@@ -1,5 +1,4 @@
 "use client";
-import Topic6 from "@/app/components/topics/Topic6"
 import axios from "axios";
 import { useSession } from "next-auth/react"
 import { useEffect, useRef, useState } from "react";
@@ -33,7 +32,7 @@ export default function Topic({ params }: { params: { id: string } }) {
         readOnly: true,
         tools: {
           image: SimpleImage,
-          fontSize: FontSizeTool, // Add the font size tool here
+          fontSize: FontSizeTool, 
         },
       });
     });

@@ -20,45 +20,30 @@ export default function TopicLayout({
 
   return (
     <>
-      {/*     
-        <ResizablePanelGroup  direction="horizontal" >
-        <ResizablePanel
-        className="h-full overflow-y-auto"
-          defaultSize={22}
-          collapsible={false}
-        >
-          <Separator />
-          <TopicsNavMenu
-          />
-        </ResizablePanel>
-        <ResizablePanel  defaultSize={78} id="topic">{children}</ResizablePanel>
-        </ResizablePanelGroup> */}
-
-      <div className={`flex h-full w-full `}>
-        <div
-          className={`w-full  sm:w-1/4 ${isTopicsNavOpen ? "block" : "hidden"}`}
-        >
+      <div className="flex flex-col h-full w-full">
+        {/* Topic Navbar Menu */}
+        <div className={`flex flex-wrap justify-center p-4 }`}>
           <TopicsNavMenu />
         </div>
-        <div className={`w-${isTopicsNavOpen ? "3/4" : "full"}`}>
+
+        {/* Topics */}
+        <div className="flex flex-wrap justify-center h-full w-full overflow-y-auto">
           {children}
         </div>
-        <button
-          className="fixed z-[99999] right-4 top-20 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg"
-          onClick={toggleTopicsNav}
-        >
-          {isTopicsNavOpen ? "Skryť" : "Témy"}
-        </button>
-        <style jsx>{`
-          @media (max-width: 640px) {
-            .fixed {
-              right: unset;
-              left: 15px; 
-              top: 70px;
-            }
-          }
-        `}</style>
+
       </div>
+
+      {/* Responsive Styles */}
+      <style jsx>{`
+        @media (max-width: 640px) {
+          .fixed {
+            right: unset;
+            left: 15px; 
+            top: 70px;
+          }
+        }
+      `}</style>
     </>
   );
 }
+

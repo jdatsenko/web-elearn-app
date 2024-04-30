@@ -21,6 +21,8 @@ interface Topic {
       title: "",
       description: "",
     });
+    const [successMessage, setSuccessMessage] = useState<string>("");
+
   
     const editorRef = useRef<EditorJS | null>(null);
   
@@ -49,16 +51,24 @@ interface Topic {
       
   
     const onSave = async () => {
-      if (!editorRef.current) return;
-  
-      const outputData = await editorRef.current.save();
-      const content = outputData.blocks.map((e) => JSON.stringify(e));
-      const res = await axios.post("/api/topic/create", {
-        number: newTopic.number,
-        title: newTopic.title,
-        description: newTopic.description,
-        content: content,
-      });
+      try {
+        if (!editorRef.current) return;
+    
+        const outputData = await editorRef.current.save();
+        const content = outputData.blocks.map((e) => JSON.stringify(e));
+        const res = await axios.post("/api/topic/create", {
+          number: newTopic.number,
+          title: newTopic.title,
+          description: newTopic.description,
+          content: content,
+        });
+        setSuccessMessage("Topic successfully updated!");
+
+    }
+    catch (error) {
+        console.error("Error creating topic:", error);
+        setSuccessMessage("Error. Topic with this number might already exist");
+      }
     };
   return (
     <>
@@ -110,6 +120,11 @@ interface Topic {
       <div className="border mx-auto w-11/12 flex align-center justify-center border-gray-300 rounded-md">
         <div id="editorjs" className="mb-4 mx-10 w-full"></div>
       </div>
+      {successMessage && (
+        <div className="text-green-600 font-bold text-center">
+          {successMessage}
+        </div>
+      )}
       <div className="flex justify-center items-center my-8 mx-auto">
         <Button
             onClick={onSave}
@@ -117,6 +132,7 @@ interface Topic {
         >
             Save
         </Button>
+        
         <style>
         {`
           .ce-block__content,
@@ -137,6 +153,7 @@ interface Topic {
         `}
       </style>
       </div>
+      
     </>
   );
 }

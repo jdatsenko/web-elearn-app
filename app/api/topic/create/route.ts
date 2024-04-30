@@ -18,9 +18,9 @@ export async function POST(req: Request) {
             }
         });
 
-        if (existingTopic) {
-            return NextResponse.json({ error: "Topic already exists" }, { status: 400 });
-        }
+        // if (existingTopic) {
+        //     return NextResponse.json({ error: "Topic already exists" }, { status: 400 });
+        // }
 
         const topic = await prisma.content.create({
             data: {

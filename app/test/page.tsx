@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 
+
 interface Topic {
     number?: number;
     title?: string;
@@ -24,21 +25,28 @@ interface Topic {
     const editorRef = useRef<EditorJS | null>(null);
   
     useEffect(() => {
-      import("@editorjs/editorjs").then((EditorJS) => {
-         // @ts-ignore
-        import("@editorjs/simple-image").then((SimpleImage) => {
-          editorRef.current = new EditorJS.default({
+        (async () => {
+          const EditorJS = (await import("@editorjs/editorjs")).default;
+          // @ts-ignore
+          const SimpleImage = (await import("@editorjs/simple-image")).default;
+          // @ts-ignore
+            const FontSizeTool = (await import('editorjs-inline-font-size-tool')).default;
+      
+          const editorInstance = new EditorJS({
             holder: "editorjs",
             onReady: () => {
               console.log("Editor.js is ready to work!");
             },
             tools: {
               image: SimpleImage,
+              fontSize: FontSizeTool,
             },
           });
-        });
-      });
-    }, []);
+      
+          editorRef.current = editorInstance;
+        })();
+      }, []);
+      
   
     const onSave = async () => {
       if (!editorRef.current) return;
@@ -49,7 +57,7 @@ interface Topic {
         number: newTopic.number,
         title: newTopic.title,
         description: newTopic.description,
-        content,
+        content: content,
       });
     };
   return (
@@ -99,8 +107,8 @@ interface Topic {
       <div className="text-center mb-10">
         <h1 className="text-3xl">Content</h1>
       </div>
-      <div className="mx-60 border flex align-center justify-center border-gray-300 p-4 rounded-md">
-        <div id="editorjs" className="mb-4 w-full"></div>
+      <div className="border mx-auto w-11/12 flex align-center justify-center border-gray-300 rounded-md">
+        <div id="editorjs" className="mb-4 mx-10 w-full"></div>
       </div>
       <div className="flex justify-center items-center my-8 mx-auto">
         <Button
@@ -109,6 +117,25 @@ interface Topic {
         >
             Save
         </Button>
+        <style>
+        {`
+          .ce-block__content,
+          .ce-toolbar__content {
+            max-width: calc(100% - 150px) !important;
+          }
+          .cdx-block {
+            max-width: 100% !important;
+          }
+          .ce-paragraph.cdx-block {
+            width: 100% !important;
+        }
+          .cdx-simple-image .cdx-input {
+            width: 50% !important;
+            margin: 30px auto !important;
+            text-align: center;
+            }
+        `}
+      </style>
       </div>
     </>
   );

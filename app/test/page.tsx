@@ -2,50 +2,56 @@
 
 import { Button } from "@/components/ui/button";
 import EditorJS from "@editorjs/editorjs";
-// // @ts-ignore
-// import SimpleImage from "@editorjs/simple-image";
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
+
 interface Topic {
     number?: number;
-  title?: string;
-  description?: string;
-  content?: string[];
-}
-
-export default function Test() {
-  const [newTopic, setNewTopic] = useState<Topic>({
-    number: 0,
-    title: "",
-    description: "",
-  });
-
-  const editor = useRef<EditorJS>();
-
-  useEffect(() => {
-    const e = new EditorJS({
-      holder: "editorjs",
-      onReady: () => {
-        console.log("Editor.js is ready to work!");
-        editor.current = e as EditorJS;
-      },
-      tools: {
-        // image: SimpleImage,
-      },
+    title?: string;
+    description?: string;
+    content?: string[];
+  }
+  
+  export default function Test() {
+    const [newTopic, setNewTopic] = useState<Topic>({
+      number: 0,
+      title: "",
+      description: "",
     });
-  }, []);
-
-  const onSave = async () => {
-    const data = await editor.current?.save();
-    const res = await axios.post("/api/topic/create", {
+  
+    const editorRef = useRef<EditorJS | null>(null);
+  
+    useEffect(() => {
+      import("@editorjs/editorjs").then((EditorJS) => {
+         // @ts-ignore
+        import("@editorjs/simple-image").then((SimpleImage) => {
+          editorRef.current = new EditorJS.default({
+            holder: "editorjs",
+            onReady: () => {
+              console.log("Editor.js is ready to work!");
+            },
+            tools: {
+              image: SimpleImage,
+            },
+          });
+        });
+      });
+    }, []);
+  
+    const onSave = async () => {
+      if (!editorRef.current) return;
+  
+      const outputData = await editorRef.current.save();
+      const content = outputData.blocks.map((e) => JSON.stringify(e));
+      const res = await axios.post("/api/topic/create", {
         number: newTopic.number,
         title: newTopic.title,
         description: newTopic.description,
-        content: data?.blocks.map((e) => JSON.stringify(e)),
-    });
-  };
+        content,
+      });
+    };
   return (
     <>
      <div className="my-4 mx-20">

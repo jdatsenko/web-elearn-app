@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import EditorJS from "@editorjs/editorjs";
-// @ts-ignore
-import SimpleImage from "@editorjs/simple-image";
+// // @ts-ignore
+// import SimpleImage from "@editorjs/simple-image";
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -32,7 +32,7 @@ export default function Test() {
         editor.current = e as EditorJS;
       },
       tools: {
-        image: SimpleImage,
+        // image: SimpleImage,
       },
     });
   }, []);

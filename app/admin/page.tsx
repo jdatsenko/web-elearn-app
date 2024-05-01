@@ -74,7 +74,7 @@ const Admin = () => {
         )}
         {isTeacher && (
           <Link className={buttonVariants()} href={"./teacher"}>
-          Upravit tému
+          Pridať tému
         </Link>
         )}
       </div>

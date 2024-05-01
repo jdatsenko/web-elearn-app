@@ -5,7 +5,7 @@ import EditorJS from "@editorjs/editorjs";
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
 
 
 interface Topic {
@@ -22,6 +22,7 @@ interface Topic {
       description: "",
     });
     const [successMessage, setSuccessMessage] = useState<string>("");
+    const router = useRouter();
 
   
     const editorRef = useRef<EditorJS | null>(null);
@@ -62,8 +63,10 @@ interface Topic {
           description: newTopic.description,
           content: content,
         });
-        setSuccessMessage("Topic successfully updated!");
-
+        setSuccessMessage("Téma bola úspešne pridaná.");
+        const timer = setTimeout(() => {
+          router.push(`/topics/${res.data.topic.topicNumber}`);
+        }, 700);
     }
     catch (error) {
         console.error("Error creating topic:", error);
@@ -121,7 +124,7 @@ interface Topic {
         <div id="editorjs" className="mb-4 mx-10 w-full"></div>
       </div>
       {successMessage && (
-        <div className="text-green-600 font-bold text-center">
+        <div className="text-green-600 my-5 font-bold text-center">
           {successMessage}
         </div>
       )}

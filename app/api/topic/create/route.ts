@@ -18,9 +18,9 @@ export async function POST(req: Request) {
             }
         });
 
-        // if (existingTopic) {
-        //     return NextResponse.json({ error: "Topic already exists" }, { status: 400 });
-        // }
+        if (existingTopic) {
+            return NextResponse.json({ error: "Topic already exists" }, { status: 400 });
+        }
 
         const topic = await prisma.content.create({
             data: {
@@ -31,11 +31,11 @@ export async function POST(req: Request) {
             }
         })
 
-        return NextResponse.json({ message: "Topic created" });
+        return NextResponse.json({ topic });
 
     }
     catch (error) {
-      console.error("Error creating test:", error);
-      return NextResponse.json({ error: "Error creating test" }, { status: 500 });
+      console.error("Error creating topic:", error);
+      return NextResponse.json({ error: "Error creating topic" }, { status: 500 });
     }
 }

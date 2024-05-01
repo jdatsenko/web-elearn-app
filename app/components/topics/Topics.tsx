@@ -20,48 +20,35 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+
+
+interface Topic {
+  topicNumber: number;
+  title: string;
+  description: string;
+}
 
 const Topics = () => {
-  const topics = [
-    {
-      id: 1,
-      title: "1. LPWAN: technológie a aplikácie",
-      description:
-        "V tejto téme sa budeme venovať technológii LPWAN, jej histórii, typom a aplikáciám. Dozviete sa, čo je LoRa Alliance a od čoho závisí výber typu technológie LPWAN. Takisto sa oboznámime so štandardmi projektu 3GPP, ktoré fungujú v licencovanom spektre. ",
-    },
-    {
-      id: 2,
-      title: "2. LoRaWAN: Lora Alliance, obmedzenia a výhody",
-      description:
-        "V tejto téme opíšeme špeciálny protokol pripojenia LPWAN vyvinutý spoločnosťou Semtech — LoRaWAN. Hlbšie sa zoznámime so spoločnosťou Lora Alliance a jej členmi. Okrem toho dozviete sa o obmedzeniach a výhodách LoRaWAN. ",
-    },
-    {
-      id: 3,
-      title: "3. Architektúra LoRaWAN",
-      description:
-        "V tejto téme sa budeme venovať architektúre LoRaWAN. Dozviete sa, aké sú základné komponenty LoRaWAN siete a ako fungujú. Preskúmame dôležité prvky, ako sú brány a ich typy, koncové zariadenia a ich úlohy v sieti, ako táto architektúra umožňuje efektívne prenosy údajov. ",
-    },
-    {
-      id: 4,
-      title: "4. NB-IoT: špecifikácie a výhody",
-      description:
-        "V tejto téme sa budeme zaoberať štandardom NB-IoT, jeho špecifikáciami a výhodami.  Zistíme, aké sú hlavné vlastnosti a špecifikácie tohto štandardu, ako napríklad jeho schopnosť prenášať údaje cez úzky pás, nízku spotrebu energie a vysokú priepustnosť signálu.",
-    },
-    {
-      id: 5,
-      title: "5. NB-IoT: aplikácie",
-      description:
-        "V tejto téme sa budeme zaoberať aplikáciami NB-IoT v kontexte smart city, smart meters a smart building. Detailne preskúmame, ako NB-IoT technológia prispieva k rozvoju inteligentných miest, zariadení pre meranie spotreby energie a inteligentných budov.",
-    },
-    {
-      id: 6,
-      title: "6. Porovnanie technológií LPWAN",
-      description:
-        "V tejto téme sa zameriame na porovnanie technológií LPWAN, konkrétne Sigfox, NB-IoT a LoRaWAN. Preskúmame jedinečné vlastnosti, výhody a obmedzenia každej z týchto technológií a analyzujeme ich vhodnosť pre rôzne aplikácie a scenáre použitia.",
-    },
-  ];
-
+  const [topics, setTopics] = useState<Topic[]>([]);
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetch("/api/topic/card");
+        const data = await response.json();
+        if (data.data) {
+          setTopics(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching topics:", error);
+      }
+    };
+
+    fetchTopics();
+  }, []);
+
   return (
     <>
       <section className="px-4 sm:px-16 flex flex-col gap-4">
@@ -70,8 +57,8 @@ const Topics = () => {
         </h1>
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">Témy</h1>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 mx-auto">
-          {topics.map((topic) => (
-            <Card key={topic.id} className="w-full max-w-[25rem] mx-auto">
+          {topics.map((topic, index) => (
+            <Card key={index} className="w-full max-w-[25rem] mx-auto">
               <CardHeader>
                 <CardTitle style={{ lineHeight: '1.5' }}>{topic.title}</CardTitle>
               </CardHeader>
@@ -81,7 +68,7 @@ const Topics = () => {
               <CardFooter className="flex justify-center">
                 <Link
                   className={buttonVariants({ variant: "default" })}
-                  href={`/topics/${topic.id}`}
+                  href={`/topics/${topic.topicNumber}`} 
                 >
                   Pozrieť
                 </Link>

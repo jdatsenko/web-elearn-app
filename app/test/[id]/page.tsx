@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 interface Question {
   id: number;
@@ -22,7 +23,7 @@ interface TestResponse {
 
 const TestPage = ({ params }: { params: { id: string } }) => {
   const topicId = parseInt(params.id);
-
+  const { data: session } = useSession();
   const [test, setTest] = useState<TestResponse>();
   const [answers, setAnswers] = useState<
     { questionId: number; answer: number; answerId: number }[]
@@ -48,13 +49,18 @@ const TestPage = ({ params }: { params: { id: string } }) => {
       });
   }, []);
 
-  const handleSubmit = () => {
-    // Handle test submission
-  };
-
   return (
     <div>
-      {test &&
+      {!session ? (
+        <div className="text-red-500 text-3xl font-bold text-center mt-10">
+          Musíte byť autorizovaný, aby ste mohli začať testovanie.
+        </div>
+      ) : session.user && session.user.topicsCompleted < topicId - 1 ? (
+        <div className="text-red-500 text-3xl font-bold text-center mt-10">
+          Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
+        </div>
+      ) : (
+        test &&
         test.questions.map((question, i) => (
           <RadioGroup
             key={question.id}
@@ -62,11 +68,11 @@ const TestPage = ({ params }: { params: { id: string } }) => {
           >
             <h3 className="text-xl font-semibold">{question.text}</h3>
             {question.answers.map((answer, j) => (
-              <div className="flex gap-2 items-center " key={answer.id}>
+              <div className="flex gap-2 items-center" key={answer.id}>
                 <RadioGroupItem
                   key={i}
                   value={answer.text}
-                  checked={answers[i].answer == j + 1}
+                  checked={answers[i].answer === j + 1}
                   onClick={(e) => {
                     const newAnswers = [...answers];
                     newAnswers[i] = {
@@ -82,12 +88,15 @@ const TestPage = ({ params }: { params: { id: string } }) => {
               </div>
             ))}
           </RadioGroup>
-        ))}
-      <div className="flex justify-center">
-        {test && <TestControll answers={answers} testId={1} />}
-      </div>
+        ))
+      )}
+      {session && session.user.topicsCompleted >= topicId - 1 && (
+        <div className="flex justify-center">
+          {test && <TestControll answers={answers} testId={topicId} />}
+        </div>
+      )}
     </div>
   );
-};
+};  
 
 export default TestPage;

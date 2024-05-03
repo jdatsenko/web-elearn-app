@@ -16,7 +16,10 @@ const TestControll = (props: any) => {
   const router = useRouter();
   const answers = props.answers as { questionId: number; answer: number }[];
   const testId = props.testId as number;
-  const [results, setResults] = useState<{ results: { id: number, correct: boolean}[], score: string }>({
+  const [results, setResults] = useState<{
+    results: { id: number; correct: boolean }[];
+    score: string;
+  }>({
     results: [],
     score: "",
   });
@@ -24,32 +27,39 @@ const TestControll = (props: any) => {
   const { data: session, update } = useSession();
 
   function submitTest() {
-    axios.post("/api/user/test/submit", {
-      answers: answers,
-      testId: testId,
-    }).then((response) => {
-      setResults(response.data);
-      if (response.data.score === "100%") {
-        console.log(session);
-        update({ topicsCompleted: testId });
-      }
-      console.log(response.data);
-    });
+    axios
+      .post("/api/user/test/submit", {
+        answers: answers,
+        testId: testId,
+      })
+      .then((response) => {
+        setResults(response.data);
+        if (response.data.score === "100%") {
+          console.log(session);
+          update({ topicsCompleted: testId });
+        }
+        console.log(response.data);
+      });
   }
   return (
     <>
       <Dialog>
-        <Button onClick={() => router.back()}>Späť</Button>
-        <DialogTrigger asChild>
-          <Button
-            onClick={() => {
-              submitTest();
-            }}
-            className="mt-4"
-          >
-            Odoslať test
+        <div className="flex justify-between mb-5 items-end">
+          <Button onClick={() => router.back()} className="mr-4">
+            Späť
           </Button>
-        </DialogTrigger>
+          <DialogTrigger asChild>
+            <Button
+              onClick={() => {
+                submitTest();
+              }}
+              className="mt-4"
+            >
+              Odoslať test
+            </Button>
+          </DialogTrigger>
+        </div>
+
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
@@ -59,17 +69,22 @@ const TestControll = (props: any) => {
           {results.results.map((result, i) => (
             <div key={i} className="mb-4">
               <p className="font-bold">Odpoveď {i + 1}</p>
-              <p className={result.correct ? 'text-green-600' : 'text-red-600'}>
-                {result.correct ? 'Správna' : 'Nesprávna'}
+              <p className={result.correct ? "text-green-600" : "text-red-600"}>
+                {result.correct ? "Správna" : "Nesprávna"}
               </p>
             </div>
           ))}
+          {results.results.every((result) => result.correct) && (
+            <div className="flex justify-center mt-4">
+              <Button onClick={() => router.push(`/topics/${testId + 1}`)}>
+                Ďalšia téma
+              </Button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </>
   );
-  
 };
 
 export default TestControll;
-

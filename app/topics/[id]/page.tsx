@@ -1,19 +1,18 @@
 "use client";
 import axios from "axios";
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import EditorJS from "@editorjs/editorjs";
 //@ts-ignore
 import SimpleImage from "@editorjs/simple-image";
 //@ts-ignore
-import FontSizeTool from 'editorjs-inline-font-size-tool'; 
+import FontSizeTool from "editorjs-inline-font-size-tool";
 import { Button } from "@/components/ui/button";
 
 export default function Topic({ params }: { params: { id: string } }) {
-  // Assuming you use useSession hook
   const { data: session, status } = useSession();
-  const isAuthorized = status === 'authenticated';
+  const isAuthorized = status === "authenticated";
   const router = useRouter();
 
   const topicId = parseInt(params.id);
@@ -30,13 +29,15 @@ export default function Topic({ params }: { params: { id: string } }) {
           console.log("Editor.js is ready to work!");
           editor.current = e as EditorJS;
           editor.current.render({
-            blocks: response.data.data.content.map((e: string) => JSON.parse(e)),
+            blocks: response.data.data.content.map((e: string) =>
+              JSON.parse(e)
+            ),
           });
         },
         readOnly: true,
         tools: {
           image: SimpleImage,
-          fontSize: FontSizeTool, 
+          fontSize: FontSizeTool,
         },
       });
     });
@@ -44,12 +45,32 @@ export default function Topic({ params }: { params: { id: string } }) {
 
   return (
     <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
-        <div id="editorjs"></div>
-      {isAuthorized && <Button onClick={() => router.push(`/test/${topicId}`)}>Complete Test</Button>}
+      <div id="editorjs"></div>
+      <div className="mx-auto my-5">
+        {isAuthorized && session.user.topicsCompleted >= topicId - 1 && (
+          <Button onClick={() => router.push(`/test/${topicId}`)}>
+            Začať testovanie
+          </Button>
+        )}
 
+        {!isAuthorized && (
+          <div className="text-red-500">
+            Musíte byť autorizovaný, aby ste mohli začať testovanie.
+          </div>
+        )}
+
+        {isAuthorized && session.user.topicsCompleted < topicId - 1 && (
+          <div className="text-red-500">
+            Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
+          </div>
+        )}
+      </div>
 
       <style>{`
 
+      .codex-editor__redactor{
+          padding-bottom: 10px !important;
+        }
         .ce-block{
           margin: auto; !important;
         }

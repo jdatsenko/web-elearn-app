@@ -49,15 +49,15 @@ const FormLogin = () => {
       console.log("log", loginData);
 
       if (loginData?.status === 401) {
-        setError("Invalid username or password. Please try again.");
+        setError("Nesprávne používateľské meno alebo heslo. Skúste to prosím znova.");
       } else {
         router.refresh();
         router.push(".././");
         console.log("Authentication successful:", loginData);
       }
     } catch (error: unknown) {
-      console.error("An unexpected error occurred:", error);
-      setError("An unexpected error occurred. Please try again later.");
+      console.error("Vyskytla sa neočakávaná chyba:", error);
+      setError("Vyskytla sa neočakávaná chyba. Skúste to prosím neskôr.");
     }
   };
 

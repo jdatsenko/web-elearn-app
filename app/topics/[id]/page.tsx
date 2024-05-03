@@ -47,7 +47,7 @@ export default function Topic({ params }: { params: { id: string } }) {
     <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
       <div id="editorjs"></div>
       <div className="mx-auto my-5">
-        {isAuthorized && session.user.topicsCompleted >= topicId - 1 && (
+        {isAuthorized && session?.user?.topicsCompleted >= topicId - 1 && (
           <Button onClick={() => router.push(`/test/${topicId}`)}>
             Začať testovanie
           </Button>

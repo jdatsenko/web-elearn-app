@@ -90,7 +90,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
           </RadioGroup>
         ))
       )}
-      {session && session.user.topicsCompleted >= topicId - 1 && (
+      {session && session?.user?.topicsCompleted >= topicId - 1 && (
         <div className="flex justify-center">
           {test && <TestControll answers={answers} testId={topicId} />}
         </div>

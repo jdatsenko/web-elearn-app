@@ -2,15 +2,19 @@
 import axios from "axios";
 import { useSession } from "next-auth/react"
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import EditorJS from "@editorjs/editorjs";
 //@ts-ignore
 import SimpleImage from "@editorjs/simple-image";
 //@ts-ignore
 import FontSizeTool from 'editorjs-inline-font-size-tool'; 
+import { Button } from "@/components/ui/button";
 
 export default function Topic({ params }: { params: { id: string } }) {
   // Assuming you use useSession hook
   const { data: session, status } = useSession();
+  const isAuthorized = status === 'authenticated';
+  const router = useRouter();
 
   const topicId = parseInt(params.id);
 
@@ -39,8 +43,10 @@ export default function Topic({ params }: { params: { id: string } }) {
   }, []);
 
   return (
-    <div className="h-full mx-auto flex justify-center align-center w-full overflow-y-auto">
+    <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
         <div id="editorjs"></div>
+      {isAuthorized && <Button onClick={() => router.push(`/test/${topicId}`)}>Complete Test</Button>}
+
 
       <style>{`
 

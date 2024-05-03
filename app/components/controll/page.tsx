@@ -10,8 +10,10 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const TestControll = (props: any) => {
+  const router = useRouter();
   const answers = props.answers as { questionId: number; answer: number }[];
   const testId = props.testId as number;
   const [results, setResults] = useState<{ results: { id: number, correct: boolean}[], score: string }>({
@@ -37,6 +39,7 @@ const TestControll = (props: any) => {
   return (
     <>
       <Dialog>
+        <Button onClick={() => router.back()}>Späť</Button>
         <DialogTrigger asChild>
           <Button
             onClick={() => {

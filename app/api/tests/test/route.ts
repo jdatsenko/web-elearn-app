@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { number } from "zod";
 
 export interface TestRequest {
-  userId: number
   topicId: number
   questions: Question[]
 }
@@ -26,6 +25,7 @@ export async function POST(req: Request) {
     const body = await req.json() as TestRequest;
     console.log(body);
 
+    return;
     const test = await prisma.test.create({
       data: {
         topicId: body.topicId,

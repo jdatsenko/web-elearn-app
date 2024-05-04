@@ -2,6 +2,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
+
 const TeacherRequestForm: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -119,7 +120,7 @@ const TeacherRequestForm: React.FC = () => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-red-500 text-white px-4 py-2 mb-8 rounded-md hover:bg-red-600"
+            className="px-4 text-white bg-red-500 py-2 mb-8 rounded-md hover:bg-red-600"
           >
             Odoslať
           </button>

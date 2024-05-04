@@ -30,23 +30,27 @@ const TestPage = ({ params }: { params: { id: string } }) => {
   >([]);
   useEffect(() => {
     axios
-      .get("/api/tests/test", {
-        params: {
-          id: topicId,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        const resTest = res.data as TestResponse;
-        setTest(res.data);
-        setAnswers(
-          resTest.questions.map((question) => ({
-            questionId: question.id,
-            answerId: 0,
-            answer: 0,
-          }))
-        );
-      });
+    .get("/api/tests/test", {
+      params: {
+        id: topicId,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      const resTest = res.data as TestResponse;
+      setTest(res.data);
+      setAnswers(
+        resTest.questions.map((question) => ({
+          questionId: question.id,
+          answerId: 0,
+          answer: 0,
+        }))
+      );
+    })
+    .catch((error) => {
+      console.error("Error fetching test data:", error);
+    });
+  
   }, []);
 
   return (

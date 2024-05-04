@@ -33,7 +33,8 @@ export default function Test() {
     description: "",
   });
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("")
+  const [errorMessage, setErrorMessage] = useState<string>("")
   const router = useRouter();
 
   const editorRef = useRef<EditorJS | null>(null);
@@ -65,24 +66,44 @@ export default function Test() {
   const onSave = async () => {
     try {
       if (!editorRef.current) return;
-
+      if (questions.length === 0) {
+        setErrorMessage("Zadajte aspoň jednu otázku");
+        return;
+      }
       const outputData = await editorRef.current.save();
       const content = outputData.blocks.map((e) => JSON.stringify(e));
-      const res = await axios.post("/api/topic/create", {
+      const topicData = {
         number: newTopic.number,
         title: newTopic.title,
         description: newTopic.description,
         content: content,
-      });
-      setSuccessMessage("Téma bola úspešne pridaná.");
+      };
+      const topicRes = await axios.post("/api/topic/create", topicData);
+      setSuccessMessage("Téma bola úspešne vytvorená.");
+  
+      const testData = {
+        topicId: topicRes.data.topic.topicNumber, 
+        questions: questions.map((question) => ({
+          label: question.label,
+          answers: question.answers.map((answer) => ({
+            label: answer.label,
+            isRight: answer.isRight,
+            number: answer.number,
+          })),
+        })),
+      };
+      const testRes = await axios.post("/api/tests/test", testData);
+  
       const timer = setTimeout(() => {
-        router.push(`/topics/${res.data.topic.topicNumber}`);
+        router.push(`/topics/${topicRes.data.topic.topicNumber}`);
       }, 700);
     } catch (error) {
-      console.error("Error creating topic:", error);
-      setSuccessMessage("Error. Topic with this number might already exist");
+      console.error("Error creating topic or test:", error);
+      setSuccessMessage("Error creating topic or test");
     }
   };
+  
+  
 
   const addQuestion = () => {
     setQuestions([
@@ -97,9 +118,9 @@ export default function Test() {
       <div className="my-4 mx-20">
         <label
           htmlFor="topicNumber"
-          className="block text-lg font-medium text-gray-200"
+          className="block text-lg font-medium"
         >
-          Topic number
+          Číslo témy
         </label>
         <Input
           id="topicNumber"
@@ -112,9 +133,9 @@ export default function Test() {
       <div className="my-4 mx-20">
         <label
           htmlFor="title"
-          className="block text-lg font-medium text-gray-200"
+          className="block text-lg font-medium"
         >
-          Title
+          Názov
         </label>
         <Input
           id="title"
@@ -125,9 +146,9 @@ export default function Test() {
       <div className="mb-10 mx-20">
         <label
           htmlFor="description"
-          className="block text-lg font-medium text-gray-200"
+          className="block text-lg font-medium"
         >
-          Description
+          Popis
         </label>
         <Input
           id="description"
@@ -135,7 +156,6 @@ export default function Test() {
           onChange={(e) =>
             setNewTopic({ ...newTopic, description: e.target.value })
           }
-          className="h-60"
         />
       </div>
       <div className="text-center mb-10">
@@ -203,12 +223,9 @@ export default function Test() {
                       setQuestions(newQuestions);
                     }}
                   >
-                    Delete
+                    Odstrániť
                   </Button>
                 </div>
-
-
-
 
                 </>
               ))}
@@ -225,15 +242,15 @@ export default function Test() {
                     }}
                     className="mt-2"
                   >
-                    Add answer
+                    Pridať odpoveď
                   </Button>
 
             </div>
           </div>
         ))}
-        <div className="mt-2 flex flex-row gap-4">
-        <Button onClick={() => setQuestions([])}>Clear</Button>
-        <Button onClick={addQuestion}>Add question</Button>
+        <div className="mt-10 flex flex-row gap-4">
+        <Button onClick={() => setQuestions([])}>Vymazať</Button>
+        <Button onClick={addQuestion}>Pridať otázku</Button>
         </div>
       </div>
 
@@ -242,14 +259,19 @@ export default function Test() {
           {successMessage}
         </div>
       )}
+      {errorMessage && (
+        <div className="text-red-500 my-5 font-bold text-center">
+          {errorMessage}
+        </div>
+      )}
       <div className="flex justify-center items-center my-8 mx-auto">
-        <Button
-          onClick={onSave}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          Save
-        </Button>
-
+      <Button
+      onClick={onSave}
+      className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-blue-600 mr-4"
+    >
+      Uložiť tému
+    </Button>
+   
         <style>
           {`
           .ce-block__content,

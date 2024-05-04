@@ -21,11 +21,12 @@ export interface Answer {
 
 
 export async function POST(req: Request) {
+  console.log("POST /api/test");
   try {
     const body = await req.json() as TestRequest;
     console.log(body);
 
-    return;
+    // return;
     const test = await prisma.test.create({
       data: {
         topicId: body.topicId,
@@ -52,6 +53,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: NextRequest) {
+  console.log("GET /api/test");
   const topicId = req.nextUrl.searchParams.get("id");
 
   if (topicId) {

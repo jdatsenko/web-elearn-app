@@ -59,7 +59,7 @@ export default function Topic({ params }: { params: { id: string } }) {
           </div>
         )}
 
-        {isAuthorized && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted >= topicId - 1 && (
+        {isAuthorized && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted < topicId - 1 && (
           <div className="text-red-500">
             Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
           </div>

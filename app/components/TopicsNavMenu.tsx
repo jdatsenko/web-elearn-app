@@ -30,28 +30,27 @@ const TopicsNavMenu = () => {
   }, []);
 
   return (
-    <div className="pb-4 flex text-center flex-row">
-      {topics.map((topic) => (
-        <div key={topic.topicNumber}>
-          <div key={topic.title}>
-            <div className="flex flex-row">
-              <Link href={`/topics/${topic.topicNumber}`}>
-                <span
-                  className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "px-10 justify-start text-center my-[3px] mx-[8px] border hover:border-blue-500 hover:border-solid hover:border-1"
-                  )}
-                >
-                  <span className="text-muted-foreground">
-                    {topic.topicNumber}
-                  </span>
-                </span>
-              </Link>
-            </div>
+    <div className="pb-4 flex flex-wrap justify-center sm:justify-start">
+    {topics.map((topic) => (
+      <div key={topic.topicNumber} className="mr-4 mb-4">
+        <div key={topic.title}>
+          <div className="">
+            <Link href={`/topics/${topic.topicNumber}`}>
+              <span
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "px-10 justify-start text-center border hover:border-blue-500 hover:border-solid hover:border-1"
+                )}
+              >
+                <span className="text-muted-foreground">{topic.topicNumber}</span>
+              </span>
+            </Link>
           </div>
         </div>
-      ))}
-    </div>
+      </div>
+    ))}
+  </div>
+  
   );
 };
 

@@ -59,10 +59,6 @@ const TestPage = ({ params }: { params: { id: string } }) => {
         <div className="text-red-500 text-3xl font-bold text-center mt-10">
           Musíte byť autorizovaný, aby ste mohli začať testovanie.
         </div>
-      ) : session.user && session.user.topicsCompleted < topicId - 1 ? (
-        <div className="text-red-500 text-3xl font-bold text-center mt-10">
-          Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
-        </div>
       ) : (
         test &&
         test.questions.map((question, i) => (
@@ -94,7 +90,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
           </RadioGroup>
         ))
       )}
-      {session && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted >= topicId - 1 && (
+      {session && session?.user?.topicsCompleted !== undefined && (
         <div className="flex justify-center">
           {test && <TestControll answers={answers} testId={topicId} />}
         </div>

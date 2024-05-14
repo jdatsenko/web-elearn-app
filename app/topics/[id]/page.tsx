@@ -47,7 +47,7 @@ export default function Topic({ params }: { params: { id: string } }) {
     <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
       <div id="editorjs"></div>
       <div className="mx-auto my-5">
-        {isAuthorized && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted >= topicId - 1 && (
+        {isAuthorized && session?.user?.topicsCompleted !== undefined && (
           <Button onClick={() => router.push(`/test/${topicId}`)}>
             Začať testovanie
           </Button>
@@ -59,11 +59,11 @@ export default function Topic({ params }: { params: { id: string } }) {
           </div>
         )}
 
-        {isAuthorized && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted < topicId - 1 && (
+        {/* {isAuthorized && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted < topicId - 1 && (
           <div className="text-red-500">
             Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
           </div>
-        )}
+        )} */}
       </div>
 
       <style>{`

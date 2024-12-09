@@ -43,14 +43,14 @@ const Password = () => {
       <Input
         className="w-64 mb-4"
         type="password"
-        placeholder="Old password"
+        placeholder="Staré heslo"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <Input
         className="w-64 mb-4"
         type="password"
-        placeholder="New password"
+        placeholder="Nové heslo"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
       />

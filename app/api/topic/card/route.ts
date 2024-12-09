@@ -1,5 +1,5 @@
-import prisma from '@/lib/prisma';
-import { NextRequest, NextResponse } from 'next/server';
+import prisma from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
@@ -11,10 +11,19 @@ export async function GET(req: NextRequest) {
       },
     });
     return NextResponse.json({ data: topics });
-} catch (error) {
-    console.error('Error fetching topics:', error);
-    return NextResponse.json({ error: 'Error fetching topics' }, { status: 500 });
+  } catch (error) {
+    if (error instanceof Error) {
+      // Narrow the type to Error
+      console.error("Error fetching topics:", error.message);
+      console.error("Stack trace:", error.stack);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    } else {
+      // Handle other unknown types (unlikely in this context)
+      console.error("Unknown error:", error);
+      return NextResponse.json(
+        { error: "An unknown error occurred" },
+        { status: 500 }
+      );
+    }
   }
 }
-
-

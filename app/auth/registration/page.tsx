@@ -20,17 +20,17 @@ import { useRouter } from "next/navigation";
 
 const formSchema: z.Schema<any> = z
   .object({
-    name: z.string().min(1, "Username is required").max(100),
-    email: z.string().min(1, "Email is required").email("Invalid email"),
+    name: z.string().min(1, "Toto pole je povinné").max(100),
+    email: z.string().min(1, "Toto pole je povinné").email("Invalid email"),
     password: z
       .string()
-      .min(1, "Password is required")
-      .min(8, "Password must have at least 8 characters"),
-    confirmPassword: z.string().min(1, "Password confirmation is required"),
+      .min(1, "Toto pole je povinné")
+      .min(8, "Heslo musí mať aspoň 8 znakov"),
+    confirmPassword: z.string().min(1, "Je potrebné potvrdenie hesla"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
-    message: "Password do not match",
+    message: "Heslá nie sú zhodné",
   });
 
 const FormRegister = () => {
@@ -110,7 +110,7 @@ const FormRegister = () => {
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder="Zadajte heslo"
                       {...field}
                     />
                   </FormControl>
@@ -126,7 +126,7 @@ const FormRegister = () => {
                   <FormLabel>Zadajte znova svoje heslo</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Re-Enter your password"
+                      placeholder="Opätovné zadanie hesla"
                       type="password"
                       {...field}
                     />
@@ -138,7 +138,7 @@ const FormRegister = () => {
           </div>
           <div className="flex justify-center">
             <Button className="w-1/7 mt-[20px]" type="submit">
-              Sign up
+            Zaregistrovať sa
             </Button>
           </div>
         </form>

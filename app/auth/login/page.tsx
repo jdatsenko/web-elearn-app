@@ -17,13 +17,12 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: "Používateľské meno musí mať aspoň 2 znaky.",
   }),
   password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+    message: "Heslo musí mať aspoň 8 znakov.",
   }),
 });
 
@@ -49,7 +48,9 @@ const FormLogin = () => {
       console.log("log", loginData);
 
       if (loginData?.status === 401) {
-        setError("Nesprávne používateľské meno alebo heslo. Skúste to prosím znova.");
+        setError(
+          "Nesprávne používateľské meno alebo heslo. Skúste to prosím znova."
+        );
       } else {
         router.refresh();
         router.push(".././");
@@ -67,16 +68,10 @@ const FormLogin = () => {
         <h1>Prihlásenie</h1>
       </div>
 
-      {error && (
-        <div className="text-red-500 font-bold text-center mb-4">
-          {error}
-        </div>
-      )}
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full "
+          className="w-full"
           method="POST"
         >
           <div className="space-y-2 w-1/2 sm:w-1/5 m-auto">
@@ -103,7 +98,7 @@ const FormLogin = () => {
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder="Zadajte svoje heslo"
                       {...field}
                     />
                   </FormControl>
@@ -114,14 +109,22 @@ const FormLogin = () => {
           </div>
           <div className="flex justify-center">
             <Button className="w-1/7 mt-[20px]" type="submit">
-              Login
+              Prihlásiť sa
             </Button>
           </div>
         </form>
       </Form>
+
       <div className="flex justify-center mt-5">
-        <p>Nemáte účet?{" "}</p>
-        <a href="/auth/registration" className="text-red-500 font-bold ml-3 underline">
+        {error && <p className="text-red-500 font-bold mt-1">{error}</p>}
+      </div>
+
+      <div className="flex justify-center mt-5">
+        <p>Nemáte účet? </p>
+        <a
+          href="/auth/registration"
+          className="text-red-500 font-bold ml-3 underline"
+        >
           Registrácia
         </a>
       </div>

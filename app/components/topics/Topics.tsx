@@ -22,7 +22,6 @@ import {
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-
 interface Topic {
   topicNumber: number;
   title: string;

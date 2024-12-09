@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+//@ts-ignore
 import { SolvedTest } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
@@ -53,7 +54,7 @@ const Admin = () => {
   }, [solvedTests]);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <div>Načítanie...</div>;
   }
   if (!session) {
     return <div>Unauthorized</div>;

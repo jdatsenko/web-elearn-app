@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 interface Topic {
   title: string;
   description: string;
-  topicNumber: number; // Добавляем поле topicNumber
+  topicNumber: number;
 }
 
 const TopicsNavMenu = () => {
@@ -20,7 +20,7 @@ const TopicsNavMenu = () => {
       try {
         const response = await fetch("/api/topic/card");
         const data = await response.json();
-        setTopics(data.data); // Используйте data.data вместо data.topics
+        setTopics(data.data); 
       } catch (error) {
         console.error("Error fetching topics:", error);
       }

@@ -39,7 +39,7 @@ const TopBar = () => {
 
   return (
     <>
-      <header className="p-4 flex flex-col sm:flex-row w-full justify-between border-b">
+      <header className="p-4 flex flex-col sm:flex-row w-full justify-between border-b ">
         <div className="flex flex-grow justify-between">
           <div className="flex gap-3 self-start">
             <Link

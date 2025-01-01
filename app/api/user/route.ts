@@ -5,17 +5,22 @@ import * as z from "zod";
 
 const userSchema = z
     .object({
-        name: z.string().min(3, 'Name is required, at least 3 characters').max(30, 'Name is too long'),
-        email: z.string().min(1, 'Email is required').email('Invalid email format'),
-        password: z.
-        string()
-        .min(6, 'Password is required, at least 6 characters')
-        .max(30, 'Password is too long'),
-    }); 
-
+        name: z
+            .string()
+            .min(3, 'Meno je povinné, musí obsahovať aspoň 3 znaky')
+            .max(30, 'Meno je príliš dlhé, maximálne 30 znakov'),
+        email: z
+            .string()
+            .min(1, 'Email je povinný')
+            .email('Neplatný formát emailu'),
+        password: z
+            .string()
+            .min(6, 'Heslo je povinné, musí obsahovať aspoň 6 znakov')
+            .max(30, 'Heslo je príliš dlhé, maximálne 30 znakov'),
+    });
 
 export async function POST(req: Request) {
-    try{
+    try {
         const body = await req.json();
         const { name, email, password } = userSchema.parse(body);
 
@@ -26,7 +31,10 @@ export async function POST(req: Request) {
         });
 
         if (existingUser) {
-            return NextResponse.json({ message: "User with this email already exists" }, { status: 400 });
+            return NextResponse.json(
+                { message: "Používateľ s týmto emailom už existuje" },
+                { status: 400 }
+            );
         }
 
         const existingUserByName = await prisma.user.findUnique({
@@ -36,7 +44,10 @@ export async function POST(req: Request) {
         });
 
         if (existingUserByName) {
-            return NextResponse.json({ message: "User with this username already exists" }, { status: 400 });
+            return NextResponse.json(
+                { message: "Používateľ s týmto používateľským menom už existuje" },
+                { status: 400 }
+            );
         }
 
         const hashedPassword = await hash(password, 10);
@@ -48,15 +59,21 @@ export async function POST(req: Request) {
             }
         });
 
-        const{ password: newUserPassword, ...rest } = newUser;
+        const { password: newUserPassword, ...rest } = newUser;
 
-        return NextResponse.json({
-            message: "User created successfully",
-            user: rest
-        }, {
-            status: 201
-        });
-    } catch(error) {
-        return NextResponse.json({ message: "Something went wrong", error: error }, { status: 500 });
+        return NextResponse.json(
+            {
+                message: "Používateľ bol úspešne vytvorený",
+                user: rest
+            },
+            {
+                status: 201
+            }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            { message: "Niečo sa pokazilo", error: error },
+            { status: 500 }
+        );
     }
 }

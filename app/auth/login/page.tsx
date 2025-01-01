@@ -18,9 +18,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Používateľské meno musí mať aspoň 2 znaky.",
-  }),
+  identifier: z
+    .string()
+    .min(2, {
+      message: "Používateľské meno musí mať aspoň 2 znaky.",
+    })
+    .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) || val.length >= 2, {
+      message: "Zadajte platný e-mail alebo používateľské meno.",
+    }),
   password: z.string().min(8, {
     message: "Heslo musí mať aspoň 8 znakov.",
   }),
@@ -33,7 +38,7 @@ const FormLogin = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      identifier: "",
       password: "",
     },
   });
@@ -41,20 +46,25 @@ const FormLogin = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const loginData = await signIn("credentials", {
-        name: values.name,
+        identifier: values.identifier, // email or username
         password: values.password,
         redirect: false,
       });
-      console.log("log", loginData);
+
+      console.log("log:: ", loginData);
 
       if (loginData?.status === 401) {
-        setError(
-          "Nesprávne používateľské meno alebo heslo. Skúste to prosím znova."
-        );
-      } else {
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.identifier)) {
+          setError("Tento e-mail alebo heslo nie je správne.");
+        } else {
+          setError("Tento používateľské meno alebo heslo nie je správne.");
+        }
+      } else if (loginData?.ok) {
         router.refresh();
         router.push(".././");
         console.log("Authentication successful:", loginData);
+      } else {
+        setError("Vyskytla sa neočakávaná chyba. Skúste to prosím znova.");
       }
     } catch (error: unknown) {
       console.error("Vyskytla sa neočakávaná chyba:", error);
@@ -77,12 +87,12 @@ const FormLogin = () => {
           <div className="space-y-2 w-1/2 sm:w-1/5 m-auto">
             <FormField
               control={form.control}
-              name="name"
+              name="identifier"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prihlasovacie meno</FormLabel>
+                  <FormLabel>Prihlasovacie meno alebo e-mail</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe" {...field} />
+                    <Input placeholder="johndoe alebo johndoe@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

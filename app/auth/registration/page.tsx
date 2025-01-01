@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 const formSchema: z.Schema<any> = z
   .object({
     name: z.string().min(1, "Toto pole je povinné").max(100),
-    email: z.string().min(1, "Toto pole je povinné").email("Invalid email"),
+    email: z.string().min(1, "Toto pole je povinné").email("Neplatný e-mail"),
     password: z
       .string()
       .min(1, "Toto pole je povinné")
@@ -61,8 +61,8 @@ const FormRegister = () => {
     if (response.ok) {
       router.push("/auth/login");
     } else {
-      console.error("Failed to create user");
-      setErrorMessage("Tento e-mail / používateľské meno je už obsadené.");
+      const errorData = await response.json();
+      setErrorMessage(errorData.message);
     }
   };
 

@@ -26,7 +26,6 @@ export default function Topic({ params }: { params: { id: string } }) {
       const e = new EditorJS({
         holder: "editorjs",
         onReady: () => {
-          console.log("Editor.js is ready to work!");
           editor.current = e as EditorJS;
           editor.current.render({
             blocks: response.data.data.content.map((e: string) =>
@@ -45,25 +44,53 @@ export default function Topic({ params }: { params: { id: string } }) {
 
   return (
     <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
-      <div id="editorjs"></div>
+      <div className="mx-14 md:mx-20" id="editorjs"></div>
       <div className="mx-auto my-5">
-        {isAuthorized && session?.user?.topicsCompleted !== undefined && (
-          <Button onClick={() => router.push(`/test/${topicId}`)}>
-            Začať testovanie
-          </Button>
+        {isAuthorized && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted >= topicId - 1 && (
+          <div>
+            <Button
+              className="mr-4"
+              onClick={() => router.push(`/test/${topicId}`)}
+            >
+              Začať testovanie
+            </Button>
+            <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
+              Ďalšia téma
+            </Button>
+          </div>
         )}
 
         {!isAuthorized && (
-          <div className="text-red-500">
-            Musíte byť autorizovaný, aby ste mohli začať testovanie.
+          <div>
+            <div className="flex justify-center">
+              <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                Ďalšia téma
+              </Button>
+            </div>
+            <div className="text-red-500 mt-5">
+              Musíte byť autorizovaný, aby ste mohli začať testovanie.
+              <a
+                href="/auth/login"
+                className="text-red-500 font-bold ml-3 underline"
+              >
+                Prihlásiť sa
+              </a>
+            </div>
           </div>
         )}
 
-        {/* {isAuthorized && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted < topicId - 1 && (
-          <div className="text-red-500">
-            Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
-          </div>
-        )} */}
+        {isAuthorized &&
+          session?.user?.topicsCompleted !== undefined &&
+          session?.user?.topicsCompleted < topicId - 1 && (
+            <div className="text-red-500">
+              Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
+              <div className="flex justify-center mt-4">
+                <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                  Ďalšia téma
+                </Button>
+              </div>
+            </div>
+          )}
       </div>
 
       <style>{`

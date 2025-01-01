@@ -1,49 +1,62 @@
 "use client";
 
-import TopicsNavMenu from "@/app/components/TopicsNavMenu";
-import {
-  ResizablePanel,
-  ResizableHandle,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function TopicLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const [isTopicsNavOpen, setIsTopicsNavOpen] = useState(false);
+  const params = useParams<{ id: string }>();
+  const [topics, setTopics] = useState([]);
+  const router = useRouter();
 
-  const toggleTopicsNav = () => {
-    setIsTopicsNavOpen(!isTopicsNavOpen);
-  };
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetch("/api/topic/card");
+        const data = await response.json();
+        if (data.data) {
+          setTopics(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching topics:", error);
+      }
+    };
 
+    fetchTopics();
+  }, []);
   return (
     <>
-      <div className="flex flex-col h-full w-full">
-        {/* Topic Navbar Menu */}
-        <div className={`flex flex-wrap justify-center p-4 }`}>
-          <TopicsNavMenu />
-        </div>
-
-        {/* Topics */}
+      <div className="flex h-full w-full">
+        {params.id !== "1" && (
+          <div
+            className=" cursor-pointer fixed h-full flex justify-center items-center px-6 md:px-10"
+            onClick={() => {
+              router.push(`/topics/${parseInt(params.id) - 1}`);
+            }}
+          >
+            <i className="bi bi-arrow-left text-base md:text-2xl"></i>
+          </div>
+        )}
         <div className="flex flex-wrap justify-center h-full w-full overflow-y-auto">
           {children}
         </div>
-
+        {params.id !== topics.length.toString() && (
+          <div>
+            <div
+              className="fixed cursor-pointer h-full flex justify-center items-center px-6 md:px-10 right-0"
+              onClick={() => {
+                router.push(`/topics/${parseInt(params.id) + 1}`);
+              }}
+            >
+              <i className="bi bi-arrow-right text-base md:text-2xl"></i>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Responsive Styles */}
-      <style jsx>{`
-        @media (max-width: 640px) {
-          .fixed {
-            right: unset;
-            left: 15px; 
-            top: 70px;
-          }
-        }
-      `}</style>
     </>
   );
 }
-

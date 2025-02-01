@@ -31,7 +31,7 @@ const TopBar = () => {
   };
 
   if (loading) {
-    return <div className="text-center mt-4 text-lg">Loading...</div>;
+    return <div className="text-center mt-4 text-lg">Načítanie...</div>;
   }
 
   const isAdmin = session?.user?.role === "ADMIN";

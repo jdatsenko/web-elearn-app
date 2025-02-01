@@ -20,37 +20,65 @@ export default function Topic({ params }: { params: { id: string } }) {
 
   const topicId = parseInt(params.id);
 
-  const [editorData, setEditorData] = useState<any>({});
-  const editor = useRef<EditorJS>();
+  const [loading, setLoading] = useState(true);
+
+  const [editorData, setEditorData] = useState<any>(null);
+  const editor = useRef<EditorJS | null>(null);
 
   useEffect(() => {
-    axios.get(`/api/topic/get?id=${topicId}`).then((response) => {
-      setEditorData(response.data);
-      const e = new EditorJS({
-        holder: "editorjs",
-        onReady: () => {
-          editor.current = e as EditorJS;
-          //TODO try catch
-          editor.current.render({
-            blocks: response.data.data.content.map((e: string) =>
-              JSON.parse(e)
+    const fetchTopic = async () => {
+      try {
+        const response = await axios.get(`/api/topic/get?id=${topicId}`);
+        setEditorData(response.data);
+        setLoading(false); 
+      } catch (error) {
+        console.error(error);
+        setLoading(false); 
+      }
+    };
+
+    fetchTopic();
+
+    return () => {
+      if (editor.current) {
+        editor.current.destroy();
+        editor.current = null;
+      }
+    };
+  }, [topicId]);
+
+  useEffect(() => {
+    if (!loading && editorData && !editor.current) {
+      const holderElement = document.getElementById("editorjs");
+      if (holderElement) {
+        editor.current = new EditorJS({
+          holder: "editorjs",
+          readOnly: true,
+          tools: {
+            image: SimpleImage,
+            fontSize: FontSizeTool,
+          },
+          data: {
+            blocks: editorData.data.content.map((item: string) =>
+              JSON.parse(item)
             ),
-          });
-        },
-        readOnly: true,
-        tools: {
-          image: SimpleImage,
-          fontSize: FontSizeTool,
-        },
-      });
-    });
-  }, []);
+          },
+        });
+      } else {
+        console.error("Element with ID 'editorjs' not found.");
+      }
+    }
+  }, [loading, editorData]);
+
+  if (loading === true) {
+    return <div className="text-center mt-5">Načítanie...</div>;
+  }
 
   return (
     <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
       <div className="mx-14 md:mx-20" id="editorjs"></div>
       <div className="mx-auto my-5">
-        {status === "loading" && (
+        {status !== "loading" && (
           <div>
             {isAuthorized &&
               session?.user?.topicsCompleted !== undefined &&
@@ -104,35 +132,34 @@ export default function Topic({ params }: { params: { id: string } }) {
           </div>
         )}
 
-        <div>Načítanie...</div>
+        {status === "loading" && <div>Načítanie...</div>}
       </div>
+
       <style>{`
+      .codex-editor__redactor {
+        padding-bottom: 10px !important;
+      }
+      .ce-block {
+        margin: auto !important;
+      }
+      .ce-block__content,
+      .ce-toolbar__content {
+        max-width: 70% !important;
+      }
+      .cdx-block {
+        max-width: 100% !important;
+        margin: 20px 0 !important;
+      }
+      .ce-paragraph.cdx-block {
+        width: 100% !important;
+      }
+      .cdx-simple-image .cdx-input {
+        width: 50% !important;
+        margin: 30px auto !important;
+        text-align: center !important;
+      }
+    `}</style>
 
-      .codex-editor__redactor{
-          padding-bottom: 10px !important;
-        }
-        .ce-block{
-          margin: auto; !important;
-        }
-          .ce-block__content,
-          .ce-toolbar__content {
-            max-width: 70% !important;
-          }
-          .cdx-block {
-            max-width: 100% !important;
-            margin: 20px 0 !important;
-          }
-          .ce-paragraph.cdx-block {
-            width: 100% !important;
-        }
-          .cdx-simple-image .cdx-input {
-            width: 50% !important;
-            margin: 30px auto !important;
-            text-align: center;
-            }
-
-        }
-      `}</style>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-
 import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -8,6 +7,7 @@ import { useState, useEffect, use } from "react";
 import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import TopBarSkeleton from "./skeletons/TopBarSkeleton";
 
 const TopBar = () => {
   const { data: session, status } = useSession();
@@ -30,8 +30,8 @@ const TopBar = () => {
     });
   };
 
-  if (loading) {
-    return <div className="text-center mt-4 text-lg">Načítanie...</div>;
+  if (!loading) {
+    return <TopBarSkeleton />;
   }
 
   const isAdmin = session?.user?.role === "ADMIN";
@@ -39,7 +39,7 @@ const TopBar = () => {
 
   return (
     <>
-      <header className="p-4 flex flex-col sm:flex-row w-full justify-between border-b ">
+      <header className="p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit">
         <div className="flex flex-grow justify-between">
           <div className="flex gap-3 self-start">
             <Link

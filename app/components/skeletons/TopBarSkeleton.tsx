@@ -7,11 +7,9 @@ const TopBarSkeleton = () => {
       <div className="p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit">
         <div className="flex flex-grow justify-between">
           <div className="flex gap-3 self-start">
-            <Skeleton width={70} height={35} />
-            <Skeleton width={70} height={35} />
+            <Skeleton width={75} height={35} />
           </div>
           <div className="flex gap-3 self-end">
-            <Skeleton width={100} height={35} />
             <Skeleton width={100} height={35} />
           </div>
         </div>
@@ -19,6 +17,15 @@ const TopBarSkeleton = () => {
           <Skeleton circle width={35} height={35} />
         </div>
       </div>
+
+      <style>{`
+        span.react-loading-skeleton:before {
+            content: "" !important;
+        }
+        span {
+            height: 2.3rem;
+        }
+    `}</style>
     </SkeletonTheme>
   );
 };

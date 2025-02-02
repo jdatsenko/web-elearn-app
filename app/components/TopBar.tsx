@@ -7,13 +7,13 @@ import { useState, useEffect, use } from "react";
 import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import TopBarSkeleton from "./skeletons/TopBarSkeleton";
-
+import dynamic from "next/dynamic";
 const TopBar = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const { theme, setTheme } = useTheme();
   const router = useRouter();
+  const TopBarSkeleton = dynamic(() => import("./skeletons/TopBarSkeleton"), { ssr: false });
 
   useEffect(() => {
     if (status === "loading") {
@@ -30,10 +30,9 @@ const TopBar = () => {
     });
   };
 
-  if (!loading) {
+  if (loading) {
     return <TopBarSkeleton />;
   }
-
   const isAdmin = session?.user?.role === "ADMIN";
   const isTeacher = session?.user?.role === "TEACHER"; 
 

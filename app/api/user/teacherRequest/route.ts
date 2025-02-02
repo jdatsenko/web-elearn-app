@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ message: "Not logged in" }, { status: 401 });
+    return NextResponse.json({ message: "Nie ste prihlásený" }, { status: 401 });
   }
 
   const userId = session.user.id;
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 
   if (teacherRequestExists && teacherRequestExists.status == 'pending') {
     return NextResponse.json(
-      { message: "Teacher request already exists" },
+      { message: "Žiadosť už existuje" },
       { status: 400 }
     );
   }
@@ -43,5 +43,5 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ message: "Password updated successfully" });
+  return NextResponse.json({ message: "Heslo bolo úspešne aktualizované" });
 }

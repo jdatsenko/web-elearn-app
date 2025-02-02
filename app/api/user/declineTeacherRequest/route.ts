@@ -10,11 +10,11 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ message: "Not logged in" }, { status: 401 });
+    return NextResponse.json({ message: "Nie ste prihlásení" }, { status: 401 });
   }
 
   if (session.user.role !== 'ADMIN') {
-    return NextResponse.json({ message: "Not authorized" }, { status: 401 });
+    return NextResponse.json({ message: "Nemáte oprávnenie" }, { status: 401 });
   }
 
   const updatedRequest = await prisma.teacherRequests.update({
@@ -26,5 +26,5 @@ export async function POST(req: Request) {
     },
   })
 
-  return NextResponse.json({ message: "Request rejected" });
+  return NextResponse.json({ message: "Žiadosť zamietnutá" });
 }

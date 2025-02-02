@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         });
 
         if (existingTopic) {
-            return NextResponse.json({ error: "Topic already exists" }, { status: 400 });
+            return NextResponse.json({ error: "Téma už existuje" }, { status: 400 });
         }
 
         const topic = await prisma.content.create({
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     }
     catch (error) {
-      console.error("Error creating topic:", error);
-      return NextResponse.json({ error: "Error creating topic" }, { status: 500 });
+      console.error(error);
+      return NextResponse.json({ error: "Chyba pri vytváraní témy" }, { status: 500 });
     }
 }

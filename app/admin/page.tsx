@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { SolvedTest } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import "react-loading-skeleton/dist/skeleton.css";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -27,11 +26,12 @@ const Admin = () => {
   const router = useRouter();
   const isTeacher = session?.user?.role === "TEACHER";
   const isAdmin = session?.user?.role === "ADMIN";
-  
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get("/api/user/test/solved").then((response) => {
       setSolvedTests(response.data);
+      setLoading(false);
     });
   }, []);
 
@@ -55,11 +55,8 @@ const Admin = () => {
     setProgress(newProgress);
   }, [solvedTests]);
 
-  if (status === "loading") {
-    return <div>Načítanie...</div>;
-  }
-  if (!session) {
-    return <div>Unauthorized</div>;
+  if (!session || loading) {
+    return <></>;
   }
 
   return (
@@ -126,8 +123,11 @@ const Admin = () => {
             let isTopicSolved = false;
             return (
               <div key={topic}>
-                <Link href={`/topics/${topicIndex + 1}`} className="text-lg hover:underline">
-                {topicIndex + 1}. {topics[topicIndex]}
+                <Link
+                  href={`/topics/${topicIndex + 1}`}
+                  className="text-lg hover:underline"
+                >
+                  {topicIndex + 1}. {topics[topicIndex]}
                 </Link>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tests.map((test, index) => {

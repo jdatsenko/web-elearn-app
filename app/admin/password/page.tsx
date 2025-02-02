@@ -1,9 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { PasswordInput } from "@/components/ui/password-input";
 
 const Password = () => {
   const router = useRouter();
@@ -39,17 +39,16 @@ const Password = () => {
   }
 
   return (
-    <div className="flex flex-col mt-10 items-center">
-      <Input
-        className="w-64 mb-4"
-        type="password"
+    <div className="flex flex-col mt-10 items-center space-y-4">
+      <h1 className="text-2xl font-bold text-center my-4">Nastavte staré a nové heslo na zmenu hesla</h1>
+      <PasswordInput
+        className="w-64"
         placeholder="Staré heslo"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Input
-        className="w-64 mb-4"
-        type="password"
+      <PasswordInput
+        className="w-64"
         placeholder="Nové heslo"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}

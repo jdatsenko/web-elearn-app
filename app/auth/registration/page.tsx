@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as z from "zod";
 import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
+import { PasswordInput } from "@/components/ui/password-input";
 import {
   Form,
   FormControl,
@@ -108,11 +108,10 @@ const FormRegister = () => {
                 <FormItem>
                   <FormLabel>Heslo</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Zadajte heslo"
-                      {...field}
-                    />
+                      <PasswordInput
+                        placeholder="Zadajte heslo"
+                        {...field}
+                      />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -125,9 +124,8 @@ const FormRegister = () => {
                 <FormItem>
                   <FormLabel>Zadajte znova svoje heslo</FormLabel>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       placeholder="Opätovné zadanie hesla"
-                      type="password"
                       {...field}
                     />
                   </FormControl>
@@ -138,7 +136,7 @@ const FormRegister = () => {
           </div>
           <div className="flex justify-center">
             <Button className="w-1/7 mt-[20px]" type="submit">
-            Zaregistrovať sa
+              Zaregistrovať sa
             </Button>
           </div>
         </form>
@@ -148,10 +146,9 @@ const FormRegister = () => {
         <a href="/auth/login" className="text-red-500 font-bold ml-3 underline">
           Prihlásiť sa
         </a>
-        
       </div>
       <div className="flex justify-center mt-5">
-          {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
+        {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
       </div>
     </>
   );

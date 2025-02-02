@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { PasswordInput } from "@/components/ui/password-input";
 
 const formSchema = z.object({
   identifier: z
@@ -23,9 +24,12 @@ const formSchema = z.object({
     .min(2, {
       message: "Používateľské meno musí mať aspoň 2 znaky.",
     })
-    .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) || val.length >= 2, {
-      message: "Zadajte platný e-mail alebo používateľské meno.",
-    }),
+    .refine(
+      (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) || val.length >= 2,
+      {
+        message: "Zadajte platný e-mail alebo používateľské meno.",
+      }
+    ),
   password: z.string().min(8, {
     message: "Heslo musí mať aspoň 8 znakov.",
   }),
@@ -92,7 +96,10 @@ const FormLogin = () => {
                 <FormItem>
                   <FormLabel>Prihlasovacie meno alebo e-mail</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe alebo johndoe@example.com" {...field} />
+                    <Input
+                      placeholder="johndoe alebo johndoe@example.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,8 +113,7 @@ const FormLogin = () => {
                 <FormItem>
                   <FormLabel>Heslo</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
+                    <PasswordInput
                       placeholder="Zadajte svoje heslo"
                       {...field}
                     />

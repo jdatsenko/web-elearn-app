@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
 interface Topic {
   topicNumber: number;
@@ -31,6 +32,8 @@ interface Topic {
 const Topics = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
   const { data: session, status } = useSession();
+  const [loading, setLoading] = useState(true);
+  const HomePageSkeleton = dynamic(() => import("../skeletons/HomePageSkeleton"), { ssr: false });
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -39,6 +42,7 @@ const Topics = () => {
         const data = await response.json();
         if (data.data) {
           setTopics(data.data);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching topics:", error);
@@ -48,6 +52,10 @@ const Topics = () => {
     fetchTopics();
   }, []);
 
+  if (loading) {
+    return <HomePageSkeleton />;
+  }
+  
   return (
     <>
       <section className="px-4 sm:px-16 flex flex-col gap-4">

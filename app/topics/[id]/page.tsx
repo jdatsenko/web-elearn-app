@@ -9,6 +9,7 @@ import SimpleImage from "@editorjs/simple-image";
 //@ts-ignore
 import FontSizeTool from "editorjs-inline-font-size-tool";
 import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
 
 export default function Topic({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession() as {
@@ -24,6 +25,7 @@ export default function Topic({ params }: { params: { id: string } }) {
 
   const [editorData, setEditorData] = useState<any>(null);
   const editor = useRef<EditorJS | null>(null);
+  const TopicSkeleton = dynamic(() => import("@/app/components/skeletons/TopicSkeleton"), { ssr: false });
 
   useEffect(() => {
     const fetchTopic = async () => {
@@ -70,8 +72,8 @@ export default function Topic({ params }: { params: { id: string } }) {
     }
   }, [loading, editorData]);
 
-  if (loading === true) {
-    return <div className="text-center mt-5">Načítanie...</div>;
+  if (loading) {
+    return <TopicSkeleton />;
   }
 
   return (

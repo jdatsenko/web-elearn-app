@@ -8,6 +8,7 @@ import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+
 const TopBar = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);

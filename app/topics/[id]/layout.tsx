@@ -55,6 +55,11 @@ export default function TopicLayout({
             </div>
           </div>
         )}
+        <style>{`
+          ::selection {
+            color: black;
+          }
+        `}</style>
       </div>
     </>
   );

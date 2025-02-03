@@ -1,9 +1,8 @@
 "use client";
-
 import "bootstrap-icons/font/bootstrap-icons.css";
-
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ArrowToTop } from "@/components/ui/arrow-to-top";
 
 export default function TopicLayout({
   children,
@@ -30,6 +29,7 @@ export default function TopicLayout({
   return (
     <>
       <div className="flex h-full w-full">
+        <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
         {params.id !== "1" && (
           <div
             className=" cursor-pointer fixed h-full flex justify-center items-center px-6 md:px-10"
@@ -51,12 +51,11 @@ export default function TopicLayout({
                 router.push(`/topics/${parseInt(params.id) + 1}`);
               }}
             >
-              <i className="bi bi-arrow-right text-base md:text-2xl"></i>
+              <i className="bi bi-arrow-right text-base md:text-2xl absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2" />
             </div>
           </div>
         )}
       </div>
-
     </>
   );
 }

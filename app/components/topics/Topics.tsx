@@ -3,7 +3,6 @@ import "./topics.css";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
 import {
   Accordion,
   AccordionContent,

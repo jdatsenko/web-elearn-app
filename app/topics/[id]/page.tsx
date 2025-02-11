@@ -133,8 +133,6 @@ export default function Topic({ params }: { params: { id: string } }) {
               )}
           </div>
         )}
-
-        {status === "loading" && <div>Načítanie...</div>}
       </div>
 
       <style>{`
@@ -147,6 +145,9 @@ export default function Topic({ params }: { params: { id: string } }) {
       .ce-block__content,
       .ce-toolbar__content {
         max-width: 70% !important;
+      }
+      .ce-block--selected .ce-block__content{
+      background-color: #8080805c !important;
       }
       .cdx-block {
         max-width: 100% !important;

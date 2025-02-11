@@ -123,7 +123,7 @@ export default function Topic({ params }: { params: { id: string } }) {
             {isAuthorized &&
               session?.user?.topicsCompleted !== undefined &&
               session?.user?.topicsCompleted < topicId - 1 && (
-                <div className="text-red-500">
+                <div className="test-warning text-red-500 text-center">
                   Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
                   <div className="flex justify-center mt-4">
                     <Button
@@ -165,6 +165,10 @@ export default function Topic({ params }: { params: { id: string } }) {
         width: 50% !important;
         margin: 30px auto !important;
         text-align: center !important;
+      }
+      .test-warning::selection {
+        color: black;
+        background: #ffffffa1;
       }
     `}</style>
     </div>

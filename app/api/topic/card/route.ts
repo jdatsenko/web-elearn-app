@@ -10,15 +10,15 @@ export async function GET(req: NextRequest) {
         description: true,
       },
     });
-    return NextResponse.json({ data: topics });
+
+    const response = NextResponse.json({ data: topics });
+    response.headers.set("Cache-Control", "no-store");
+
+    return response;
   } catch (error) {
     if (error instanceof Error) {
-      // Narrow the type to Error
-      console.error("Error fetching topics:", error.message);
-      console.error("Stack trace:", error.stack);
       return NextResponse.json({ error: error.message }, { status: 500 });
     } else {
-      // Handle other unknown types (unlikely in this context)
       console.error("Unknown error:", error);
       return NextResponse.json(
         { error: "An unknown error occurred" },

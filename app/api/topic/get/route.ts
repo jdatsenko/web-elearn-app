@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+export const revalidate = 0;
 export async function GET(req: NextRequest) {
     const topicId = req.nextUrl.searchParams.get("id");
 
@@ -12,11 +13,9 @@ export async function GET(req: NextRequest) {
         });
 
         const response = NextResponse.json({ data: topic });
-        response.headers.set("Cache-Control", "no-store");
         return response;
     }
 
     const response = NextResponse.json({ message: "Hello from the API" });
-    response.headers.set("Cache-Control", "no-store");
     return response;
 }

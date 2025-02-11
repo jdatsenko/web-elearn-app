@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
+export const revalidate = 0;
 export async function GET(req: NextRequest) {
   try {
     const topics = await prisma.content.findMany({
@@ -12,7 +13,6 @@ export async function GET(req: NextRequest) {
     });
 
     const response = NextResponse.json({ data: topics });
-    response.headers.set("Cache-Control", "no-store");
 
     return response;
   } catch (error) {

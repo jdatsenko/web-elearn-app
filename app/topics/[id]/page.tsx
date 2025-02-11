@@ -25,17 +25,20 @@ export default function Topic({ params }: { params: { id: string } }) {
 
   const [editorData, setEditorData] = useState<any>(null);
   const editor = useRef<EditorJS | null>(null);
-  const TopicSkeleton = dynamic(() => import("@/app/components/skeletons/TopicSkeleton"), { ssr: false });
+  const TopicSkeleton = dynamic(
+    () => import("@/app/components/skeletons/TopicSkeleton"),
+    { ssr: false }
+  );
 
   useEffect(() => {
     const fetchTopic = async () => {
       try {
         const response = await axios.get(`/api/topic/get?id=${topicId}`);
         setEditorData(response.data);
-        setLoading(false); 
+        setLoading(false);
       } catch (error) {
         console.error(error);
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -142,9 +145,11 @@ export default function Topic({ params }: { params: { id: string } }) {
       .ce-block {
         margin: auto !important;
       }
-      .ce-block__content,
-      .ce-toolbar__content {
-        max-width: 70% !important;
+      @media (min-width: 1024px) {
+        .ce-block__content,
+        .ce-toolbar__content {
+          max-width: 70% !important;
+        }
       }
       .ce-block--selected .ce-block__content{
       background-color: #8080805c !important;
@@ -162,7 +167,6 @@ export default function Topic({ params }: { params: { id: string } }) {
         text-align: center !important;
       }
     `}</style>
-
     </div>
   );
 }

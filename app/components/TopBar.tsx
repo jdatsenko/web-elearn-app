@@ -14,7 +14,9 @@ const TopBar = () => {
   const [loading, setLoading] = useState(true);
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const TopBarSkeleton = dynamic(() => import("./skeletons/TopBarSkeleton"), { ssr: false });
+  const TopBarSkeleton = dynamic(() => import("./skeletons/TopBarSkeleton"), {
+    ssr: false,
+  });
 
   useEffect(() => {
     if (status === "loading") {
@@ -34,12 +36,15 @@ const TopBar = () => {
   if (loading) {
     return <TopBarSkeleton />;
   }
-  const isAdmin = session?.user?.role === "ADMIN";
-  const isTeacher = session?.user?.role === "TEACHER"; 
 
   return (
     <>
-      <header className="p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit">
+      <header
+        className={cn(
+          "p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit sticky top-0 z-10",
+          theme === "dark" ? "bg-black" : "bg-white"
+        )}
+      >
         <div className="flex flex-grow justify-between">
           <div className="flex gap-3 self-start">
             <Link
@@ -53,7 +58,6 @@ const TopBar = () => {
                 <Link className={buttonVariants()} href={"/admin"}>
                   Moje konto
                 </Link>
-                
               </div>
             )}
           </div>

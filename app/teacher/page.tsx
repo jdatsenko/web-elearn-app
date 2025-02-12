@@ -108,7 +108,7 @@ export default function Test() {
   const addQuestion = () => {
     setQuestions([
       ...questions,
-      { label: "qwe", answers: [{ label: "", isRight: false, number: 0 }] },
+      { label: "", answers: [{ label: "", isRight: false, number: 0 }] },
     ]);
 
     console.log(questions);
@@ -159,7 +159,7 @@ export default function Test() {
         />
       </div>
       <div className="text-center mb-10">
-        <h1 className="text-3xl">Content</h1>
+        <h1 className="text-3xl">Obsah témy</h1>
       </div>
       <div className="border mx-auto w-11/12 flex align-center justify-center border-gray-300 rounded-md">
         <div id="editorjs" className="mb-4 mx-10 w-full"></div>
@@ -169,7 +169,7 @@ export default function Test() {
         {questions?.map((question, index) => (
           <div key={index} >
             <div className="mb-4">
-              Question {index + 1}:
+              Otázka {index + 1}:
               <Input
                 id="question"
                 value={question.label}

@@ -16,11 +16,10 @@ export interface Question {
 export interface Answer {
   label: string;
   isRight: boolean;
-  number: number;
+  // number: number;
 }
 
 interface Topic {
-  number?: number;
   title?: string;
   description?: string;
   content?: string[];
@@ -28,7 +27,6 @@ interface Topic {
 
 export default function Test() {
   const [newTopic, setNewTopic] = useState<Topic>({
-    number: 0,
     title: "",
     description: "",
   });
@@ -73,7 +71,6 @@ export default function Test() {
       const outputData = await editorRef.current.save();
       const content = outputData.blocks.map((e) => JSON.stringify(e));
       const topicData = {
-        number: newTopic.number,
         title: newTopic.title,
         description: newTopic.description,
         content: content,
@@ -88,7 +85,6 @@ export default function Test() {
           answers: question.answers.map((answer) => ({
             label: answer.label,
             isRight: answer.isRight,
-            number: answer.number,
           })),
         })),
       };
@@ -108,28 +104,13 @@ export default function Test() {
   const addQuestion = () => {
     setQuestions([
       ...questions,
-      { label: "", answers: [{ label: "", isRight: false, number: 0 }] },
+      { label: "", answers: [{ label: "", isRight: false}] },
     ]);
 
     console.log(questions);
   };
   return (
     <>
-      <div className="my-4 mx-20">
-        <label
-          htmlFor="topicNumber"
-          className="block text-lg font-medium"
-        >
-          Číslo témy
-        </label>
-        <Input
-          id="topicNumber"
-          value={newTopic.number}
-          onChange={(e) =>
-            setNewTopic({ ...newTopic, number: parseInt(e.target.value) })
-          }
-        />
-      </div>
       <div className="my-4 mx-20">
         <label
           htmlFor="title"
@@ -236,7 +217,7 @@ export default function Test() {
                       newQuestions[index].answers.push({
                         label: "",
                         isRight: false,
-                        number: 0,
+                        // number: 0,
                       });
                       setQuestions(newQuestions);
                     }}

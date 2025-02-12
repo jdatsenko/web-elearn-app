@@ -20,7 +20,7 @@ export default function Topic({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   const topicId = parseInt(params.id);
-
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
   const [editorData, setEditorData] = useState<any>(null);
@@ -34,10 +34,14 @@ export default function Topic({ params }: { params: { id: string } }) {
     const fetchTopic = async () => {
       try {
         const response = await axios.get(`/api/topic/get?id=${topicId}`);
+        if (!response.data) {
+          throw new Error("Téma nebola nájdená alebo neexistuje.");
+        }
+  
         setEditorData(response.data);
-        setLoading(false);
       } catch (error) {
-        console.error(error);
+        setErrorMessage("Téma nebola nájdená alebo neexistuje.");
+      } finally {
         setLoading(false);
       }
     };
@@ -53,25 +57,33 @@ export default function Topic({ params }: { params: { id: string } }) {
   }, [topicId]);
 
   useEffect(() => {
-    if (!loading && editorData && !editor.current) {
-      const holderElement = document.getElementById("editorjs");
-      if (holderElement) {
-        editor.current = new EditorJS({
-          holder: "editorjs",
-          readOnly: true,
-          tools: {
-            image: SimpleImage,
-            fontSize: FontSizeTool,
-          },
-          data: {
-            blocks: editorData.data.content.map((item: string) =>
-              JSON.parse(item)
-            ),
-          },
-        });
-      } else {
-        console.error("Element with ID 'editorjs' not found.");
+    try {
+      if (!loading && editorData && !editor.current) {
+        if (!editorData.data) {
+          setErrorMessage("Téma nebola nájdená alebo neexistuje.");
+        }
+        
+        const holderElement = document.getElementById("editorjs");
+        if (holderElement) {
+          editor.current = new EditorJS({
+            holder: "editorjs",
+            readOnly: true,
+            tools: {
+              image: SimpleImage,
+              fontSize: FontSizeTool,
+            },
+            data: {
+              blocks: editorData.data.content?.map((item: string) =>
+                JSON.parse(item)
+              ),
+            },
+          });
+        } else {
+          console.error("Element with ID 'editorjs' not found.");
+        }
       }
+    } catch (error) {
+      console.error("Error initializing EditorJS:", error);
     }
   }, [loading, editorData]);
 
@@ -79,98 +91,104 @@ export default function Topic({ params }: { params: { id: string } }) {
     return <TopicSkeleton />;
   }
 
-  return (
-    <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
-      <div className="mx-14 md:mx-20" id="editorjs"></div>
-      <div className="mx-auto my-5">
-        {status !== "loading" && (
-          <div>
-            {isAuthorized &&
-              session?.user?.topicsCompleted !== undefined &&
-              session?.user?.topicsCompleted >= topicId - 1 && (
-                <div>
-                  <Button
-                    className="mr-4"
-                    onClick={() => router.push(`/test/${topicId}`)}
-                  >
-                    Začať testovanie
-                  </Button>
-                  <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
-                    Ďalšia téma
-                  </Button>
-                </div>
-              )}
-
-            {!isAuthorized && (
-              <div>
-                <div className="flex justify-center">
-                  <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
-                    Ďalšia téma
-                  </Button>
-                </div>
-                <div className="text-red-500 mt-5">
-                  Musíte byť autorizovaný, aby ste mohli začať testovanie.
-                  <a
-                    href="/auth/login"
-                    className="text-red-500 font-bold ml-3 underline"
-                  >
-                    Prihlásiť sa
-                  </a>
-                </div>
-              </div>
-            )}
-
-            {isAuthorized &&
-              session?.user?.topicsCompleted !== undefined &&
-              session?.user?.topicsCompleted < topicId - 1 && (
-                <div className="test-warning text-red-500 text-center">
-                  Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
-                  <div className="flex justify-center mt-4">
+  if (errorMessage) {
+    return <div className="text-red-600 text-center mt-4">{errorMessage}</div>;
+  }
+  else {
+    return (
+      <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
+        <div className="mx-14 md:mx-20" id="editorjs"></div>
+        <div className="mx-auto my-5">
+          {status !== "loading" && (
+            <div>
+              {isAuthorized &&
+                session?.user?.topicsCompleted !== undefined &&
+                session?.user?.topicsCompleted >= topicId - 1 && (
+                  <div>
                     <Button
-                      onClick={() => router.push(`/topics/${topicId + 1}`)}
+                      className="mr-4"
+                      onClick={() => router.push(`/test/${topicId}`)}
                     >
+                      Začať testovanie
+                    </Button>
+                    <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
                       Ďalšia téma
                     </Button>
                   </div>
+                )}
+  
+              {!isAuthorized && (
+                <div>
+                  <div className="flex justify-center">
+                    <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                      Ďalšia téma
+                    </Button>
+                  </div>
+                  <div className="text-red-500 mt-5">
+                    Musíte byť autorizovaný, aby ste mohli začať testovanie.
+                    <a
+                      href="/auth/login"
+                      className="text-red-500 font-bold ml-3 underline"
+                    >
+                      Prihlásiť sa
+                    </a>
+                  </div>
                 </div>
               )}
-          </div>
-        )}
-      </div>
-
-      <style>{`
-      .codex-editor__redactor {
-        padding-bottom: 10px !important;
-      }
-      .ce-block {
-        margin: auto !important;
-      }
-      @media (min-width: 1024px) {
-        .ce-block__content,
-        .ce-toolbar__content {
-          max-width: 70% !important;
+  
+              {isAuthorized &&
+                session?.user?.topicsCompleted !== undefined &&
+                session?.user?.topicsCompleted < topicId - 1 && (
+                  <div className="test-warning text-red-500 text-center">
+                    Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
+                    <div className="flex justify-center mt-4">
+                      <Button
+                        onClick={() => router.push(`/topics/${topicId + 1}`)}
+                      >
+                        Ďalšia téma
+                      </Button>
+                    </div>
+                  </div>
+                )}
+            </div>
+          )}
+          {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}
+        </div>
+  
+        <style>{`
+        .codex-editor__redactor {
+          padding-bottom: 10px !important;
         }
-      }
-      .ce-block--selected .ce-block__content{
-      background-color: #8080805c !important;
-      }
-      .cdx-block {
-        max-width: 100% !important;
-        margin: 20px 0 !important;
-      }
-      .ce-paragraph.cdx-block {
-        width: 100% !important;
-      }
-      .cdx-simple-image .cdx-input {
-        width: 50% !important;
-        margin: 30px auto !important;
-        text-align: center !important;
-      }
-      .test-warning::selection {
-        color: black;
-        background: #ffffffa1;
-      }
-    `}</style>
-    </div>
-  );
+        .ce-block {
+          margin: auto !important;
+        }
+        @media (min-width: 1024px) {
+          .ce-block__content,
+          .ce-toolbar__content {
+            max-width: 70% !important;
+          }
+        }
+        .ce-block--selected .ce-block__content{
+        background-color: #8080805c !important;
+        }
+        .cdx-block {
+          max-width: 100% !important;
+          margin: 20px 0 !important;
+        }
+        .ce-paragraph.cdx-block {
+          width: 100% !important;
+        }
+        .cdx-simple-image .cdx-input {
+          width: 50% !important;
+          margin: 30px auto !important;
+          text-align: center !important;
+        }
+        .test-warning::selection {
+          color: black;
+          background: #ffffffa1;
+        }
+      `}</style>
+      </div>
+    );
+  }
 }

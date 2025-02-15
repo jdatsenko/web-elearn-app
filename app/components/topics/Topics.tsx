@@ -91,7 +91,7 @@ const Topics = () => {
 
         <Accordion type="single" collapsible className="mx-auto sm:mx-[100px] mb-8 sm:mb-[30px]">
           <AccordionItem value="item-1">
-            <AccordionTrigger className="text-base hover:no-underline text-red-600">
+            <AccordionTrigger className="text-base text-start hover:no-underline text-red-600">
               1. Lepšie porozumenie technologickému prostrediu.
             </AccordionTrigger>
             <AccordionContent className="text-base">
@@ -105,7 +105,7 @@ const Topics = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
-            <AccordionTrigger className="text-base hover:no-underline text-red-600">
+            <AccordionTrigger className="text-base text-start hover:no-underline text-red-600">
               2. Pochopenie výhod pre obyčajného spotrebiteľa.
             </AccordionTrigger>
             <AccordionContent className="text-base">
@@ -117,7 +117,7 @@ const Topics = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
-            <AccordionTrigger className="text-base hover:no-underline text-red-600">
+            <AccordionTrigger className="text-base text-start hover:no-underline text-red-600">
               3. Zlepšenie kvality života.
             </AccordionTrigger>
             <AccordionContent className="text-base">
@@ -129,7 +129,7 @@ const Topics = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-4">
-            <AccordionTrigger className="text-base hover:no-underline text-red-600">
+            <AccordionTrigger className="text-base text-start hover:no-underline text-red-600">
               4. Informovanosť a ochrana súkromia.
             </AccordionTrigger>
             <AccordionContent className="text-base">

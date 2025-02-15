@@ -37,9 +37,11 @@ model SolvedTest {
 model Test {
   id          Int          @id @default(autoincrement())
   createdAt   DateTime     @default(now())
+  topicNumber Int          @default(0)
   topicId     Int
   questions   Question[]
   solvedUsers SolvedTest[]
+  topic       Topic        @relation(fields: [topicId], references: [id])
 }
 
 model Question {
@@ -70,10 +72,11 @@ model TeacherRequests {
   status        String @default("pending") // pending, accepted, rejected
 }
 
-model Content {
-  id          Int      @id @default(autoincrement())
-  topicNumber Int      @unique
+model Topic {
+  id          Int    @id @default(autoincrement())
+  topicNumber Int    @unique
   content     String[]
   title       String
   description String
+  Test        Test[]
 }

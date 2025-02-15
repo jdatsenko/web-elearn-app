@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const revalidate = 0;
 export async function GET(req: NextRequest) {
   try {
-    const topics = await prisma.content.findMany({
+    const topics = await prisma.topic.findMany({
       select: {
         topicNumber: true,
         title: true,

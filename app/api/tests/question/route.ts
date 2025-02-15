@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       }
     });
   } catch (error) {
-    console.error("Error creating test:", error);
+    console.error("Error creating test1:", error);
     return NextResponse.json({
       status: 500,
       body: {

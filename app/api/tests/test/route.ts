@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { number } from "zod";
 
 export interface TestRequest {
-  topicId: number
-  questions: Question[]
+  topicId: number;
+  topicNumber: number;
+  questions: Question[];
 }
 
 export interface Question {
@@ -19,17 +20,16 @@ export interface Answer {
   number: number
 }
 
+export async function POST(req: NextRequest) {
+  console.log("req", req);
 
-export async function POST(req: Request) {
-  console.log("POST /api/test");
   try {
     const body = await req.json() as TestRequest;
-    console.log(body);
-
-    // return;
+    console.log("BODY", body);
     const test = await prisma.test.create({
       data: {
         topicId: body.topicId,
+        topicNumber: body.topicNumber,
         questions: {
           create: body.questions.map((question) => ({
             text: question.label,
@@ -37,23 +37,22 @@ export async function POST(req: Request) {
               create: question.answers.map((answer) => ({
                 text: answer.label,
                 isCorrect: answer.isRight,
-                answerNumber: answer.number,
               }))
             }
           }))
         }
       }
-    })
+    });
+    
 
-    return NextResponse.json({ data: test });
+    return NextResponse.json({ data: body });
   } catch (error) {
-    console.error("Error creating test:", error);
-    return NextResponse.json({ error: "Error creating test" }, { status: 500 });
+    console.log("Error creating test:", error);
+    return NextResponse.json({ error: JSON.stringify(error, Object.getOwnPropertyNames(error), 2) }, { status: 500 });
   }
 }
 
 export async function GET(req: NextRequest) {
-  console.log("GET /api/test");
   const topicId = req.nextUrl.searchParams.get("id");
 
   if (topicId) {

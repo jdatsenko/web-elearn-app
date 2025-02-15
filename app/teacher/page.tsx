@@ -16,7 +16,7 @@ export interface Question {
 export interface Answer {
   label: string;
   isRight: boolean;
-  // number: number;
+  number: number;
 }
 
 interface Topic {
@@ -77,18 +77,24 @@ export default function Test() {
       };
       const topicRes = await axios.post("/api/topic/create", topicData);
       setSuccessMessage("Téma bola úspešne vytvorená.");
-  
+
+
       const testData = {
-        topicId: topicRes.data.topic.topicNumber, 
+        topicId: topicRes.data.topic.id, 
+        topicNumber: topicRes.data.topic.topicNumber,
         questions: questions.map((question) => ({
           label: question.label,
           answers: question.answers.map((answer) => ({
             label: answer.label,
             isRight: answer.isRight,
+            number: answer.number
           })),
         })),
       };
+      console.log("here2 testDATA", testData);
+
       const testRes = await axios.post("/api/tests/test", testData);
+      console.log("here3", testRes);
   
       const timer = setTimeout(() => {
         router.push(`/topics/${topicRes.data.topic.topicNumber}`);
@@ -99,12 +105,10 @@ export default function Test() {
     }
   };
   
-  
-
   const addQuestion = () => {
     setQuestions([
       ...questions,
-      { label: "", answers: [{ label: "", isRight: false}] },
+      { label: "", answers: [{ label: "", isRight: false, number: 0 }] },
     ]);
 
     console.log(questions);
@@ -217,7 +221,7 @@ export default function Test() {
                       newQuestions[index].answers.push({
                         label: "",
                         isRight: false,
-                        // number: 0,
+                        number: 0,
                       });
                       setQuestions(newQuestions);
                     }}

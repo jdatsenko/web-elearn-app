@@ -56,7 +56,6 @@ model Answer {
   id           Int      @id @default(autoincrement())
   text         String
   isCorrect    Boolean
-  answerNumber Int
   question     Question @relation(fields: [questionId], references: [id])
   questionId   Int
 }

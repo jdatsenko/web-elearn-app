@@ -16,7 +16,6 @@ export interface TestResponse {
     id: number
     text: string
     isCorrect: boolean
-    answerNumber: number
     questionId: number
   }
   

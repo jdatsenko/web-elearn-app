@@ -11,7 +11,6 @@ export interface Answers {
 export interface Answer {
   questionId: number;
   answerId: number;
-  answer: number;
 }
 
 export async function POST(req: Request) {

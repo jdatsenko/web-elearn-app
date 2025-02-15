@@ -10,6 +10,9 @@ export async function GET(req: NextRequest) {
         title: true,
         description: true,
       },
+      orderBy: {
+        topicNumber: "asc", 
+      },
     });
 
     const response = NextResponse.json({ data: topics });

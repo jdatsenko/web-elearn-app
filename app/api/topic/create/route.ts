@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json() as TopicRequest;
 
-        const latestTopic = await prisma.content.findFirst({
+        const latestTopic = await prisma.topic.findFirst({
             orderBy: {
                 topicNumber: 'desc', 
             },
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
         const nextTopicNumber = latestTopic ? latestTopic.topicNumber + 1 : 1; 
 
-        const topic = await prisma.content.create({
+        const topic = await prisma.topic.create({
             data: {
                 topicNumber: nextTopicNumber,
                 title: body.title,

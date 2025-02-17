@@ -50,7 +50,7 @@ const TeacherRequestForm: React.FC = () => {
         setSuccessMessage("Žiadosť bola úspešne odoslaná! Počkajte na schválenie.");
         setError(""); 
         setTimeout(() => {
-          router.push("../admin");
+          router.push("../account");
         }, 1000);
       })
       .catch((error: any) => {

@@ -55,7 +55,7 @@ const TopBar = () => {
             </Link>
             {session && !loading && (
               <div className="space-x-3">
-                <Link className={buttonVariants()} href={"/admin"}>
+                <Link className={buttonVariants()} href={"/account"}>
                   Moje konto
                 </Link>
               </div>

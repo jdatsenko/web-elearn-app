@@ -62,7 +62,7 @@ const Admin = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-end space-x-2">
-        <Link className={buttonVariants()} href={"/admin/password"}>
+        <Link className={buttonVariants()} href={"/account/password"}>
           Zmeniť heslo
         </Link>
         {!isAdmin && !isTeacher && (

@@ -2,18 +2,15 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Editor } from "@ckeditor/ckeditor5-core";
 import { cn } from "@/lib/utils";
-import { UploadAdapter, FileLoader } from "@ckeditor/ckeditor5-upload/src/filerepository";
-import "ckeditor5/ckeditor5.css";
+import dynamic from "next/dynamic";
+import { useCallback } from "react";
+import React, { useState } from "react";
 
 export interface Question {
   label: string;
@@ -32,36 +29,10 @@ interface Topic {
   content?: string[];
 }
 
-function uploadAdapter(loader: FileLoader): UploadAdapter {
-  return {
-    upload: () => {
-      return new Promise(async (resolve, reject) => {
-        try {
-          const file = await loader.file;
-          if (file === null) {
-            return;
-          }
-          const reader = new FileReader();
-
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            resolve({ default: reader.result });
-          };
-          reader.onerror = (error) => reject(error);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    },
-    abort: () => {}
-  };
-}
-
-function uploadPlugin(editor: Editor) {
-  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-    return uploadAdapter(loader);
-  };
-}
+const ClassicCKEditor = dynamic(
+  () => import("../components/CKEditor/ClassicCKEditor"),
+  { ssr: false }
+);
 
 export default function Test() {
   const [newTopic, setNewTopic] = useState<Topic>({
@@ -73,14 +44,16 @@ export default function Test() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
+  const onCKChange = useCallback((event: any, value: any) => {
+    setNewTopic({ ...newTopic, content: [value.getData()] });
+  }, []);
+
   const onSave = async () => {
     try {
       if (questions.length === 0) {
         setErrorMessage("Zadajte aspoň jednu otázku");
         return;
       }
-      const content = newTopic.content ? newTopic.content.join("\n") : "";
-
       const topicData = {
         title: newTopic.title,
         description: newTopic.description,
@@ -101,11 +74,10 @@ export default function Test() {
           })),
         })),
       };
-      const testRes = await axios.post("/api/tests/test", testData);
-
-      const timer = setTimeout(() => {
+      await axios.post("/api/tests/test", testData);
+      setTimeout(() => {
         router.push(`/topics/${topicRes.data.topic.topicNumber}`);
-      }, 700);
+      }, 300);
     } catch (error) {
       console.error("Error creating topic or test:", error);
       setSuccessMessage("Error creating topic or test");
@@ -152,18 +124,7 @@ export default function Test() {
         <h1 className="text-3xl">Obsah témy</h1>
       </div>
       <div className="mx-60">
-        <CKEditor
-          editor={ClassicEditor}
-          config={ {
-           licenseKey: 'GPL', 
-           extraPlugins: [uploadPlugin],
-          }}
-          data={newTopic.content ? newTopic.content.join("\n") : ""}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            setNewTopic({ ...newTopic, content: [data] }); // Store as an array if needed
-          }}
-        />
+        <ClassicCKEditor data={"<p>Zadajte obsah</p>"} onChange={onCKChange} />
       </div>
 
       <div className="px-4 mt-2">
@@ -279,7 +240,6 @@ export default function Test() {
           :root{
             --ck-color-base-border: hsl(var(--primary));
           }
-
           html.dark {
             --ck-color-base-background: hsl(0deg 0% 0%);
             --ck-color-base-border: hsl(209, 92%, 70%);
@@ -287,7 +247,8 @@ export default function Test() {
           }
           `}
         </style>
-         <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
+        
+        <ArrowToTop className="fixed bottom-6 right-6 z-[999]" />
       </div>
     </>
   );

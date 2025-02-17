@@ -17,7 +17,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import { Settings } from "lucide-react"
+import { Settings, UserCircleIcon } from "lucide-react"
 
 const topics = [
   "LPWAN: technológie a aplikácie",
@@ -70,9 +70,9 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-end space-x-2">
+      {/* <div className="flex justify-end space-x-2">
       <DropdownMenu>
-          <DropdownMenuTrigger className="border px-4 py-2 rounded-md bg-gray-400 text-black hover:bg-gray-300"><Settings className="w-5 h-5" /></DropdownMenuTrigger>
+          <DropdownMenuTrigger className="border px-4 py-2 rounded-md bg-secondary hover:bg-secondary/80 text-secondary-foreground"><UserCircleIcon className="w-5 h-5" /></DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel className="text-center">Nastavenia</DropdownMenuLabel>
             <DropdownMenuSeparator></DropdownMenuSeparator>
@@ -105,7 +105,7 @@ const Admin = () => {
             )}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div> */}
 
       {isTeacher && (
         <div className="text-center">

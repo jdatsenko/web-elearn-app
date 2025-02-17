@@ -8,12 +8,23 @@ import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { Settings, UserCircleIcon } from "lucide-react";
 
 const TopBar = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const { theme, setTheme } = useTheme();
   const router = useRouter();
+  const isTeacher = session?.user?.role === "TEACHER";
+  const isAdmin = session?.user?.role === "ADMIN";
   const TopBarSkeleton = dynamic(() => import("./skeletons/TopBarSkeleton"), {
     ssr: false,
   });
@@ -55,9 +66,58 @@ const TopBar = () => {
             </Link>
             {session && !loading && (
               <div className="space-x-3">
-                <Link className={buttonVariants()} href={"/account"}>
-                  Moje konto
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="border px-4 py-2 rounded-md bg-secondary hover:bg-secondary/80 text-secondary-foreground">
+                    <UserCircleIcon className="w-5 h-5" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>
+                      <Link className={`w-full ${buttonVariants()}`} href={"/account"}>
+                        Moj progress
+                      </Link>
+                    </DropdownMenuItem>
+                    
+                    <DropdownMenuItem>
+                      <Link
+                        className={`w-full ${buttonVariants()}`}
+                        href={"/account/password"}
+                      >
+                        Zmeniť heslo
+                      </Link>
+                    </DropdownMenuItem>
+                    
+                    {!isAdmin && !isTeacher && (
+                      <DropdownMenuItem>
+                        <Link
+                          className={`w-full ${buttonVariants()}`}
+                          href={"/adminForm"}
+                        >
+                          Stať sa učiteľom
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    {isAdmin && (
+                      <DropdownMenuItem>
+                        <Link
+                          className={`w-full ${buttonVariants()}`}
+                          href={"/adminPanel"}
+                        >
+                          Panel administrátora
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    {isTeacher && (
+                      <DropdownMenuItem>
+                        <Link
+                          className={`w-full ${buttonVariants()}`}
+                          href={"./teacher"}
+                        >
+                          Pridať tému
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             )}
           </div>

@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^44.2.0",
+    "@ckeditor/ckeditor5-react": "^9.5.0",
+    "@ckeditor/ckeditor5-upload": "^44.2.0",
     "@editorjs/editorjs": "^2.29.1",
     "@editorjs/header": "^2.8.1",
     "@editorjs/image": "^2.9.0",
@@ -48,6 +51,8 @@
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "bootstrap-icons": "^1.11.3",
+    "ckeditor5": "^44.2.0",
+    "ckeditor5-premium-features": "^44.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

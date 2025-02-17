@@ -4,13 +4,17 @@ import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import EditorJS from "@editorjs/editorjs";
-//@ts-ignore
+// @ts-ignore
 import SimpleImage from "@editorjs/simple-image";
 //@ts-ignore
 import FontSizeTool from "editorjs-inline-font-size-tool";
 import { Button, buttonVariants } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { ClassicEditor } from "ckeditor5";
+import "ckeditor5/ckeditor5.css";
 
 export default function Topic({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession() as {
@@ -38,7 +42,7 @@ export default function Topic({ params }: { params: { id: string } }) {
         if (!response.data) {
           throw new Error("Téma nebola nájdená alebo neexistuje.");
         }
-
+  
         setEditorData(response.data);
       } catch (error) {
         setErrorMessage("Téma nebola nájdená alebo neexistuje.");
@@ -63,7 +67,7 @@ export default function Topic({ params }: { params: { id: string } }) {
         if (!editorData.data) {
           setErrorMessage("Téma nebola nájdená alebo neexistuje.");
         }
-
+        
         const holderElement = document.getElementById("editorjs");
         if (holderElement) {
           editor.current = new EditorJS({
@@ -84,9 +88,18 @@ export default function Topic({ params }: { params: { id: string } }) {
         }
       }
     } catch (error) {
-      console.error("Error initializing EditorJS:", error);
+      if ((error as any).name === "SyntaxError") {
+        const errorElement = document.getElementById("ckstyle");
+        if (errorElement) {
+          console.log(errorElement)
+          errorElement.innerHTML = editorData.data.content; // Vloženie HTML obsahu
+        }
+      } else {
+        console.error("Error initializing EditorJS:", error);
+      }
     }
   }, [loading, editorData]);
+  
 
   if (loading) {
     return <TopicSkeleton />;
@@ -99,6 +112,10 @@ export default function Topic({ params }: { params: { id: string } }) {
   return (
     <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
       <div className="mx-14 md:mx-20" id="editorjs"></div>
+      <div className="mx-14 md:mx-20" id="ckstyle">
+
+      </div>
+      
       <div className="mx-auto my-5">
         {status !== "loading" && (
           <div>

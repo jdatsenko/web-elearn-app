@@ -12,7 +12,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
+  DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
 import { UserCircleIcon } from "lucide-react";
 
@@ -68,48 +69,34 @@ const TopBar = () => {
                   <DropdownMenuTrigger className="border px-4 py-2 rounded-md bg-secondary hover:bg-secondary/80 text-secondary-foreground">
                     <UserCircleIcon className="w-5 h-5" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent className="border-2 border-gray-200">
                     <DropdownMenuItem>
-                      <Link className={`w-full ${buttonVariants()}`} href={"/account"}>
+                      <Link className="text-center" href={"/account"}>
                         Moj progress
                       </Link>
                     </DropdownMenuItem>
-                    
+                    <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                     <DropdownMenuItem>
-                      <Link
-                        className={`w-full ${buttonVariants()}`}
-                        href={"/account/password"}
-                      >
-                        Zmeniť heslo
-                      </Link>
+                      <Link href={"/account/password"}>Zmeniť heslo</Link>
                     </DropdownMenuItem>
-                    
+                    <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                     {!isAdmin && !isTeacher && (
                       <DropdownMenuItem>
-                        <Link
-                          className={`w-full ${buttonVariants()}`}
-                          href={"/adminForm"}
-                        >
+                        <Link className="text-center" href={"/adminForm"}>
                           Stať sa učiteľom
                         </Link>
                       </DropdownMenuItem>
                     )}
                     {isAdmin && (
                       <DropdownMenuItem>
-                        <Link
-                          className={`w-full ${buttonVariants()}`}
-                          href={"/adminPanel"}
-                        >
+                        <Link className="text-center" href={"/adminPanel"}>
                           Panel administrátora
                         </Link>
                       </DropdownMenuItem>
                     )}
                     {isTeacher && (
                       <DropdownMenuItem>
-                        <Link
-                          className={`w-full ${buttonVariants()}`}
-                          href={"./teacher"}
-                        >
+                        <Link className="text-center" href={"/teacher"}>
                           Pridať tému
                         </Link>
                       </DropdownMenuItem>

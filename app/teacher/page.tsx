@@ -1,12 +1,19 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import EditorJS from "@editorjs/editorjs";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import { cn } from "@/lib/utils";
+import { UploadAdapter, FileLoader } from "@ckeditor/ckeditor5-upload/src/filerepository";
+import "ckeditor5/ckeditor5.css";
 
 export interface Question {
   label: string;
@@ -25,77 +32,77 @@ interface Topic {
   content?: string[];
 }
 
+function uploadAdapter(loader: FileLoader): UploadAdapter {
+  return {
+    upload: () => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const file = await loader.file;
+          if (file === null) {
+            return;
+          }
+          const reader = new FileReader();
+
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            resolve({ default: reader.result });
+          };
+          reader.onerror = (error) => reject(error);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    abort: () => {}
+  };
+}
+
+function uploadPlugin(editor: Editor) {
+  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+    return uploadAdapter(loader);
+  };
+}
+
 export default function Test() {
   const [newTopic, setNewTopic] = useState<Topic>({
     title: "",
     description: "",
   });
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [successMessage, setSuccessMessage] = useState<string>("")
-  const [errorMessage, setErrorMessage] = useState<string>("")
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
-
-  const editorRef = useRef<EditorJS | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const EditorJS = (await import("@editorjs/editorjs")).default;
-      // @ts-ignore
-      const SimpleImage = (await import("@editorjs/simple-image")).default;
-      // @ts-ignore
-      const FontSizeTool = (await import("editorjs-inline-font-size-tool"))
-        .default;
-
-      const editorInstance = new EditorJS({
-        holder: "editorjs",
-        onReady: () => {
-          console.log("Editor.js is ready to work!");
-        },
-        tools: {
-          image: SimpleImage,
-          fontSize: FontSizeTool,
-        },
-      });
-
-      editorRef.current = editorInstance;
-    })();
-  }, []);
 
   const onSave = async () => {
     try {
-      if (!editorRef.current) return;
       if (questions.length === 0) {
         setErrorMessage("Zadajte aspoň jednu otázku");
         return;
       }
-      const outputData = await editorRef.current.save();
-      const content = outputData.blocks.map((e) => JSON.stringify(e));
+      const content = newTopic.content ? newTopic.content.join("\n") : "";
+
       const topicData = {
         title: newTopic.title,
         description: newTopic.description,
-        content: content,
+        content: newTopic.content,
       };
       const topicRes = await axios.post("/api/topic/create", topicData);
       setSuccessMessage("Téma bola úspešne vytvorená.");
 
-
       const testData = {
-        topicId: topicRes.data.topic.id, 
+        topicId: topicRes.data.topic.id,
         topicNumber: topicRes.data.topic.topicNumber,
         questions: questions.map((question) => ({
           label: question.label,
           answers: question.answers.map((answer) => ({
             label: answer.label,
             isRight: answer.isRight,
-            number: answer.number
+            number: answer.number,
           })),
         })),
       };
-      console.log("here2 testDATA", testData);
-
       const testRes = await axios.post("/api/tests/test", testData);
-      console.log("here3", testRes);
-  
+
       const timer = setTimeout(() => {
         router.push(`/topics/${topicRes.data.topic.topicNumber}`);
       }, 700);
@@ -104,7 +111,7 @@ export default function Test() {
       setSuccessMessage("Error creating topic or test");
     }
   };
-  
+
   const addQuestion = () => {
     setQuestions([
       ...questions,
@@ -115,44 +122,53 @@ export default function Test() {
   };
   return (
     <>
-      <div className="my-4 mx-20">
-        <label
-          htmlFor="title"
-          className="block text-lg font-medium"
-        >
+      <div className="my-4 mx-60">
+        <Label htmlFor="experience" className="block text-sm font-medium">
           Názov
-        </label>
-        <Input
+        </Label>
+        <Textarea
           id="title"
+          name="title"
           value={newTopic.title}
           onChange={(e) => setNewTopic({ ...newTopic, title: e.target.value })}
-        />
+          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+        ></Textarea>
       </div>
-      <div className="mb-10 mx-20">
-        <label
-          htmlFor="description"
-          className="block text-lg font-medium"
-        >
+      <div className="my-4 mx-60">
+        <Label htmlFor="description" className="block text-sm font-medium">
           Popis
-        </label>
-        <Input
+        </Label>
+        <Textarea
           id="description"
+          name="description"
           value={newTopic.description}
           onChange={(e) =>
             setNewTopic({ ...newTopic, description: e.target.value })
           }
-        />
+          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+        ></Textarea>
       </div>
       <div className="text-center mb-10">
         <h1 className="text-3xl">Obsah témy</h1>
       </div>
-      <div className="border mx-auto w-11/12 flex align-center justify-center border-gray-300 rounded-md">
-        <div id="editorjs" className="mb-4 mx-10 w-full"></div>
+      <div className="mx-60">
+        <CKEditor
+          editor={ClassicEditor}
+          config={ {
+           licenseKey: 'GPL', 
+           extraPlugins: [uploadPlugin],
+          }}
+          data={newTopic.content ? newTopic.content.join("\n") : ""}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            setNewTopic({ ...newTopic, content: [data] }); // Store as an array if needed
+          }}
+        />
       </div>
 
       <div className="px-4 mt-2">
         {questions?.map((question, index) => (
-          <div key={index} >
+          <div key={index}>
             <div className="mb-4">
               Otázka {index + 1}:
               <Input
@@ -169,73 +185,74 @@ export default function Test() {
               />
             </div>
             <div>
-            <RadioGroup key={index}>
-              {question.answers.map((answer, index2) => (
-                <>
-                <div className="flex flex-row gap-4 align-center justify-center items-center">
-                <RadioGroupItem key={index2} 
-                    value={''}
-                    checked={answer.isRight}
-                    id="answer"
-                    onClick={(e) => {
-                      const newQuestions = [...questions];
-                      //all answers are not right 
-                      newQuestions[index].answers.forEach((a) => a.isRight = false);
-                      // set the right answer
-                      newQuestions[index].answers[index2] = {
-                        ...newQuestions[index].answers[index2],
-                        isRight: true,
-                      };
-                      setQuestions(newQuestions);
-                    }}>
-                  </RadioGroupItem>
-                  <Input
-                    id="answer"
-                    value={answer.label}
-                    onChange={(e) => {
-                      const newQuestions = [...questions];
-                      newQuestions[index].answers[index2] = {
-                        ...newQuestions[index].answers[index2],
-                        label: e.target.value,
-                      };
-                      setQuestions(newQuestions);
-                    }}
-                  />
-                                    <Button
-                    onClick={() => {
-                      const newQuestions = [...questions];
-                      newQuestions[index].answers.splice(index2, 1);
-                      setQuestions(newQuestions);
-                    }}
-                  >
-                    Odstrániť
-                  </Button>
-                </div>
-
-                </>
-              ))}
+              <RadioGroup key={index}>
+                {question.answers.map((answer, index2) => (
+                  <>
+                    <div className="flex flex-row gap-4 align-center justify-center items-center">
+                      <RadioGroupItem
+                        key={index2}
+                        value={""}
+                        checked={answer.isRight}
+                        id="answer"
+                        onClick={(e) => {
+                          const newQuestions = [...questions];
+                          //all answers are not right
+                          newQuestions[index].answers.forEach(
+                            (a) => (a.isRight = false)
+                          );
+                          // set the right answer
+                          newQuestions[index].answers[index2] = {
+                            ...newQuestions[index].answers[index2],
+                            isRight: true,
+                          };
+                          setQuestions(newQuestions);
+                        }}
+                      ></RadioGroupItem>
+                      <Input
+                        id="answer"
+                        value={answer.label}
+                        onChange={(e) => {
+                          const newQuestions = [...questions];
+                          newQuestions[index].answers[index2] = {
+                            ...newQuestions[index].answers[index2],
+                            label: e.target.value,
+                          };
+                          setQuestions(newQuestions);
+                        }}
+                      />
+                      <Button
+                        onClick={() => {
+                          const newQuestions = [...questions];
+                          newQuestions[index].answers.splice(index2, 1);
+                          setQuestions(newQuestions);
+                        }}
+                      >
+                        Odstrániť
+                      </Button>
+                    </div>
+                  </>
+                ))}
               </RadioGroup>
               <Button
-                    onClick={() => {
-                      const newQuestions = [...questions];
-                      newQuestions[index].answers.push({
-                        label: "",
-                        isRight: false,
-                        number: 0,
-                      });
-                      setQuestions(newQuestions);
-                    }}
-                    className="mt-2"
-                  >
-                    Pridať odpoveď
-                  </Button>
-
+                onClick={() => {
+                  const newQuestions = [...questions];
+                  newQuestions[index].answers.push({
+                    label: "",
+                    isRight: false,
+                    number: 0,
+                  });
+                  setQuestions(newQuestions);
+                }}
+                className="mt-2"
+              >
+                Pridať odpoveď
+              </Button>
             </div>
           </div>
         ))}
         <div className="mt-10 flex flex-row gap-4">
-        <Button onClick={() => setQuestions([])}>Vymazať</Button>
-        <Button onClick={addQuestion}>Pridať otázku</Button>
+          <Button onClick={() => setQuestions([])}>Vymazať</Button>
+          <Button onClick={addQuestion}>Pridať otázku</Button>
         </div>
       </div>
 
@@ -250,31 +267,25 @@ export default function Test() {
         </div>
       )}
       <div className="flex justify-center items-center my-8 mx-auto">
-      <Button
-      onClick={onSave}
-      className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-blue-600 mr-4"
-    >
-      Uložiť tému
-    </Button>
-   
+        <Button
+          onClick={onSave}
+          className={cn(buttonVariants({ variant: "secondary" }))}
+        >
+          Uložiť tému
+        </Button>
+
         <style>
           {`
-          .ce-block__content,
-          .ce-toolbar__content {
-            max-width: calc(100% - 150px) !important;
+          :root{
+            --ck-color-base-border: hsl(var(--primary));
           }
-          .cdx-block {
-            max-width: 100% !important;
+
+          html.dark {
+            --ck-color-base-background: hsl(0deg 0% 0%);
+            --ck-color-base-border: hsl(209, 92%, 70%);
+            --ck-color-base-text: hsl(0deg 0% 100%);
           }
-          .ce-paragraph.cdx-block {
-            width: 100% !important;
-        }
-          .cdx-simple-image .cdx-input {
-            width: 50% !important;
-            margin: 30px auto !important;
-            text-align: center;
-            }
-        `}
+          `}
         </style>
          <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
       </div>

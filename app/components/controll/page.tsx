@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const TestControll = (props: any) => {
   const router = useRouter();
@@ -76,7 +77,7 @@ const TestControll = (props: any) => {
           ))}
           {results.results.every((result) => result.correct) && (
             <div className="flex justify-center mt-4">
-              <Button onClick={() => router.push(`/topics/${testId + 1}`)}>
+              <Button onClick={() => router.push(`/topics/${testId + 1}`)} className={cn(buttonVariants({ variant: "secondary" }))}>
                 Ďalšia téma
               </Button>
             </div>

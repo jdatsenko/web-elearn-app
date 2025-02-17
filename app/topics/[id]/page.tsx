@@ -38,7 +38,7 @@ export default function Topic({ params }: { params: { id: string } }) {
         if (!response.data) {
           throw new Error("Téma nebola nájdená alebo neexistuje.");
         }
-  
+
         setEditorData(response.data);
       } catch (error) {
         setErrorMessage("Téma nebola nájdená alebo neexistuje.");
@@ -63,7 +63,7 @@ export default function Topic({ params }: { params: { id: string } }) {
         if (!editorData.data) {
           setErrorMessage("Téma nebola nájdená alebo neexistuje.");
         }
-        
+
         const holderElement = document.getElementById("editorjs");
         if (holderElement) {
           editor.current = new EditorJS({
@@ -112,7 +112,10 @@ export default function Topic({ params }: { params: { id: string } }) {
                   >
                     Začať testovanie
                   </Button>
-                  <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                  <Button
+                    className={cn(buttonVariants({ variant: "secondary" }))}
+                    onClick={() => router.push(`/topics/${topicId + 1}`)}
+                  >
                     Ďalšia téma
                   </Button>
                 </div>
@@ -121,7 +124,10 @@ export default function Topic({ params }: { params: { id: string } }) {
             {!isAuthorized && (
               <div>
                 <div className="flex justify-center">
-                  <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                  <Button
+                    className={cn(buttonVariants({ variant: "secondary" }))}
+                    onClick={() => router.push(`/topics/${topicId + 1}`)}
+                  >
                     Ďalšia téma
                   </Button>
                 </div>
@@ -145,6 +151,7 @@ export default function Topic({ params }: { params: { id: string } }) {
                   <div className="flex justify-center mt-4">
                     <Button
                       onClick={() => router.push(`/topics/${topicId + 1}`)}
+                      className={cn(buttonVariants({ variant: "secondary" }))}
                     >
                       Ďalšia téma
                     </Button>
@@ -153,7 +160,9 @@ export default function Topic({ params }: { params: { id: string } }) {
               )}
           </div>
         )}
-        {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="text-red-600 text-center mt-4">{errorMessage}</p>
+        )}
       </div>
 
       <style>{`

@@ -9,6 +9,15 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
+import { Settings } from "lucide-react"
 
 const topics = [
   "LPWAN: technológie a aplikácie",
@@ -62,24 +71,40 @@ const Admin = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-end space-x-2">
-        <Link className={buttonVariants()} href={"/account/password"}>
-          Zmeniť heslo
-        </Link>
-        {!isAdmin && !isTeacher && (
-          <Link className={buttonVariants()} href={"/adminForm"}>
-            Stať sa učiteľom
-          </Link>
-        )}
-        {isAdmin && (
-          <Link className={buttonVariants()} href={"/adminPanel"}>
-            Panel administrátora
-          </Link>
-        )}
-        {isTeacher && (
-          <Link className={buttonVariants()} href={"./teacher"}>
-            Pridať tému
-          </Link>
-        )}
+      <DropdownMenu>
+          <DropdownMenuTrigger className="border px-4 py-2 rounded-md bg-gray-400 text-black hover:bg-gray-300"><Settings className="w-5 h-5" /></DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel className="text-center">Nastavenia</DropdownMenuLabel>
+            <DropdownMenuSeparator></DropdownMenuSeparator>
+            <DropdownMenuItem>
+              <Link className={`w-full ${buttonVariants()}`} href={"/account/password"}>
+                Zmeniť heslo
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator></DropdownMenuSeparator>
+            {!isAdmin && !isTeacher && (
+            <DropdownMenuItem>
+              <Link className={`w-full ${buttonVariants()}`} href={"/adminForm"}>
+                Stať sa učiteľom
+              </Link>
+            </DropdownMenuItem>
+            )}
+             {isAdmin && (
+            <DropdownMenuItem> 
+              <Link className={`w-full ${buttonVariants()}`} href={"/adminPanel"}>
+                Panel administrátora
+              </Link>
+            </DropdownMenuItem>
+            )}
+             {isTeacher && (
+            <DropdownMenuItem>
+              <Link className={`w-full ${buttonVariants()}`} href={"./teacher"}>
+                Pridať tému
+              </Link>
+            </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {isTeacher && (

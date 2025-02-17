@@ -8,8 +8,9 @@ import EditorJS from "@editorjs/editorjs";
 import SimpleImage from "@editorjs/simple-image";
 //@ts-ignore
 import FontSizeTool from "editorjs-inline-font-size-tool";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import dynamic from "next/dynamic";
+import { cn } from "@/lib/utils";
 
 export default function Topic({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession() as {
@@ -120,7 +121,7 @@ export default function Topic({ params }: { params: { id: string } }) {
             {!isAuthorized && (
               <div>
                 <div className="flex justify-center">
-                  <Button onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                  <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
                     Ďalšia téma
                   </Button>
                 </div>

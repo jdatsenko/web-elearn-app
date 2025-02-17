@@ -6,18 +6,10 @@ import { SolvedTest } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu"
-import { Settings, UserCircleIcon } from "lucide-react"
+import { ArrowToTop } from "@/components/ui/arrow-to-top";
 
 const topics = [
   "LPWAN: technológie a aplikácie",
@@ -70,43 +62,6 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {/* <div className="flex justify-end space-x-2">
-      <DropdownMenu>
-          <DropdownMenuTrigger className="border px-4 py-2 rounded-md bg-secondary hover:bg-secondary/80 text-secondary-foreground"><UserCircleIcon className="w-5 h-5" /></DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel className="text-center">Nastavenia</DropdownMenuLabel>
-            <DropdownMenuSeparator></DropdownMenuSeparator>
-            <DropdownMenuItem>
-              <Link className={`w-full ${buttonVariants()}`} href={"/account/password"}>
-                Zmeniť heslo
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator></DropdownMenuSeparator>
-            {!isAdmin && !isTeacher && (
-            <DropdownMenuItem>
-              <Link className={`w-full ${buttonVariants()}`} href={"/adminForm"}>
-                Stať sa učiteľom
-              </Link>
-            </DropdownMenuItem>
-            )}
-             {isAdmin && (
-            <DropdownMenuItem> 
-              <Link className={`w-full ${buttonVariants()}`} href={"/adminPanel"}>
-                Panel administrátora
-              </Link>
-            </DropdownMenuItem>
-            )}
-             {isTeacher && (
-            <DropdownMenuItem>
-              <Link className={`w-full ${buttonVariants()}`} href={"./teacher"}>
-                Pridať tému
-              </Link>
-            </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div> */}
-
       {isTeacher && (
         <div className="text-center">
           <h3 className="text-2xl font-bold my-9">
@@ -192,6 +147,7 @@ const Admin = () => {
           })}
         </div>
       )}
+      <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
     </div>
   );
 };

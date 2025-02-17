@@ -21,6 +21,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { ArrowToTop } from "@/components/ui/arrow-to-top";
 
 interface Topic {
   topicNumber: number;
@@ -152,6 +153,7 @@ const Topics = () => {
           Táto webová e-learningová aplikácia poskytuje tieto dôležité
           informácie a vzdelávanie.
         </p>
+        <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
       </section>
     </>
   );

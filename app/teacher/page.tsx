@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import EditorJS from "@editorjs/editorjs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { ArrowToTop } from "@/components/ui/arrow-to-top";
 
 export interface Question {
   label: string;
@@ -276,6 +276,7 @@ export default function Test() {
             }
         `}
         </style>
+         <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
       </div>
     </>
   );

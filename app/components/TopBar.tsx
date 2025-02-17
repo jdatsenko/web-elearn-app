@@ -12,11 +12,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Settings, UserCircleIcon } from "lucide-react";
+import { UserCircleIcon } from "lucide-react";
 
 const TopBar = () => {
   const { data: session, status } = useSession();

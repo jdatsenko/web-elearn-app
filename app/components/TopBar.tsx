@@ -51,8 +51,7 @@ const TopBar = () => {
     <>
       <header
         className={cn(
-          "p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit sticky top-0 z-10",
-          theme === "dark" ? "bg-black" : "bg-white"
+          "p-4 flex bg-background flex-col sm:flex-row w-full justify-between border-b h-fit sticky top-0 z-10"
         )}
       >
         <div className="flex flex-grow justify-between">

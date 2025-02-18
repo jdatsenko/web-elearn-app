@@ -21,7 +21,6 @@ export async function POST(req: Request) {
         });
 
         const nextTopicNumber = latestTopic ? latestTopic.topicNumber + 1 : 1; 
-
         const topic = await prisma.topic.create({
             data: {
                 topicNumber: nextTopicNumber,

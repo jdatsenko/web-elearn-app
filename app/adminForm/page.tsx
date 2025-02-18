@@ -68,7 +68,7 @@ const TeacherRequestForm: React.FC = () => {
         <div className="mb-4 mx-7">
           <Label
             htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium"
           >
             Meno
           </Label>
@@ -84,7 +84,7 @@ const TeacherRequestForm: React.FC = () => {
         <div className="mb-4 mx-7">
           <Label
             htmlFor="surname"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium"
           >
             Priezvisko
           </Label>
@@ -100,9 +100,9 @@ const TeacherRequestForm: React.FC = () => {
         <div className="mb-4 mx-7">
           <Label
             htmlFor="qualification"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium"
           >
-            Kvalifikácie
+            Kvalifikácie / Vzdelávanie
           </Label>
           <Textarea
             id="qualification"
@@ -115,7 +115,7 @@ const TeacherRequestForm: React.FC = () => {
         <div className="mb-4 mx-7">
           <Label
             htmlFor="experience"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium"
           >
             Skúsenosti
           </Label>

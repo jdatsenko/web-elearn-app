@@ -91,8 +91,7 @@ export default function Topic({ params }: { params: { id: string } }) {
       if ((error as any).name === "SyntaxError") {
         const errorElement = document.getElementById("ckstyle");
         if (errorElement) {
-          console.log(errorElement)
-          errorElement.innerHTML = editorData.data.content; // Vloženie HTML obsahu
+          errorElement.innerHTML += editorData.data.content; 
         }
       } else {
         console.error("Error initializing EditorJS:", error);
@@ -112,8 +111,10 @@ export default function Topic({ params }: { params: { id: string } }) {
   return (
     <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
       <div className="mx-14 md:mx-20" id="editorjs"></div>
-      <div className="mx-14 md:mx-20" id="ckstyle">
-
+      <div className="mx-14 md:mx-30">
+        <div id="ckstyle" className="mx-4 md:mx-60">
+          <p className="text-3xl font-bold my-5">{ editorData.data.title }</p>
+        </div>
       </div>
       
       <div className="mx-auto my-5">

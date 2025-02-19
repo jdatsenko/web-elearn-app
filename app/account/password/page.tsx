@@ -54,9 +54,14 @@ const Password = () => {
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
       />
-      <Button onClick={() => changePassword()} className="w-32">
-        Zmeniť heslo
-      </Button>
+      <div className="flex space-x-2">
+        <Button onClick={() => router.push("/account/data")} variant="secondary">
+          Späť
+        </Button>
+        <Button onClick={() => changePassword()} className="w-32">
+          Zmeniť heslo
+        </Button>
+      </div>
       {successMessage && (
         <p className="text-green-600 mt-4">{successMessage}</p>
       )}

@@ -1,11 +1,16 @@
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import React from "react";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useTheme } from "next-themes";
 
 const TopicSkeleton = () => {
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
+
     return (
-      <div className="flex flex-col mx-auto mt-3 min-h-screen space-y-4"> 
-        <SkeletonTheme baseColor="#c4c4c4" highlightColor="#f5f5f5">
+      <div className="flex flex-col mx-auto mt-3 min-h-screen space-y-4">
+        <SkeletonTheme baseColor={isDark ? "#2a2a2a" : "#e0e0e0"}
+        highlightColor={isDark ? "#444" : "#f5f5f5"}>
           <Skeleton height={50} width={900} /> 
           <Skeleton height={30} width={900} /> 
           <Skeleton height={700} width={900} /> 

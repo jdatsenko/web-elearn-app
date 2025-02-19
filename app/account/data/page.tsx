@@ -2,11 +2,17 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const ProfilePage = () => {
   const { data: session } = useSession();
@@ -60,90 +66,164 @@ const ProfilePage = () => {
     }
   };
 
-  if (loading) return <p>Načítava sa...</p>;
+  const handleDeleteAccount = async () => {
+    try {
+      const res = await axios.delete("/api/user/delete");
+      if (res.status === 200) {
+        await signOut({
+          redirect: true,
+          callbackUrl: "/",
+        });
+      }
+    } catch (error) {
+      console.error("Chyba pri vymazaní účtu:", error);
+    }
+  };
+
+  if (loading) return <p className="text-center">Načítava sa...</p>;
   if (!session) return <p>Musíte byť prihlásený na zobrazenie profilu.</p>;
 
   return (
-    <div className="mx-auto p-4">
-      <Button onClick={() => router.push("/account/password")}>
-        Zmeniť heslo
-      </Button>
-      <p className="text-3xl mt-3 text-center font-bold mb-4 flex-1">Vaše údaje</p>
-      {user ? (
-        <div className="mx-5 md:mx-60">
-          {!editing ? (
-            <>
-              <p>
-                <strong>Meno:</strong> {user.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
-              <Button className="mt-2" onClick={() => setEditing(true)}>
-                Upraviť profil
-              </Button>
-            </>
-          ) : (
-            <>
-              <Label className="block">
-                <span className="text-gray-700">Nové meno</span>
-                <Input
-                  type="text"
-                  placeholder={user.name}
-                  value={keepCurrentName ? user.name : newName}
-                  disabled={keepCurrentName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  className="mt-1 block w-full border-gray-500 rounded-md p-2"
-                />
-                <Label className="flex items-center mt-2">
-                  <input
-                    type="checkbox"
-                    checked={keepCurrentName}
-                    onChange={() => setKeepCurrentName(!keepCurrentName)}
-                    className="mr-2"
-                  />
-                  Použiť aktuálne meno
-                </Label>
-              </Label>
-
-              <Label className="block mt-3">
-                <span className="text-gray-700">Nový email</span>
-                <Input
-                  type="email"
-                  placeholder={user.email}
-                  value={keepCurrentEmail ? user.email : newEmail}
-                  disabled={keepCurrentEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  className="mt-1 block w-full border-gray-500 rounded-md p-2"
-                />
-                <Label className="flex items-center mt-2">
-                  <input
-                    type="checkbox"
-                    checked={keepCurrentEmail}
-                    onChange={() => setKeepCurrentEmail(!keepCurrentEmail)}
-                    className="mr-2"
-                  />
-                  Použiť aktuálny email
-                </Label>
-              </Label>
-
-              <Button className="mt-3" onClick={handleUpdate}>
-                Uložiť zmeny
-              </Button>
+    <div>
+      <div className="mt-3 mx-4">
+        <Button
+          onClick={() => router.push("/account/password")}
+          className="mr-3"
+        >
+          Zmeniť heslo
+        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="destructive" className="px-4 py-2 rounded-lg">
+              Vymazať konto
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] shadow-lg rounded-xl p-6">
+            <p className="text-lg text-center mt-2 font-semibold">
+              Ste si istí, že chcete vymazať svoje konto?
+            </p>
+            <p className="text-center mt-2">
+              Váš študijný progres bude{" "}
+              <span className="text-red-500 font-bold">navždy stratený.</span>
+            </p>
+            <DialogFooter className="flex justify-center gap-2 mt-4">
               <Button
-                className="mt-3 mx-2"
-                variant={"secondary"}
-                onClick={() => setEditing(false)}
+                variant="destructive"
+                className="px-4 py-2 rounded-lg"
+                onClick={handleDeleteAccount}
               >
-                Zrušiť
+                Áno, vymazať
               </Button>
-            </>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="flex justify-center p-6">
+        <div className="rounded-2xl shadow-lg w-1/3 lg:w-1/4 p-6">
+          <p className="text-3xl font-semibold text-center mb-6 text-gray-900 dark:text-white">
+            Vaše údaje
+          </p>
+
+          {user ? (
+            !editing ? (
+              <div className="text-gray-800 dark:text-gray-300 space-y-3">
+                <p>
+                  <strong>Meno:</strong> {user.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {user.email}
+                </p>
+                <div className="flex w-full justify-center">
+                  <Button className="mt-3" onClick={() => setEditing(true)}>
+                    Upraviť profil
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Label className="block text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-medium">Nové meno</span>
+                  <Input
+                    type="text"
+                    placeholder={user.name}
+                    value={keepCurrentName ? user.name : newName}
+                    disabled={keepCurrentName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-lg p-2 dark:bg-gray-700 dark:text-white"
+                  />
+                  <Label className="flex items-center mt-2 text-gray-700 dark:text-gray-400">
+                    <Checkbox
+                      id="currentName"
+                      checked={keepCurrentName}
+                      onCheckedChange={() =>
+                        setKeepCurrentName(!keepCurrentName)
+                      }
+                      className="mr-2"
+                    />
+                    Použiť aktuálne meno
+                  </Label>
+                </Label>
+
+                <Label className="block text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-medium">Nový email</span>
+                  <Input
+                    type="email"
+                    placeholder={user.email}
+                    value={keepCurrentEmail ? user.email : newEmail}
+                    disabled={keepCurrentEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    className="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-lg p-2 dark:bg-gray-700 dark:text-white"
+                  />
+                  <Label className="flex items-center mt-2 text-gray-700 dark:text-gray-400">
+                    <Checkbox
+                      id="currentEmail"
+                      checked={keepCurrentEmail}
+                      onCheckedChange={() =>
+                        setKeepCurrentEmail(!keepCurrentEmail)
+                      }
+                      className="mr-2"
+                    />
+                    Použiť aktuálny email
+                  </Label>
+                </Label>
+
+                <div className="flex justify-between mt-4">
+                  <Button onClick={handleUpdate} className="w-full">
+                    Uložiť zmeny
+                  </Button>
+                  <Button
+                    className="w-full ml-3"
+                    variant="secondary"
+                    onClick={() => setEditing(false)}
+                  >
+                    Zrušiť
+                  </Button>
+                </div>
+              </div>
+            )
+          ) : (
+            <p className="mt-6 text-center text-gray-700 dark:text-gray-400">
+              Údaje sa nenašli.
+            </p>
+          )}
+
+          {message && (
+            <p className="mt-4 text-center text-green-600 font-medium">
+              {message}
+            </p>
           )}
         </div>
-      ) : (
-        <p className="mt-10">Údaje sa nenašli.</p>
-      )}
-      {message && <p className="mt-3 text-green-600">{message}</p>}
+      </div>
+      <style>
+        {`
+          @media (min-width: 640px) {
+            .sm\\:justify-end {
+              justify-content: center !important;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

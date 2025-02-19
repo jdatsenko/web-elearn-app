@@ -94,7 +94,7 @@ const TopBar = () => {
                       </DropdownMenuItem>
                     )}
                     {isTeacher && (
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="justify-center">
                         <Link className="text-center" href={"/teacher"}>
                           Pridať tému
                         </Link>

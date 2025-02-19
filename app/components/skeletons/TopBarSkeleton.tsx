@@ -1,9 +1,14 @@
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useTheme } from "next-themes";
 
 const TopBarSkeleton = () => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   return (
-    <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
+    <SkeletonTheme baseColor={isDark ? "#2a2a2a" : "#e0e0e0"}
+        highlightColor={isDark ? "#444" : "#f5f5f5"}>
       <div className="p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit">
         <div className="flex flex-grow justify-between">
           <div className="flex gap-3 self-start">

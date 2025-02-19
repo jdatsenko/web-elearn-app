@@ -69,18 +69,18 @@ const TopBar = () => {
                     <UserCircleIcon className="w-5 h-5" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="border-2 border-gray-200">
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="justify-center">
                       <Link className="text-center" href={"/account"}>
                         Moj progress
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
-                    <DropdownMenuItem>
-                      <Link href={"/account/password"}>Zmeniť heslo</Link>
+                    <DropdownMenuItem className="justify-center">
+                      <Link href={"/account/data"}>Spravovať údaje</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                     {!isAdmin && !isTeacher && (
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="justify-center">
                         <Link className="text-center" href={"/adminForm"}>
                           Stať sa učiteľom
                         </Link>

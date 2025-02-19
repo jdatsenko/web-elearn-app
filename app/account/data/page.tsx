@@ -4,11 +4,15 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const ProfilePage = () => {
   const { data: session } = useSession();
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [user, setUser] = useState<{ name: string; email: string } | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
@@ -16,6 +20,7 @@ const ProfilePage = () => {
   const [keepCurrentName, setKeepCurrentName] = useState(true);
   const [keepCurrentEmail, setKeepCurrentEmail] = useState(true);
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -43,9 +48,9 @@ const ProfilePage = () => {
 
       if (res.status === 200) {
         setMessage("Údaje boli úspešne aktualizované.");
-        setUser({ 
-          name: keepCurrentName ? user!.name : newName, 
-          email: keepCurrentEmail ? user!.email : newEmail 
+        setUser({
+          name: keepCurrentName ? user!.name : newName,
+          email: keepCurrentEmail ? user!.email : newEmail,
         });
         setEditing(false);
       }
@@ -60,7 +65,10 @@ const ProfilePage = () => {
 
   return (
     <div className="mx-auto p-4">
-      <p className="text-3xl text-center font-bold mb-4">Vaše údaje</p>
+      <Button onClick={() => router.push("/account/password")}>
+        Zmeniť heslo
+      </Button>
+      <p className="text-3xl mt-3 text-center font-bold mb-4 flex-1">Vaše údaje</p>
       {user ? (
         <div className="mx-5 md:mx-60">
           {!editing ? (
@@ -71,10 +79,7 @@ const ProfilePage = () => {
               <p>
                 <strong>Email:</strong> {user.email}
               </p>
-              <Button
-                className="mt-2"
-                onClick={() => setEditing(true)}
-              >
+              <Button className="mt-2" onClick={() => setEditing(true)}>
                 Upraviť profil
               </Button>
             </>
@@ -122,10 +127,7 @@ const ProfilePage = () => {
                 </Label>
               </Label>
 
-              <Button
-                className="mt-3"
-                onClick={handleUpdate}
-              >
+              <Button className="mt-3" onClick={handleUpdate}>
                 Uložiť zmeny
               </Button>
               <Button
@@ -139,7 +141,7 @@ const ProfilePage = () => {
           )}
         </div>
       ) : (
-        <p>Údaje sa nenašli.</p>
+        <p className="mt-10">Údaje sa nenašli.</p>
       )}
       {message && <p className="mt-3 text-green-600">{message}</p>}
     </div>

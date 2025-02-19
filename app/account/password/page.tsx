@@ -26,9 +26,10 @@ const Password = () => {
         newPassword: newPassword,
       })
       .then((response) => {
-        console.log(response.data);
         setSuccessMessage("Heslo bolo úspešne aktualizované!");
-        router.push("./");
+        setTimeout(() => {
+          router.push("./");
+        }, 700);
       })
       .catch((error) => {
         console.log(error.response.data);

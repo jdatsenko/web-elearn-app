@@ -10,9 +10,6 @@ export async function POST(req: Request) {
   const oldPassword = body.oldPassword as string;
   const newPassword = body.newPassword as string;
 
-  console.log("oldPassword", oldPassword);
-  console.log("newPassword", newPassword);
-
   const session = await getServerSession(authOptions);
 
   if (!session) {

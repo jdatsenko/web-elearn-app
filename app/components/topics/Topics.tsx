@@ -33,7 +33,10 @@ const Topics = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
-  const HomePageSkeleton = dynamic(() => import("../skeletons/HomePageSkeleton"), { ssr: false });
+  const HomePageSkeleton = dynamic(
+    () => import("../skeletons/HomePageSkeleton"),
+    { ssr: false }
+  );
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -55,19 +58,26 @@ const Topics = () => {
   if (loading) {
     return <HomePageSkeleton />;
   }
-  
+
   return (
     <>
       <section className="px-4 sm:px-16 flex flex-col gap-4">
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[40px]">
           Webová e-learningová aplikácia pre LPWAN
         </h1>
-        <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">Témy</h1>
+        <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
+          Témy
+        </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mx-auto">
           {topics.map((topic, index) => (
-            <Card key={index} className="w-full bg-background max-w-[25rem] mx-auto">
+            <Card
+              key={index}
+              className="w-full bg-background max-w-[25rem] mx-auto"
+            >
               <CardHeader>
-                <CardTitle style={{ lineHeight: '1.5' }}>{topic.title}</CardTitle>
+                <CardTitle style={{ lineHeight: "1.5" }}>
+                  {topic.title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>{topic.description}</CardDescription>
@@ -75,7 +85,7 @@ const Topics = () => {
               <CardFooter className="flex justify-center">
                 <Link
                   className={buttonVariants({ variant: "default" })}
-                  href={`/topics/${topic.topicNumber}`} 
+                  href={`/topics/${topic.topicNumber}`}
                 >
                   Pozrieť
                 </Link>
@@ -83,14 +93,18 @@ const Topics = () => {
             </Card>
           ))}
         </div>
-  
+
         <Separator className="my-8 sm:my-[40px]" />
-  
+
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
           Prečo by sme mali vedieť, čo je LPWAN?
         </h1>
 
-        <Accordion type="single" collapsible className="mx-auto sm:mx-[100px] mb-8 sm:mb-[30px]">
+        <Accordion
+          type="single"
+          collapsible
+          className="mx-auto sm:mx-[100px] mb-8 sm:mb-[30px]"
+        >
           <AccordionItem value="item-1">
             <AccordionTrigger className="text-base text-start hover:no-underline text-red-600">
               1. Lepšie porozumenie technologickému prostrediu.
@@ -142,11 +156,35 @@ const Topics = () => {
           </AccordionItem>
         </Accordion>
         <Separator className="my-8 sm:my-[40px]" />
-        <footer className="flex justify-end mx-2 md:mx-10">
-          <div>
-            <p className="max-w-lg pb-8 sm:pb-[50px]">
-              Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv na
-              rôzne aspekty každodenného života, je dôležité, aby obyčajní
+        <ArrowToTop className="fixed bottom-6 right-6 z-[999]" />
+      </section>
+      <footer className="flex flex-col md:flex-row items-center w-full mb-5 px-6 rounded-lg shadow-xl mt-8">
+          <div className="w-full md:w-1/2 mb-4 md:mb-0">
+            <p className="text-lg">
+              Informácie o ochrane osobných údajov a zásadách nájdete{" "}
+              <Link
+                href={"/policy"}
+                className="text-blue-400 underline hover:text-blue-600 transition-colors"
+              >
+                tu.
+              </Link>
+            </p>
+            <p className="mt-2 text-lg">
+              Ak nájdete akékoľvek chyby, neváhajte mi napísať na email:{" "}
+              <Link
+                href="mailto:yu.datsenko@gmail.com"
+                className="text-blue-400 underline hover:text-blue-600 transition-colors"
+              >
+                yu.datsenko@gmail.com
+              </Link>
+              .
+            </p>
+          </div>
+
+          <div className="w-full md:w-1/2 text-center md:text-left pl-10">
+            <p className="max-w-lg text-lg pb-8 sm:pb-[50px]">
+              Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv
+              na rôzne aspekty každodenného života, je dôležité, aby obyčajní
               obyvatelia mali základné pochopenie tejto technológie, aby mohli
               efektívne využívať výhody, ktoré prináša, a zároveň chrániť svoje
               súkromie a bezpečnosť.
@@ -156,12 +194,10 @@ const Topics = () => {
               informácie a vzdelávanie.
             </p>
           </div>
+          <div className="w-1/12"></div>
         </footer>
-        <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
-      </section>
     </>
   );
 };
 
 export default Topics;
-

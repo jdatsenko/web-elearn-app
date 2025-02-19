@@ -13,7 +13,7 @@ const TopicSkeleton = () => {
         highlightColor={isDark ? "#444" : "#f5f5f5"}>
           <Skeleton height={50} /> 
           <Skeleton height={30} /> 
-          <Skeleton height={700} /> 
+          <Skeleton className="h-[200rem]" /> 
         </SkeletonTheme>
       </div>
     );

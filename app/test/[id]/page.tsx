@@ -24,6 +24,7 @@ interface TestResponse {
 const TestPage = ({ params }: { params: { id: string } }) => {
   const topicId = parseInt(params.id);
   const { data: session } = useSession();
+  const [loading, setLoading] = useState(true);
   const [test, setTest] = useState<TestResponse>();
   const [answers, setAnswers] = useState<
     { questionId: number; answer: number; answerId: number }[]
@@ -46,12 +47,15 @@ const TestPage = ({ params }: { params: { id: string } }) => {
           answer: 0,
         }))
       );
+      setLoading(false);
     })
     .catch((error) => {
       console.error("Error fetching test data:", error);
     });
   
   }, []);
+
+  if (loading) return <p className="text-center text-lg">Načítava sa...</p>;
 
   return (
     <div>

@@ -128,12 +128,12 @@ const ProfilePage = () => {
           {user ? (
             !editing ? (
               <div className="text-gray-800 dark:text-gray-300 space-y-3">
-                <p>
-                  <strong>Meno:</strong> {user.name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {user.email}
-                </p>
+              <p className="border-b border-gray-100 dark:border-gray-800 pb-2">
+                <strong>Meno:</strong> {user.name}
+              </p>
+              <p className="border-b border-gray-100 dark:border-gray-800 pb-2">
+                <strong>Email:</strong> {user.email}
+              </p>
                 <div className="flex w-full justify-center">
                   <Button className="mt-3" onClick={() => setEditing(true)}>
                     Upraviť profil

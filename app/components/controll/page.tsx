@@ -6,6 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -42,6 +44,7 @@ const TestControll = (props: any) => {
         console.log(response.data);
       });
   }
+
   return (
     <>
       <Dialog>
@@ -60,7 +63,6 @@ const TestControll = (props: any) => {
             </Button>
           </DialogTrigger>
         </div>
-
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
@@ -77,11 +79,19 @@ const TestControll = (props: any) => {
           ))}
           {results.results.every((result) => result.correct) && (
             <div className="flex justify-center mt-4">
-              <Button onClick={() => router.push(`/topics/${testId + 1}`)} className={cn(buttonVariants({ variant: "secondary" }))}>
+              <Button
+                onClick={() => router.push(`/topics/${testId + 1}`)}
+                className={cn(buttonVariants({ variant: "secondary" }))}
+              >
                 Ďalšia téma
               </Button>
             </div>
           )}
+          <DialogFooter className="flex mt-4">
+            <DialogClose className="flex">
+              <Button className="px-4 py-2 rounded-lg">Späť</Button>
+            </DialogClose>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>

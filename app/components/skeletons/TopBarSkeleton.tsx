@@ -3,8 +3,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useTheme } from "next-themes";
 
 const TopBarSkeleton = () => {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const { systemTheme } = useTheme();
+  const isDark = systemTheme === "dark";
 
   return (
     <SkeletonTheme baseColor={isDark ? "#2a2a2a" : "#e0e0e0"}

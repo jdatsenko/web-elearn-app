@@ -141,18 +141,22 @@ const Topics = () => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-
-        <p className="mx-auto max-w-lg pb-8 sm:pb-[50px]">
-          Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv na
-          rôzne aspekty každodenného života, je dôležité, aby obyčajní
-          obyvatelia mali základné pochopenie tejto technológie, aby mohli
-          efektívne využívať výhody, ktoré prináša, a zároveň chrániť svoje
-          súkromie a bezpečnosť.
-          <br />
-          <br />
-          Táto webová e-learningová aplikácia poskytuje tieto dôležité
-          informácie a vzdelávanie.
-        </p>
+        <Separator className="my-8 sm:my-[40px]" />
+        <footer className="flex justify-end mx-2 md:mx-10">
+          <div>
+            <p className="max-w-lg pb-8 sm:pb-[50px]">
+              Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv na
+              rôzne aspekty každodenného života, je dôležité, aby obyčajní
+              obyvatelia mali základné pochopenie tejto technológie, aby mohli
+              efektívne využívať výhody, ktoré prináša, a zároveň chrániť svoje
+              súkromie a bezpečnosť.
+              <br />
+              <br />
+              Táto webová e-learningová aplikácia poskytuje tieto dôležité
+              informácie a vzdelávanie.
+            </p>
+          </div>
+        </footer>
         <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
       </section>
     </>

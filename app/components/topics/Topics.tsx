@@ -65,7 +65,7 @@ const Topics = () => {
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">Témy</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mx-auto">
           {topics.map((topic, index) => (
-            <Card key={index} className="w-full max-w-[25rem] mx-auto">
+            <Card key={index} className="w-full bg-background max-w-[25rem] mx-auto">
               <CardHeader>
                 <CardTitle style={{ lineHeight: '1.5' }}>{topic.title}</CardTitle>
               </CardHeader>

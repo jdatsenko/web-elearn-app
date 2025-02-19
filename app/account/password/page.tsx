@@ -40,7 +40,7 @@ const Password = () => {
 
   return (
     <div className="flex flex-col mt-10 items-center space-y-4">
-      <h1 className="text-2xl font-bold text-center my-4">Nastavte staré a nové heslo na zmenu hesla</h1>
+      <h1 className="text-2xl font-bold text-center my-4">Nastavte staré a nové heslo</h1>
       <PasswordInput
         className="w-64"
         placeholder="Staré heslo"

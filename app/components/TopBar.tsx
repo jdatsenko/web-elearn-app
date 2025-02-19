@@ -51,7 +51,7 @@ const TopBar = () => {
     <>
       <header
         className={cn(
-          "p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit sticky top-0 z-10"
+          "p-4 flex bg-background flex-col sm:flex-row w-full justify-between border-b h-fit sticky top-0 z-10"
         )}
       >
         <div className="flex flex-grow justify-between">
@@ -65,7 +65,7 @@ const TopBar = () => {
             {session && !loading && (
               <div className="space-x-3">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border px-4 py-2 rounded-md bg-secondary hover:bg-secondary/80 text-secondary-foreground">
+                  <DropdownMenuTrigger className="border px-4 py-[0.48rem] rounded-md bg-secondary hover:bg-secondary/80 text-secondary-foreground">
                     <UserCircleIcon className="w-5 h-5" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="border-2 border-gray-200">

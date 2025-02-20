@@ -22,7 +22,7 @@ const topics = [
 
 const Admin = () => {
   const [solvedTests, setSolvedTests] = useState<SolvedTest[]>([]);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [progress, setProgress] = useState<number>(0);
   const router = useRouter();
   const isTeacher = session?.user?.role === "TEACHER";

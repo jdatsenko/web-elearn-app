@@ -160,7 +160,7 @@ const Topics = () => {
       <Separator className="my-8 sm:my-[40px]" />
       <footer className="flex flex-col md:flex-row items-center w-full px-12 rounded-lg shadow-xl pb-8 sm:pb-[40px]">
           <div className="w-full md:w-2/5">
-            <p className="text-sm text-gray-700 dark:text-[#323232]">
+            <p className="text-sm text-gray-700 dark:text-[#696969]">
               Informácie o ochrane osobných údajov a zásadách nájdete{" "}
               <Link
                 href={"/policy"}
@@ -169,7 +169,7 @@ const Topics = () => {
                 tu.
               </Link>
             </p>
-            <p className="mt-2 text-sm text-gray-700 dark:text-[#323232]">
+            <p className="mt-2 text-sm text-gray-700 dark:text-[#696969]">
               Ak nájdete akékoľvek chyby, neváhajte mi napísať na email:{" "}
               <Link
                 href="mailto:yu.datsenko@gmail.com"
@@ -182,7 +182,7 @@ const Topics = () => {
           </div>
 
           <div className="w-full md:w-1/2 mt-8 md:text-justify md:ml-8">
-            <p className="text-base dark:text-[#696969]">
+            <p className="text-base dark:text-gray-400">
               Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv
               na rôzne aspekty každodenného života, je dôležité, aby obyčajní
               obyvatelia mali základné pochopenie tejto technológie, aby mohli

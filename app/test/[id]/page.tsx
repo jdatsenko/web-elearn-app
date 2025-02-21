@@ -29,6 +29,22 @@ const TestPage = ({ params }: { params: { id: string } }) => {
   const [answers, setAnswers] = useState<
     { questionId: number; answer: number; answerId: number }[]
   >([]);
+
+  const [results, setResults] = useState<{
+    results: { id: number; correct: boolean }[];
+    score: string;
+  }>({
+    results: [],
+    score: "",
+  });
+
+  const handleAnswersUpdate = (result: {
+    results: { id: number; correct: boolean }[];
+    score: string;
+  }) => {
+    setResults(result);
+  };
+
   useEffect(() => {
     axios
     .get("/api/tests/test", {
@@ -68,7 +84,10 @@ const TestPage = ({ params }: { params: { id: string } }) => {
         test.questions.map((question, i) => (
           <RadioGroup
             key={question.id}
-            className="flex flex-col space-y-1 mb-2 border-solid border-2 border-sky-600 m-5 rounded-md p-3"
+            className={`flex flex-col space-y-1 mb-2 border-solid border-2 m-5 rounded-md p-3
+            ${results.results.length === 0 ? "border-sky-600" : results.results.find((result) => {
+              return result.id === question.id
+            })?.correct ? "border-green-600" : "border-red-600"}`}
           >
             <h3 className="text-xl font-semibold">{question.text}</h3>
             {question.answers.map((answer, j) => (
@@ -85,7 +104,6 @@ const TestPage = ({ params }: { params: { id: string } }) => {
                       answer: j + 1,
                     };
                     setAnswers(newAnswers);
-                    console.log(newAnswers);
                   }}
                 />
                 <span>{answer.text}</span>
@@ -96,7 +114,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
       )}
       {session && session?.user?.topicsCompleted !== undefined && session?.user?.topicsCompleted >= topicId - 1 && (
         <div className="flex justify-center">
-          {test && <TestControll answers={answers} testId={topicId} />}
+          {test && <TestControll answers={answers} testId={topicId} onResults={handleAnswersUpdate}/>}
         </div>
       )}
     </div>

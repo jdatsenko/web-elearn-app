@@ -1,24 +1,16 @@
 "use client";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 const TestControll = (props: any) => {
   const router = useRouter();
   const answers = props.answers as { questionId: number; answer: number }[];
   const testId = props.testId as number;
+  const onResults = props.onResults as Function;
+
   const [results, setResults] = useState<{
     results: { id: number; correct: boolean }[];
     score: string;
@@ -37,9 +29,14 @@ const TestControll = (props: any) => {
       })
       .then((response) => {
         setResults(response.data);
+        onResults(response.data);
         if (response.data.score === "100%") {
           console.log(session);
           update({ topicsCompleted: testId });
+          setTimeout(() => {
+            router.push(`/topics/${testId + 1}`);
+          }
+          , 1500);
         }
         console.log(response.data);
       });
@@ -47,53 +44,19 @@ const TestControll = (props: any) => {
 
   return (
     <>
-      <Dialog>
-        <div className="flex justify-between mb-5 items-end">
-          <Button onClick={() => router.back()} className="mr-4">
-            Späť
-          </Button>
-          <DialogTrigger asChild>
-            <Button
-              onClick={() => {
-                submitTest();
-              }}
-              className="mt-4"
-            >
-              Odoslať test
-            </Button>
-          </DialogTrigger>
-        </div>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>
-              <h2 className="text-2xl font-bold mb-4">Výsledky testovania:</h2>
-            </DialogTitle>
-          </DialogHeader>
-          {results.results.map((result, i) => (
-            <div key={i} className="mb-4">
-              <p className="font-bold">Odpoveď {i + 1}</p>
-              <p className={result.correct ? "text-green-600" : "text-red-600"}>
-                {result.correct ? "Správna" : "Nesprávna"}
-              </p>
-            </div>
-          ))}
-          {results.results.every((result) => result.correct) && (
-            <div className="flex justify-center mt-4">
-              <Button
-                onClick={() => router.push(`/topics/${testId + 1}`)}
-                className={cn(buttonVariants({ variant: "secondary" }))}
-              >
-                Ďalšia téma
-              </Button>
-            </div>
-          )}
-          <DialogFooter className="flex mt-4">
-            <DialogClose className="flex">
-              <Button className="px-4 py-2 rounded-lg">Späť</Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <div className="flex justify-between mb-5 items-end">
+        <Button onClick={() => router.back()} className="mr-4">
+          Späť
+        </Button>
+        <Button
+          onClick={() => {
+            submitTest();
+          }}
+          className="mt-4"
+        >
+          Odoslať test
+        </Button>
+      </div>
     </>
   );
 };

@@ -3,8 +3,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useTheme } from "next-themes";
 
 const HomePageSkeleton = () => {
-  const { systemTheme } = useTheme();
-  const isDark = systemTheme === "dark";
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
     <>

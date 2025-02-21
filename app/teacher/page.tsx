@@ -318,14 +318,12 @@ export default function Test() {
           {`
           :root{
             --ck-color-base-border: hsl(var(--primary));
+            --ck-spacing-unit: 2em;
           }
           html.dark {
             --ck-color-base-background: hsl(0deg 0% 0%);
             --ck-color-base-border: hsl(209, 92%, 70%);
             --ck-color-base-text: hsl(0deg 0% 100%);
-          }
-          :root{
-            --ck-color-base-border: hsl(var(--primary));
           }
           html.dark {
             --ck-color-base-background: hsl(0deg 0% 8%);

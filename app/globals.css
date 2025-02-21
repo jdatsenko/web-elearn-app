@@ -86,10 +86,14 @@
   }
 }
 
-figcaption {
+#ckstyle figcaption {
+  background-color: #222;
+  color: #fff;
+  font: italic smaller sans-serif;
+  padding: 3px;
   text-align: center;
 }
 
-h3 {
+#ckstyle h3 {
   font-size: 1.75rem;
 }

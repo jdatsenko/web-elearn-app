@@ -26,6 +26,36 @@ export default function TopicLayout({
 
     fetchTopics();
   }, []);
+
+  const maxTopicId = topics.length;
+  const topicId = parseInt(params.id, 10) || 1;
+
+  const goToPrevious = () => {
+    if (topicId > 1) {
+      router.push(`/topics/${topicId - 1}`);
+    }
+  };
+
+  const goToNext = () => {
+    if (topicId < maxTopicId) {
+      router.push(`/topics/${topicId + 1}`);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        goToPrevious();
+      } else if (event.key === "ArrowRight") {
+        goToNext();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [topicId, maxTopicId]);
+
   return (
     <>
       <div className="flex h-full w-full">
@@ -33,9 +63,7 @@ export default function TopicLayout({
         {params.id !== "1" && (
           <div
             className=" cursor-pointer fixed h-full flex justify-center items-center px-6 md:px-10"
-            onClick={() => {
-              router.push(`/topics/${parseInt(params.id) - 1}`);
-            }}
+            onClick={goToPrevious}
           >
             <i className="bi bi-arrow-left text-base md:text-2xl"></i>
           </div>
@@ -47,9 +75,7 @@ export default function TopicLayout({
           <div>
             <div
               className="fixed cursor-pointer h-full flex justify-center items-center px-6 md:px-10 right-0"
-              onClick={() => {
-                router.push(`/topics/${parseInt(params.id) + 1}`);
-              }}
+              onClick={goToNext}
             >
               <i className="bi bi-arrow-right text-base md:text-2xl absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2" />
             </div>

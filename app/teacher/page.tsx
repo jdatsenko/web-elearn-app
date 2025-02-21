@@ -12,6 +12,8 @@ import dynamic from "next/dynamic";
 import { useCallback } from "react";
 import React, { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export interface Question {
   label: string;
@@ -43,7 +45,9 @@ export default function Test() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const { data: session } = useSession();
   const router = useRouter();
+  const isTeacher = session?.user?.role === "TEACHER";
 
   const onCKChange = useCallback((event: any, value: any) => {
     setNewTopic((prevState) => ({
@@ -130,6 +134,15 @@ export default function Test() {
       { label: "", answers: [{ label: "", isRight: false, number: 0 }] },
     ]);
   };
+
+  if(!isTeacher){
+    return (
+      <div>
+        <p className="text-red-500 my-5 text-center">Nemáte prístup. Najprv treba podať {" "} <Link className="underline font-bold hover:text-red-700" href={"/teacherForm"}>žiadosť o rolu učiteľa.</Link></p>
+        
+      </div>
+    )
+  }
 
   return (
     <>

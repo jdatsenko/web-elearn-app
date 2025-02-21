@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link";
 
 const PodmienkyOchranyOsobnychUdajov = () => {
   return (
@@ -23,7 +24,14 @@ const PodmienkyOchranyOsobnychUdajov = () => {
 
       <footer className="mt-8">
         <p>
-          Ak máte akékoľvek otázky o ochrane vašich osobných údajov, kontaktujte správcu aplikácie na e-mailovej adrese: yu.datsenko@gmail.com.
+          Ak máte akékoľvek otázky o ochrane vašich osobných údajov, kontaktujte správcu aplikácie na e-mailovej adrese: :{" "}
+              <Link
+                href="mailto:yu.datsenko@gmail.com"
+                className="text-blue-400 underline hover:text-blue-600 transition-colors"
+              >
+                yu.datsenko@gmail.com
+              </Link>
+              .
         </p>
       </footer>
     </div>

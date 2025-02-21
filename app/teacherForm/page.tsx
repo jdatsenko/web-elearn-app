@@ -50,7 +50,7 @@ const TeacherRequestForm: React.FC = () => {
         setSuccessMessage("Žiadosť bola úspešne odoslaná! Počkajte na schválenie.");
         setError(""); 
         setTimeout(() => {
-          router.push("../account");
+          router.push("/");
         }, 1000);
       })
       .catch((error: any) => {
@@ -135,10 +135,10 @@ const TeacherRequestForm: React.FC = () => {
           </Button>
         </div>
         {error && (
-          <p className="text-red-600 font-bold text-center mb-4">{error}</p>
+          <p className="text-red-600 mt-2 font-bold text-center mb-4">{error}</p>
         )}
         {successMessage && (
-          <p className="text-green-600 font-bold text-center mb-4">{successMessage}</p>
+          <p className="text-green-600 mt-2 font-bold text-center mb-4">{successMessage}</p>
         )}
       </form>
     </div>

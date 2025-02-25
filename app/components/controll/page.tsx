@@ -4,12 +4,14 @@ import { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast"
 
 const TestControll = (props: any) => {
   const router = useRouter();
   const answers = props.answers as { questionId: number; answer: number }[];
   const testId = props.testId as number;
   const onResults = props.onResults as Function;
+  const { toast } = useToast()
 
   const [results, setResults] = useState<{
     results: { id: number; correct: boolean }[];
@@ -30,15 +32,22 @@ const TestControll = (props: any) => {
       .then((response) => {
         setResults(response.data);
         onResults(response.data);
+
+        const correctAnswers = response.data.results.filter((r: any) => r.correct).length;
+        const totalQuestions = response.data.results.length;
+       
         if (response.data.score === "100%") {
-          console.log(session);
           update({ topicsCompleted: testId });
           setTimeout(() => {
             router.push(`/topics/${testId + 1}`);
-          }
-          , 1500);
+          }, 1500);
+          return;
         }
-        console.log(response.data);
+        toast({
+          title: "Výsledok testu",
+          description: `Správne odpovede: ${correctAnswers} z ${totalQuestions}`,
+          variant: "destructive",
+        });
       });
   }
 

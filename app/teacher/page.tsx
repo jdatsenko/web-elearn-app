@@ -57,7 +57,7 @@ function TestContent() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const topicId = searchParams.get("topicId")
+  const topicId = parseInt(searchParams.get("topicId") || "0");
   const isTeacher = session?.user?.role === "TEACHER";
 
   useEffect(() => {

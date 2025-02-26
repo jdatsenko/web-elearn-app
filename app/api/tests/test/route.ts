@@ -78,13 +78,13 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json() as TestRequest;
-    const topicId = req.nextUrl.searchParams.get("id");
-    if (!topicId) {
-      return NextResponse.json({ error: "Chýba topicId." }, { status: 400 });
+    let topicId = body.topicId;
+    if (!body.topicId) {
+      return NextResponse.json({ error: req.nextUrl.searchParams }, { status: 400 });
     }
 
     const existingTest = await prisma.test.findFirst({
-      where: { topicId: parseInt(topicId) },
+      where: { topicId: body.topicId },
       select: { id: true },
     });
 

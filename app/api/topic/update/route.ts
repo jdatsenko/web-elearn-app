@@ -12,8 +12,7 @@ export async function PUT(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    const existingTopic = await prisma.topic.findUnique({ where: { id: topicId } });
+    const existingTopic = await prisma.topic.findUnique({ where: { id: parseInt(topicId) } });
 
     if (!existingTopic) {
       return NextResponse.json(
@@ -23,7 +22,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const updatedTopic = await prisma.topic.update({
-      where: { id: topicId },
+      where: { id: parseInt(topicId) },
       data: {
         title,
         description,
@@ -38,7 +37,7 @@ export async function PUT(req: NextRequest) {
   } catch (error) {
     console.error("Chyba pri aktualizácii témy:", error);
     return NextResponse.json(
-      { message: "Chyba pri aktualizácii témy." },
+      { message: "Chyba pri aktualizácii témy." + error },
       { status: 500 }
     );
   }

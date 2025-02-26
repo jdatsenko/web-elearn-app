@@ -85,6 +85,13 @@ export default function TopicLayout({
           ::selection {
             color: black;
           }
+          figure.image {
+            background: white;  
+            width: fit-content;
+            height: 100%;
+            margin: 0 auto;
+          }
+
         `}</style>
       </div>
     </>

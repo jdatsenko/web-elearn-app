@@ -111,7 +111,11 @@ export default function Topic({ params }: { params: { id: string } }) {
           {/* <p className="text-3xl font-bold my-5">{ editorData.data.title }</p> */}
         </div>
       </div>
-      
+      {isTeacher && (
+              <div>
+                 <Button onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
+              </div>
+            )}
       <div className="mx-auto my-5">
         {status !== "loading" && (
           <div className={`justify-center items-center ${isAuthorized && session?.user?.topicsCompleted >= topicId - 1 ? "flex" : ""}`}>

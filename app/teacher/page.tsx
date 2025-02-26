@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
-import { useCallback } from "react";
+import { Suspense, useCallback } from "react";
 import React, { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useSession } from "next-auth/react";
@@ -38,6 +38,14 @@ const ClassicCKEditor = dynamic(
 );
 
 export default function Test() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TestContent />
+    </Suspense>
+  );
+}
+
+function TestContent() {
   const [newTopic, setNewTopic] = useState<Topic>({
     title: "",
     description: "",
@@ -389,6 +397,12 @@ export default function Test() {
           }
           .ck-editor__editable_inline {
             min-height: 300px;
+          }
+          figure.image {
+            background: white;  
+            width: fit-content;
+            height: 100%;
+            margin: 0 auto;
           }
           `}
         </style>

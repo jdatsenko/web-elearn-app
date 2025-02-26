@@ -12,10 +12,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { ClassicEditor } from "ckeditor5";
-import "ckeditor5/ckeditor5.css";
-
 export default function Topic({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession() as {
     data: any;
@@ -27,7 +23,7 @@ export default function Topic({ params }: { params: { id: string } }) {
   const topicId = parseInt(params.id);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState(true);
-
+  const isTeacher = session?.user?.role === "TEACHER";
   const [editorData, setEditorData] = useState<any>(null);
   const editor = useRef<EditorJS | null>(null);
   const TopicSkeleton = dynamic(
@@ -119,68 +115,33 @@ export default function Topic({ params }: { params: { id: string } }) {
       
       <div className="mx-auto my-5">
         {status !== "loading" && (
-          <div>
-            {isAuthorized &&
-              session?.user?.topicsCompleted !== undefined &&
-              session?.user?.topicsCompleted >= topicId - 1 && (
-                <div>
-                  <Button
-                    className="mr-4"
-                    onClick={() => router.push(`/test/${topicId}`)}
-                  >
-                    Začať testovanie
-                  </Button>
-                  <Button
-                    className={cn(buttonVariants({ variant: "secondary" }))}
-                    onClick={() => router.push(`/topics/${topicId + 1}`)}
-                  >
-                    Ďalšia téma
-                  </Button>
+          <div className={`justify-center items-center ${isAuthorized && session?.user?.topicsCompleted >= topicId - 1 ? "flex" : ""}`}>
+            {isAuthorized ? (
+              session?.user?.topicsCompleted >= topicId - 1 ? (
+                <Button className="mr-4" onClick={() => router.push(`/test/${topicId}`)}>
+                  Začať testovanie
+                </Button>
+              ) : (
+                <div className="test-warning text-red-500 text-center mb-2">
+                  Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
                 </div>
-              )}
-
-            {!isAuthorized && (
-              <div>
-                <div className="flex justify-center">
-                  <Button
-                    className={cn(buttonVariants({ variant: "secondary" }))}
-                    onClick={() => router.push(`/topics/${topicId + 1}`)}
-                  >
-                    Ďalšia téma
-                  </Button>
-                </div>
-                <div className="auth-warn text-red-500 text-center mt-5">
-                  Musíte byť autorizovaný, aby ste mohli začať testovanie.
-                  <a
-                    href="/auth/login"
-                    className="text-red-500 font-bold ml-3 underline"
-                  >
-                    Prihlásiť sa
-                  </a>
-                </div>
+              )
+            ) : (
+              <div className="auth-warn text-red-500 text-center mb-2">
+                Musíte byť autorizovaný, aby ste mohli začať testovanie.
+                <a href="/auth/login" className="text-red-500 font-bold ml-3 underline">
+                  Prihlásiť sa
+                </a>
               </div>
             )}
-
-            {isAuthorized &&
-              session?.user?.topicsCompleted !== undefined &&
-              session?.user?.topicsCompleted < topicId - 1 && (
-                <div className="test-warning text-red-500 text-center">
-                  Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
-                  <div className="flex justify-center mt-4">
-                    <Button
-                      onClick={() => router.push(`/topics/${topicId + 1}`)}
-                      className={cn(buttonVariants({ variant: "secondary" }))}
-                    >
-                      Ďalšia téma
-                    </Button>
-                  </div>
-                </div>
-              )}
+            <div className="flex justify-center">
+              <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                Ďalšia téma
+              </Button>
+            </div>
           </div>
         )}
-        {errorMessage && (
-          <p className="text-red-600 text-center mt-4">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}
       </div>
 
       <style>{`

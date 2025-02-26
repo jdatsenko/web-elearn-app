@@ -19,7 +19,6 @@ export default function Topic({ params }: { params: { id: string } }) {
   };
   const isAuthorized = status === "authenticated";
   const router = useRouter();
-
   const topicId = parseInt(params.id);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState(true);

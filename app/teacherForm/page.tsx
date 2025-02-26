@@ -6,6 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { Info } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 const TeacherRequestForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -38,8 +46,13 @@ const TeacherRequestForm: React.FC = () => {
       experience: "",
     });
 
-    if(formData.name === "" || formData.surname === "" || formData.qualification === "" || formData.experience === "") {
-      setError("Vyplňte všetky polia.")
+    if (
+      formData.name === "" ||
+      formData.surname === "" ||
+      formData.qualification === "" ||
+      formData.experience === ""
+    ) {
+      setError("Vyplňte všetky polia.");
       return;
     }
 
@@ -47,29 +60,48 @@ const TeacherRequestForm: React.FC = () => {
       .post("/api/user/teacherRequest", formData)
       .then((response) => {
         console.log(response.data);
-        setSuccessMessage("Žiadosť bola úspešne odoslaná! Počkajte na schválenie.");
-        setError(""); 
+        setSuccessMessage(
+          "Žiadosť bola úspešne odoslaná! Počkajte na schválenie."
+        );
+        setError("");
         setTimeout(() => {
           router.push("/");
         }, 1000);
       })
       .catch((error: any) => {
-        setError(error.response.data.message)
+        setError(error.response.data.message);
         setSuccessMessage("");
       });
   };
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold text-center my-4">
+      <p className="text-2xl font-bold text-center my-4 flex items-center justify-center">
         Žiadosť o funkciu učiteľa
-      </h1>
+        <span className="ml-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Info className="w-6 h-6 text-blue-500 cursor-pointer" />
+            </DialogTrigger>
+            <DialogContent>
+              <p className="text-lg text-center mt-2 font-semibold">
+                Čo môže učiteľ urobiť?
+              </p>
+              <p>V rámci tejto platformy môže učiteľ prispievať k vzdelávaciemu procesu pridaním nových tém a testov. Okrem toho má možnosť upravovať existujúce témy, čím neustále zlepšuje obsah a zaisťuje aktuálnosť materiálov. <br /> <br /> Aby ste sa stali učiteľom na tejto platforme, je potrebné vyplniť túto žiadosť a zdieľať svoje odborné kvalifikácie a zručnosti, ktoré preukazujú vašu odbornosť a schopnosť prispievať k vzdelávaniu študentov.</p>
+              <DialogFooter className="flex justify-center gap-2 mt-4">
+                <DialogClose className="flex">
+                  <Button className="px-4 py-2 rounded-lg" variant="secondary">
+                    Zavrieť
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </span>
+      </p>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4 mx-7">
-          <Label
-            htmlFor="name"
-            className="block text-sm font-medium"
-          >
+          <Label htmlFor="name" className="block text-sm font-medium">
             Meno
           </Label>
           <Input
@@ -82,10 +114,7 @@ const TeacherRequestForm: React.FC = () => {
           />
         </div>
         <div className="mb-4 mx-7">
-          <Label
-            htmlFor="surname"
-            className="block text-sm font-medium"
-          >
+          <Label htmlFor="surname" className="block text-sm font-medium">
             Priezvisko
           </Label>
           <Input
@@ -98,10 +127,7 @@ const TeacherRequestForm: React.FC = () => {
           />
         </div>
         <div className="mb-4 mx-7">
-          <Label
-            htmlFor="qualification"
-            className="block text-sm font-medium"
-          >
+          <Label htmlFor="qualification" className="block text-sm font-medium">
             Kvalifikácie / Vzdelávanie
           </Label>
           <Textarea
@@ -113,10 +139,7 @@ const TeacherRequestForm: React.FC = () => {
           ></Textarea>
         </div>
         <div className="mb-4 mx-7">
-          <Label
-            htmlFor="experience"
-            className="block text-sm font-medium"
-          >
+          <Label htmlFor="experience" className="block text-sm font-medium">
             Skúsenosti
           </Label>
           <Textarea
@@ -128,17 +151,17 @@ const TeacherRequestForm: React.FC = () => {
           ></Textarea>
         </div>
         <div className="flex justify-center">
-          <Button
-            onClick={handleSubmit}
-          >
-            Odoslať
-          </Button>
+          <Button onClick={handleSubmit}>Odoslať</Button>
         </div>
         {error && (
-          <p className="text-red-600 mt-2 font-bold text-center mb-4">{error}</p>
+          <p className="text-red-600 mt-2 font-bold text-center mb-4">
+            {error}
+          </p>
         )}
         {successMessage && (
-          <p className="text-green-600 mt-2 font-bold text-center mb-4">{successMessage}</p>
+          <p className="text-green-600 mt-2 font-bold text-center mb-4">
+            {successMessage}
+          </p>
         )}
       </form>
     </div>

@@ -14,6 +14,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const ProfilePage = () => {
   const { data: session } = useSession();
   const [user, setUser] = useState<{ name: string; email: string } | null>(
@@ -25,7 +27,8 @@ const ProfilePage = () => {
   const [newEmail, setNewEmail] = useState("");
   const [keepCurrentName, setKeepCurrentName] = useState(true);
   const [keepCurrentEmail, setKeepCurrentEmail] = useState(true);
-  const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
@@ -46,6 +49,10 @@ const ProfilePage = () => {
   }, [session]);
 
   const handleUpdate = async () => {
+    if (!keepCurrentEmail && !emailRegex.test(newEmail)) {
+      setErrorMessage("Zadajte platný e-mail");
+      return;
+    }
     try {
       const res = await axios.put("/api/user/updateUserData", {
         name: keepCurrentName ? user?.name : newName,
@@ -53,7 +60,7 @@ const ProfilePage = () => {
       });
 
       if (res.status === 200) {
-        setMessage("Údaje boli úspešne aktualizované.");
+        setSuccessMessage("Údaje boli úspešne aktualizované.");
         setUser({
           name: keepCurrentName ? user!.name : newName,
           email: keepCurrentEmail ? user!.email : newEmail,
@@ -62,7 +69,7 @@ const ProfilePage = () => {
       }
     } catch (error) {
       console.error("Chyba pri aktualizácii údajov:", error);
-      setMessage("Chyba pri aktualizácii.");
+      setErrorMessage("Chyba pri aktualizácii.");
     }
   };
 
@@ -128,12 +135,12 @@ const ProfilePage = () => {
           {user ? (
             !editing ? (
               <div className="text-gray-800 dark:text-gray-300 space-y-3">
-              <p className="border-b border-gray-100 dark:border-gray-800 pb-2">
-                <strong>Meno:</strong> {user.name}
-              </p>
-              <p className="border-b border-gray-100 dark:border-gray-800 pb-2">
-                <strong>Email:</strong> {user.email}
-              </p>
+                <p className="border-b border-gray-100 dark:border-gray-800 pb-2">
+                  <strong>Meno:</strong> {user.name}
+                </p>
+                <p className="border-b border-gray-100 dark:border-gray-800 pb-2">
+                  <strong>Email:</strong> {user.email}
+                </p>
                 <div className="flex w-full justify-center">
                   <Button className="mt-3" onClick={() => setEditing(true)}>
                     Upraviť profil
@@ -189,13 +196,24 @@ const ProfilePage = () => {
                 </Label>
 
                 <div className="flex justify-between mt-4">
-                  <Button onClick={handleUpdate} className="w-full">
+                  <Button
+                    onClick={() => {
+                      setErrorMessage(" ");
+                      setSuccessMessage(" ");
+                      handleUpdate();
+                    }}
+                    className="w-full"
+                  >
                     Uložiť zmeny
                   </Button>
                   <Button
                     className="w-full ml-3"
                     variant="secondary"
-                    onClick={() => setEditing(false)}
+                    onClick={() => {
+                      setEditing(false);
+                      setErrorMessage(" ");
+                      setSuccessMessage(" ");
+                    }}
                   >
                     Zrušiť
                   </Button>
@@ -208,10 +226,11 @@ const ProfilePage = () => {
             </p>
           )}
 
-          {message && (
-            <p className="mt-4 text-center text-green-600 font-medium">
-              {message}
-            </p>
+          {successMessage && (
+            <p className="text-green-600 mt-4 text-center">{successMessage}</p>
+          )}
+          {errorMessage && (
+            <p className="text-red-600 text-center mt-4">{errorMessage}</p>
           )}
         </div>
       </div>

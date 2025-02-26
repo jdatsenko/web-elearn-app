@@ -112,7 +112,7 @@ export default function Topic({ params }: { params: { id: string } }) {
       <div className="mx-14 md:mx-20" id="editorjs"></div>
       <div className="mx-14 md:mx-30">
         <div id="ckstyle" className="mx-4 md:mx-60">
-          <p className="text-3xl font-bold my-5">{ editorData.data.title }</p>
+          {/* <p className="text-3xl font-bold my-5">{ editorData.data.title }</p> */}
         </div>
       </div>
       

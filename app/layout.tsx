@@ -4,6 +4,7 @@ import { ThemeProvider } from "./components/theme-provider";
 import Provider from "@/components/ui/Provider";
 import "./globals.css";
 import TopBar from "./components/TopBar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           >
             <TopBar />
             {children}
+            <Toaster />
           </ThemeProvider>
         </Provider>
       </body>

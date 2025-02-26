@@ -4,8 +4,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useTheme } from "next-themes";
 
 const TopicSkeleton = () => {
-    const { systemTheme } = useTheme();
-    const isDark = systemTheme === "dark";
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
 
     return (
       <div className="flex flex-col mx-auto mt-3 w-2/3 min-h-screen space-y-4">

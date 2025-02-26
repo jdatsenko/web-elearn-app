@@ -191,7 +191,6 @@ export default function Test() {
     return (
       <div>
         <p className="text-red-500 my-5 text-center">Nemáte prístup. Najprv treba podať {" "} <Link className="underline font-bold hover:text-red-700" href={"/teacherForm"}>žiadosť o rolu učiteľa.</Link></p>
-        
       </div>
     )
   }
@@ -371,11 +370,25 @@ export default function Test() {
           {`
           :root{
             --ck-color-base-border: hsl(var(--primary));
+            --ck-spacing-unit: 2em;
           }
           html.dark {
             --ck-color-base-background: hsl(0deg 0% 0%);
             --ck-color-base-border: hsl(209, 92%, 70%);
             --ck-color-base-text: hsl(0deg 0% 100%);
+          }
+          html.dark {
+            --ck-color-base-background: hsl(0deg 0% 8%);
+            --ck-color-base-border: hsl(216, 12%, 84%);
+            --ck-color-base-text: hsl(0deg 0% 100%);
+            --ck-color-button-on-background: hsl(0, 0%, 17% / 0.88);
+            --ck-color-button-on-color: hsl(0, 0%, 100%);
+            --ck-color-button-on-hover-background: hsl(0, 0%, 17% / 0.88);
+            --ck-color-button-default-hover-background: hsl(0, 0%, 17%);
+            --ck-color-button-default-active-background: hsl(0, 0%, 17%);
+          }
+          .ck-editor__editable_inline {
+            min-height: 300px;
           }
           `}
         </style>

@@ -132,16 +132,18 @@ export default function Topic({ params }: { params: { id: string } }) {
                 </a>
               </div>
             )}
-            <div className="flex justify-center">
-              <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
-                Ďalšia téma
-              </Button>
-            </div>
-            {isTeacher && (
-              <div className="ml-4">
-                <Button onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
+            <div className={`justify-center items-center flex`}>
+              <div>
+                <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                  Ďalšia téma
+                </Button>
               </div>
-            )}
+              {isTeacher && (
+                <div className="ml-4">
+                  <Button onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
+                </div>
+              )}
+            </div>
           </div>
         )}
         {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}

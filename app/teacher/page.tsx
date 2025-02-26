@@ -71,7 +71,7 @@ function TestContent() {
         })
         .catch(() => setErrorMessage("Chyba pri načítaní témy."));
 
-        axios
+      axios
         .get(`/api/tests/test?id=${topicId}`)
         .then((res) => {
           if (res.data) {
@@ -162,7 +162,7 @@ function TestContent() {
         setSuccessMessage("Téma bola úspešne upravená.");
         return;
       }
-      
+
       const topicRes = await axios.post("/api/topic/create", topicData);
       setSuccessMessage("Téma bola úspešne vytvorená.");
 
@@ -195,18 +195,30 @@ function TestContent() {
     ]);
   };
 
-  if(!isTeacher){
+  if (!isTeacher) {
     return (
       <div>
-        <p className="text-red-500 my-5 text-center">Nemáte prístup. Najprv treba podať {" "} <Link className="underline font-bold hover:text-red-700" href={"/teacherForm"}>žiadosť o rolu učiteľa.</Link></p>
+        <p className="text-red-500 my-5 text-center">
+          Nemáte prístup. Najprv treba podať{" "}
+          <Link
+            className="underline font-bold hover:text-red-700"
+            href={"/teacherForm"}
+          >
+            žiadosť o rolu učiteľa.
+          </Link>
+        </p>
       </div>
-    )
+    );
   }
 
   return (
     <>
       <div className="my-4 mx-5 md:mx-60">
-        <p className="text-4xl text-center">Formulár na pridanie témy</p>
+        <p className="text-4xl mb-5 text-center">
+          {topicId
+            ? "Formulár na úpravu existujúcej témy a aktualizáciu jej obsahu"
+            : "Formulár na pridanie novej témy"}
+        </p>
 
         <div className="flex flex-col gap-y-4">
           <div>
@@ -245,7 +257,10 @@ function TestContent() {
       <Separator className="my-8 sm:my-[40px]" />
       <div className="mx-5 md:mx-60">
         <p className="text-2xl my-4 text-center">Obsah témy</p>
-        <ClassicCKEditor data={newTopic.content?.[0] || " "} onChange={onCKChange} />
+        <ClassicCKEditor
+          data={newTopic.content?.[0] || " "}
+          onChange={onCKChange}
+        />
       </div>
 
       <Separator className="my-8 sm:my-[40px]" />

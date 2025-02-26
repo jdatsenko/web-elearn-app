@@ -3,14 +3,14 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { useCallback } from "react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -41,13 +41,48 @@ export default function Test() {
   const [newTopic, setNewTopic] = useState<Topic>({
     title: "",
     description: "",
+    content: [""],
   });
   const [questions, setQuestions] = useState<Question[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { data: session } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const topicId = searchParams.get("topicId")
   const isTeacher = session?.user?.role === "TEACHER";
+
+  useEffect(() => {
+    if (topicId) {
+      axios
+        .get(`/api/topic/get?id=${topicId}`)
+        .then((res) => {
+          console.log("res.data", res.data.data);
+          const { title, description, content } = res.data.data;
+          setNewTopic({ title, description, content });
+        })
+        .catch(() => setErrorMessage("Chyba pri načítaní témy."));
+
+        axios
+        .get(`/api/tests/test?id=${topicId}`)
+        .then((res) => {
+          if (res.data) {
+            console.log("Test načítaný:", res.data);
+            setQuestions(
+              res.data.questions.map((question: any) => ({
+                label: question.text,
+                answers: question.answers.map((answer: any) => ({
+                  label: answer.text,
+                  isRight: answer.isCorrect,
+                  number: answer.id,
+                })),
+              }))
+            );
+          }
+        })
+        .catch(() => setErrorMessage("Chyba pri načítaní testu."));
+    }
+  }, [topicId]);
 
   const onCKChange = useCallback((event: any, value: any) => {
     setNewTopic((prevState) => ({
@@ -103,6 +138,23 @@ export default function Test() {
         return;
       }
 
+      if (topicId) {
+        await axios.put(`/api/topic/update`, { topicId, ...topicData });
+        await axios.put(`/api/tests/test`, {
+          topicId,
+          questions: questions.map((question) => ({
+            label: question.label,
+            answers: question.answers.map((answer) => ({
+              label: answer.label,
+              isRight: answer.isRight,
+              number: answer.number,
+            })),
+          })),
+        });
+        setSuccessMessage("Téma bola úspešne upravená.");
+        return;
+      }
+      
       const topicRes = await axios.post("/api/topic/create", topicData);
       setSuccessMessage("Téma bola úspešne vytvorená.");
 
@@ -186,7 +238,7 @@ export default function Test() {
       <Separator className="my-8 sm:my-[40px]" />
       <div className="mx-5 md:mx-60">
         <p className="text-2xl my-4 text-center">Obsah témy</p>
-        <ClassicCKEditor data={""} onChange={onCKChange} />
+        <ClassicCKEditor data={newTopic.content?.[0] || " "} onChange={onCKChange} />
       </div>
 
       <Separator className="my-8 sm:my-[40px]" />

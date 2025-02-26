@@ -23,11 +23,10 @@ export default function Topic({ params }: { params: { id: string } }) {
   };
   const isAuthorized = status === "authenticated";
   const router = useRouter();
-
   const topicId = parseInt(params.id);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState(true);
-
+  const isTeacher = session?.user?.role === "TEACHER";
   const [editorData, setEditorData] = useState<any>(null);
   const editor = useRef<EditorJS | null>(null);
   const TopicSkeleton = dynamic(
@@ -120,6 +119,12 @@ export default function Topic({ params }: { params: { id: string } }) {
       <div className="mx-auto my-5">
         {status !== "loading" && (
           <div>
+            {isTeacher && (
+              <div>
+                 <Button onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
+              </div>
+            )}
+
             {isAuthorized &&
               session?.user?.topicsCompleted !== undefined &&
               session?.user?.topicsCompleted >= topicId - 1 && (

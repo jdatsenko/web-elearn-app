@@ -109,13 +109,13 @@ const TopBar = () => {
             {!session && !loading ? (
               <>
                 <Link
-                  href={"/auth/login"}
+                  href="/auth/login/"
                   className={cn(buttonVariants({ variant: "default" }))}
                 >
                   Prihlásenie
                 </Link>
                 <Link
-                  href="/auth/registration"
+                  href="/auth/registration/"
                   className={cn(buttonVariants({ variant: "secondary" }))}
                 >
                   Registrácia

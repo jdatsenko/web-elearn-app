@@ -89,6 +89,13 @@ function TestContent() {
           }
         })
         .catch(() => setErrorMessage("Chyba pri načítaní testu."));
+    } else {
+      setNewTopic({
+        title: "",
+        description: "",
+        content: [""],
+      });
+      setQuestions([]);
     }
   }, [topicId]);
 

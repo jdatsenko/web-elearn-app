@@ -94,6 +94,26 @@
   text-align: center;
 }
 
+#ckstyle h1 {
+  font-size: 2.25rem;
+}
+
+#ckstyle h2 {
+  font-size: 2rem;
+}
+
 #ckstyle h3 {
+  font-size: 1.75rem;
+}
+
+.ck h1 {
+  font-size: 2.25rem;
+}
+
+.ck h2 {
+  font-size: 2rem;
+}
+
+.ck h3 {
   font-size: 1.75rem;
 }

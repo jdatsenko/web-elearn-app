@@ -93,7 +93,6 @@ export default function Topic({ params }: { params: { id: string } }) {
       }
     }
   }, [loading, editorData]);
-  
 
   if (loading) {
     return <TopicSkeleton />;

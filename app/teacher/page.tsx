@@ -167,6 +167,9 @@ function TestContent() {
           })),
         });
         setSuccessMessage("Téma bola úspešne upravená.");
+        setTimeout(() => {
+          router.push(`/topics/${topicId}`);
+        }, 300);
         return;
       }
 
@@ -221,7 +224,7 @@ function TestContent() {
   return (
     <>
       <div className="my-4 mx-5 md:mx-60">
-        <p className="text-4xl mb-5 ctext-center">
+        <p className="text-4xl mb-5 text-center">
           {topicId
             ? "Formulár na úpravu existujúcej témy a aktualizáciu jej obsahu"
             : "Formulár na pridanie novej témy"}
@@ -281,6 +284,7 @@ function TestContent() {
               </p>
               <Input
                 id="question"
+                className="border border-gray-500"
                 value={question.label}
                 onChange={(e) => {
                   const newQuestions = [...questions];
@@ -320,6 +324,7 @@ function TestContent() {
                       ></RadioGroupItem>
                       <Input
                         id="answer"
+                        className="border border-gray-500"
                         value={answer.label}
                         onChange={(e) => {
                           const newQuestions = [...questions];

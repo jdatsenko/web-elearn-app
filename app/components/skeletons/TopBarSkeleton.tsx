@@ -7,8 +7,10 @@ const TopBarSkeleton = () => {
   const isDark = resolvedTheme === "dark";
 
   return (
-    <SkeletonTheme baseColor={isDark ? "#2a2a2a" : "#e0e0e0"}
-        highlightColor={isDark ? "#444" : "#f5f5f5"}>
+    <SkeletonTheme
+      baseColor={isDark ? "#2a2a2a" : "#bdbdbd"}
+      highlightColor={isDark ? "#444" : "#e0e0e0"}
+    >
       <div className="p-4 flex flex-col sm:flex-row w-full justify-between border-b h-fit">
         <div className="flex flex-grow justify-between">
           <div className="flex gap-3 self-start">

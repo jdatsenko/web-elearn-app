@@ -19,7 +19,7 @@ const HomePageSkeleton = () => {
           </div>
           <div className="flex flex-row gap-10">
             {[1, 2, 3].map((_, index) => (
-              <div key={index} className="border rounded-lg p-4 shadow-md mb-4">
+              <div key={index} className="border border-gray-500 rounded-lg p-4 shadow-md mb-4">
                 <SkeletonTheme
                   baseColor={isDark ? "#2a2a2a" : "#bdbdbd"}
                   highlightColor={isDark ? "#444" : "#e0e0e0"}

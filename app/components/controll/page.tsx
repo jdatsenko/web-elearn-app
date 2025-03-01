@@ -40,7 +40,7 @@ const TestControll = (props: any) => {
           update({ topicsCompleted: testId });
           setTimeout(() => {
             router.push(`/topics/${testId + 1}`);
-          }, 1500);
+          }, 300);
           return;
         }
         toast({

@@ -117,7 +117,7 @@ const Admin = () => {
                         return (
                           <div
                             key={index}
-                            className="border mb-6 rounded-lg p-4 bg-green-600"
+                            className="border border-gray-500 mb-6 rounded-lg p-4 bg-green-600"
                           >
                             <p className="mb-2">Pokus: {i++}</p>{" "}
                             <p className="mb-2">Úspech: {test.score} %</p>
@@ -130,7 +130,7 @@ const Admin = () => {
                         return (
                           <div
                             key={index}
-                            className="border mb-6 rounded-lg p-4"
+                            className="border border-gray-500 mb-6 rounded-lg p-4"
                           >
                             <p className="mb-2">Pokus: {i++}</p>{" "}
                             <p className="mb-2">Úspech: {test.score} %</p>

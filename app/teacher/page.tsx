@@ -214,7 +214,7 @@ function TestContent() {
   return (
     <>
       <div className="my-4 mx-5 md:mx-60">
-        <p className="text-4xl mb-5 text-center">
+        <p className="text-4xl mb-5 ctext-center">
           {topicId
             ? "Formulár na úpravu existujúcej témy a aktualizáciu jej obsahu"
             : "Formulár na pridanie novej témy"}

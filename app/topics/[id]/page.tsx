@@ -104,84 +104,86 @@ export default function Topic({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
-      <div className="mx-14 md:mx-20" id="editorjs"></div>
-      <div className="mx-14 md:mx-30">
-        <div id="ckstyle" className="mx-4 md:mx-60">
-          {/* <p className="text-3xl font-bold my-5">{ editorData.data.title }</p> */}
-        </div>
-      </div>
-      <div className="mx-auto my-5">
-        {status !== "loading" && (
-          <div className={`justify-center items-center ${isAuthorized && session?.user?.topicsCompleted >= topicId - 1 ? "flex" : ""}`}>
-            {isAuthorized ? (
-              session?.user?.topicsCompleted >= topicId - 1 ? (
-                <Button className="mr-4" onClick={() => router.push(`/test/${topicId}`)}>
-                  Začať testovanie
-                </Button>
-              ) : (
-                <div className="test-warning text-red-500 text-center mb-2">
-                  Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
-                </div>
-              )
-            ) : (
-              <div className="auth-warn text-red-500 text-center mb-2">
-                Musíte byť autorizovaný, aby ste mohli začať testovanie.
-                <a href="/auth/login" className="text-red-500 font-bold ml-3 underline">
-                  Prihlásiť sa
-                </a>
-              </div>
-            )}
-            <div className={`justify-center items-center flex`}>
-              <div>
-                <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
-                  Ďalšia téma
-                </Button>
-              </div>
-              {isTeacher && (
-                <div className="ml-4">
-                  <Button onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
-                </div>
-              )}
-            </div>
+    <div>
+      <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
+        {isTeacher && (
+          <div className="md:absolute md:top-20 md:left-4 mx-auto mb-5 md:mb-0 mt-5 md:mt-0">
+            <Button onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
           </div>
         )}
-        {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}
-      </div>
+        <div className="mx-14 md:mx-20" id="editorjs"></div>
+        <div className="mx-14 md:mx-30">
+          <div id="ckstyle" className="mx-4 md:mx-60">
+            {/* <p className="text-3xl font-bold my-5">{ editorData.data.title }</p> */}
+          </div>
+        </div>
+        <div className="mx-auto my-5">
+          {status !== "loading" && (
+            <div className={`mb-10 justify-center items-center ${isAuthorized && session?.user?.topicsCompleted >= topicId - 1 ? "flex" : ""}`}>
+              {isAuthorized ? (
+                session?.user?.topicsCompleted >= topicId - 1 ? (
+                  <Button className="mr-4" onClick={() => router.push(`/test/${topicId}`)}>
+                    Začať testovanie
+                  </Button>
+                ) : (
+                  <div className="test-warning text-red-500 text-center mb-2">
+                    Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
+                  </div>
+                )
+              ) : (
+                <div className="auth-warn text-red-500 text-center mb-2">
+                  Musíte byť autorizovaný, aby ste mohli začať testovanie.
+                  <a href="/auth/login" className="text-red-500 font-bold ml-3 underline">
+                    Prihlásiť sa
+                  </a>
+                </div>
+              )}
+              <div className={`justify-center items-center flex`}>
+                <div>
+                  <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
+                    Ďalšia téma
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+          {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}
+        </div>
 
-      <style>{`
-      .codex-editor__redactor {
-        padding-bottom: 10px !important;
-      }
-      .ce-block {
-        margin: auto !important;
-      }
-      @media (min-width: 1024px) {
-        .ce-block__content,
-        .ce-toolbar__content {
-          max-width: 70% !important;
+        <style>{`
+        .codex-editor__redactor {
+          padding-bottom: 10px !important;
         }
-      }
-      .ce-block--selected .ce-block__content{
-      background-color: #8080805c !important;
-      }
-      .cdx-block {
-        max-width: 100% !important;
-        margin: 20px 0 !important;
-      }
-      .ce-paragraph.cdx-block {
-        width: 100% !important;
-      }
-      .cdx-simple-image .cdx-input {
-        width: 50% !important;
-        margin: 30px auto !important;
-        text-align: center !important;
-      }
-      .test-warning::selection , .auth-warn::selection {
-        color: black;
-        background:rgba(142, 141, 141, 0.63);
-      }
-    `}</style>
+        .ce-block {
+          margin: auto !important;
+        }
+        @media (min-width: 1024px) {
+          .ce-block__content,
+          .ce-toolbar__content {
+            max-width: 70% !important;
+          }
+        }
+        .ce-block--selected .ce-block__content{
+        background-color: #8080805c !important;
+        }
+        .cdx-block {
+          max-width: 100% !important;
+          margin: 20px 0 !important;
+        }
+        .ce-paragraph.cdx-block {
+          width: 100% !important;
+        }
+        .cdx-simple-image .cdx-input {
+          width: 50% !important;
+          margin: 30px auto !important;
+          text-align: center !important;
+        }
+        .test-warning::selection , .auth-warn::selection {
+          color: black;
+          background:rgba(142, 141, 141, 0.63);
+        }
+      `}</style>
+      </div>
     </div>
   );
 }

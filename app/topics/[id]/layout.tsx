@@ -59,7 +59,7 @@ export default function TopicLayout({
   return (
     <>
       <div className="flex h-full w-full">
-        <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
+        <ArrowToTop className="fixed md:bottom-6 bottom-12   right-6 z-[999]"/>
         {params.id !== "1" && (
           <div
             className=" cursor-pointer fixed h-full flex justify-center items-center px-6 md:px-10"

@@ -72,7 +72,7 @@ const FormRegister = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full ">
-          <div className="space-y-2 w-1/2 sm:w-1/5 m-auto">
+          <div className="space-y-2 w-1/2 md:w-[20rem] m-auto">
             <FormField
               control={form.control}
               name="name"

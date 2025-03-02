@@ -88,7 +88,7 @@ const FormLogin = () => {
           className="w-full"
           method="POST"
         >
-          <div className="space-y-2 w-1/2 sm:w-1/5 m-auto">
+          <div className="w-1/2 md:w-[20rem] space-y-2 m-auto">
             <FormField
               control={form.control}
               name="identifier"

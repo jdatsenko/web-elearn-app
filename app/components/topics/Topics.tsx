@@ -72,7 +72,7 @@ const Topics = () => {
           {topics.map((topic, index) => (
             <Card
               key={index}
-              className="w-full border border-gray-500 bg-background max-w-[25rem] mx-auto"
+              className="w-full border border-gray-400 bg-background max-w-[25rem] mx-auto"
             >
               <CardHeader>
                 <CardTitle style={{ lineHeight: "1.5" }}>

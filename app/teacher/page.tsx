@@ -284,7 +284,7 @@ function TestContent() {
               </p>
               <Input
                 id="question"
-                className="border border-gray-500"
+                className="border border-gray-400"
                 value={question.label}
                 onChange={(e) => {
                   const newQuestions = [...questions];
@@ -324,7 +324,7 @@ function TestContent() {
                       ></RadioGroupItem>
                       <Input
                         id="answer"
-                        className="border border-gray-500"
+                        className="border border-gray-400"
                         value={answer.label}
                         onChange={(e) => {
                           const newQuestions = [...questions];

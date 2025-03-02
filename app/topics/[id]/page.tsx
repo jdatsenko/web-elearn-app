@@ -25,6 +25,7 @@ export default function Topic({ params }: { params: { id: string } }) {
   const isTeacher = session?.user?.role === "TEACHER";
   const [editorData, setEditorData] = useState<any>(null);
   const editor = useRef<EditorJS | null>(null);
+  const [length, setLength] = useState(0);
   const TopicSkeleton = dynamic(
     () => import("@/app/components/skeletons/TopicSkeleton"),
     { ssr: false }
@@ -37,8 +38,9 @@ export default function Topic({ params }: { params: { id: string } }) {
         if (!response.data) {
           throw new Error("Téma nebola nájdená alebo neexistuje.");
         }
-  
-        setEditorData(response.data);
+        console.log("response", response);
+        setEditorData(response.data.data);
+        setLength(response.data.length);
       } catch (error) {
         setErrorMessage("Téma nebola nájdená alebo neexistuje.");
       } finally {
@@ -59,7 +61,7 @@ export default function Topic({ params }: { params: { id: string } }) {
   useEffect(() => {
     try {
       if (!loading && editorData && !editor.current) {
-        if (!editorData.data) {
+        if (!editorData) {
           setErrorMessage("Téma nebola nájdená alebo neexistuje.");
         }
         
@@ -73,7 +75,7 @@ export default function Topic({ params }: { params: { id: string } }) {
               fontSize: FontSizeTool,
             },
             data: {
-              blocks: editorData.data.content?.map((item: string) =>
+              blocks: editorData.content?.map((item: string) =>
                 JSON.parse(item)
               ),
             },
@@ -86,7 +88,7 @@ export default function Topic({ params }: { params: { id: string } }) {
       if ((error as any).name === "SyntaxError") {
         const errorElement = document.getElementById("ckstyle");
         if (errorElement) {
-          errorElement.innerHTML += editorData.data.content; 
+          errorElement.innerHTML += editorData.content; 
         }
       } else {
         console.error("Error initializing EditorJS:", error);
@@ -111,9 +113,9 @@ export default function Topic({ params }: { params: { id: string } }) {
           </div>
         )}
         <div className="mx-14 md:mx-20" id="editorjs"></div>
-        <div className="mx-14 md:mx-30">
+        <div className="mx-14 md:mx-10">
           <div id="ckstyle" className="mx-4 md:mx-60">
-            <p className="text-3xl font-bold my-5">{ editorData.data.title }</p>
+            {/* <p className="text-3xl font-bold my-5">{ editorData.title }</p> */}
           </div>
         </div>
         <div className="mx-auto my-5">
@@ -138,11 +140,13 @@ export default function Topic({ params }: { params: { id: string } }) {
                 </div>
               )}
               <div className={`justify-center items-center flex`}>
-                <div>
+                {length !== topicId && (
+                  <div>
                   <Button className={cn(buttonVariants({ variant: "secondary" }))} onClick={() => router.push(`/topics/${topicId + 1}`)}>
                     Ďalšia téma
                   </Button>
                 </div>
+                )}
               </div>
             </div>
           )}

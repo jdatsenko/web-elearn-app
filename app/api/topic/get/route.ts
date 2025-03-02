@@ -6,6 +6,13 @@ export const revalidate = 0;
 export async function GET(req: NextRequest) {
     try {
         const topicId = req.nextUrl.searchParams.get("id");
+        
+        const topics = await prisma.topic.findMany({
+            select: {
+                topicNumber: true,
+            },
+        });
+        const length  = topics.length;
 
         if (topicId) {
             const topic = await prisma.topic.findUnique({
@@ -18,7 +25,7 @@ export async function GET(req: NextRequest) {
                 return NextResponse.json({ error: "Topic not found" }, { status: 404 });
             }
 
-            return NextResponse.json({ data: topic });
+            return NextResponse.json({ data: topic, length });
         }
 
         return NextResponse.json({ message: "Hello from the API" });

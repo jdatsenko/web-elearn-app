@@ -53,7 +53,6 @@ const TestPage = ({ params }: { params: { id: string } }) => {
       },
     })
     .then((res) => {
-      console.log(res.data);
       const resTest = res.data as TestResponse;
       setTest(res.data);
       setAnswers(
@@ -89,7 +88,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
               return result.id === question.id
             })?.correct ? "border-green-600" : "border-red-600"}`}
           >
-            <h3 className="text-xl font-semibold">{question.text}</h3>
+            <h3 className="text-xl font-semibold">{i + 1}. {question.text}</h3>
             {question.answers.map((answer, j) => (
               <div className="flex gap-2 items-center" key={answer.id}>
                 <RadioGroupItem
@@ -106,7 +105,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
                     setAnswers(newAnswers);
                   }}
                 />
-                <span>{answer.text}</span>
+                <span>{String.fromCharCode(97 + j)}) {answer.text}</span>
               </div>
             ))}
           </RadioGroup>

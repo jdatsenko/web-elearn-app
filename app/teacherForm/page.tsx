@@ -59,7 +59,6 @@ const TeacherRequestForm: React.FC = () => {
     axios
       .post("/api/user/teacherRequest", formData)
       .then((response) => {
-        console.log(response.data);
         setSuccessMessage(
           "Žiadosť bola úspešne odoslaná! Počkajte na schválenie."
         );

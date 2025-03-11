@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const PodmienkyOchranyOsobnychUdajov = () => {
   return (
-    <div className="mx-40 p-4">
+    <div className="mx-5 md:mx-40 p-4">
       <h1 className="text-3xl font-bold text-center mb-6">Ochrana osobných údajov</h1>
 
       <h2 className="text-2xl mb-2 font-semibold">Účel spracovania údajov</h2>

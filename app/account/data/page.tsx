@@ -127,7 +127,7 @@ const ProfilePage = () => {
       </div>
 
       <div className="flex justify-center p-6">
-        <div className="rounded-2xl shadow-lg w-1/3 lg:w-1/4 p-6">
+        <div className="rounded-2xl shadow-lg mx-3 md:w-1/3 lg:w-1/4 p-6">
           <p className="text-3xl font-semibold text-center mb-6 text-gray-900 dark:text-white">
             Vaše údaje
           </p>

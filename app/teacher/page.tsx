@@ -65,7 +65,6 @@ function TestContent() {
       axios
         .get(`/api/topic/get?id=${topicId}`)
         .then((res) => {
-          console.log("res.data", res.data.data);
           const { title, description, content } = res.data.data;
           setNewTopic({ title, description, content });
         })
@@ -75,7 +74,6 @@ function TestContent() {
         .get(`/api/tests/test?id=${topicId}`)
         .then((res) => {
           if (res.data) {
-            console.log("Test načítaný:", res.data);
             setQuestions(
               res.data.questions.map((question: any) => ({
                 label: question.text,
@@ -282,20 +280,25 @@ function TestContent() {
               <p className="inline-block px-2 py-2 bg-gray-500 mb-3 text-background rounded-lg shadow-md font-semibold">
                 Otázka {index + 1}
               </p>
-              <Input
-                id="question"
-                className="border border-gray-400"
-                value={question.label}
-                onChange={(e) => {
-                  const newQuestions = [...questions];
-                  newQuestions[index] = {
-                    ...newQuestions[index],
-                    label: e.target.value,
-                  };
-                  setQuestions(newQuestions);
-                  setErrorMessage("");
-                }}
-              />
+              <div className="flex">
+                <span className="mr-1 flex items-center text-xl">
+                  {index + 1}.
+                </span>
+                <Input
+                  id="question"
+                  className="border border-gray-400"
+                  value={question.label}
+                  onChange={(e) => {
+                    const newQuestions = [...questions];
+                    newQuestions[index] = {
+                      ...newQuestions[index],
+                      label: e.target.value,
+                    };
+                    setQuestions(newQuestions);
+                    setErrorMessage("");
+                  }}
+                />
+              </div>
             </div>
             <div>
               <RadioGroup key={index}>

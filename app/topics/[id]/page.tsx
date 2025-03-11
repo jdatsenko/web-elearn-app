@@ -38,7 +38,6 @@ export default function Topic({ params }: { params: { id: string } }) {
         if (!response.data) {
           throw new Error("Téma nebola nájdená alebo neexistuje.");
         }
-        console.log("response", response);
         setEditorData(response.data.data);
         setLength(response.data.length);
       } catch (error) {

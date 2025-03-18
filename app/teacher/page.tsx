@@ -87,7 +87,9 @@ function TestContent() {
               }))
             );
           }
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+          }, 300);
         })
         .catch(() => setErrorMessage("Chyba pri načítaní testu."));
     } else {
@@ -97,7 +99,9 @@ function TestContent() {
         content: [""],
       });
       setQuestions([]);
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
     }
   }, [topicId]);
 

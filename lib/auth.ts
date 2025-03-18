@@ -40,8 +40,6 @@ export const authOptions: NextAuthOptions = {
             : { name: credentials.identifier }, 
         });
 
-        console.log("EXISTING USER", existingUser);
-
         if (!existingUser) {
           return null;
         }
@@ -67,8 +65,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-      console.log("TOKEN", token);
-      console.log("USER", user);
       if (trigger === "update" && session.topicsCompleted) {
         token.topicsCompleted = session.topicsCompleted;
       }

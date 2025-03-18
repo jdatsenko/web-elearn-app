@@ -21,11 +21,8 @@ export interface Answer {
 }
 
 export async function POST(req: NextRequest) {
-  console.log("req", req);
-
   try {
     const body = await req.json() as TestRequest;
-    console.log("BODY", body);
     const test = await prisma.test.create({
       data: {
         topicId: body.topicId,

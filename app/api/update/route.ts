@@ -20,8 +20,6 @@ export async function POST(req: Request) {
     where: { id: session.user.id },
   });
 
-  console.log("user", user);
-
   if (!user) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }

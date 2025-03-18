@@ -52,7 +52,6 @@ const Admin = () => {
   useEffect(() => {
     const completed = Object.values(groupTestsByTopic()).length;
     const newProgress = (completed / 6) * 100;
-    console.log(completed);
     setProgress(newProgress);
   }, [solvedTests]);
 

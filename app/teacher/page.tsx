@@ -207,7 +207,7 @@ function TestContent() {
     ]);
   };
 
-  if(!loading){
+  if(loading){
     return <TeacherPageSkeleton />
   }
 

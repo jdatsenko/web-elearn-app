@@ -14,6 +14,7 @@ import React, { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import TeacherPageSkeleton from "../components/skeletons/TeacherPageSkeleton";
 
 export interface Question {
   label: string;
@@ -39,7 +40,7 @@ const ClassicCKEditor = dynamic(
 
 export default function Test() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <TestContent />
     </Suspense>
   );
@@ -59,6 +60,7 @@ function TestContent() {
   const searchParams = useSearchParams();
   const topicId = parseInt(searchParams.get("topicId") || "0");
   const isTeacher = session?.user?.role === "TEACHER";
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (topicId) {
@@ -85,6 +87,7 @@ function TestContent() {
               }))
             );
           }
+          setLoading(false);
         })
         .catch(() => setErrorMessage("Chyba pri načítaní testu."));
     } else {
@@ -94,6 +97,7 @@ function TestContent() {
         content: [""],
       });
       setQuestions([]);
+      setLoading(false);
     }
   }, [topicId]);
 
@@ -203,6 +207,10 @@ function TestContent() {
     ]);
   };
 
+  if(!loading){
+    return <TeacherPageSkeleton />
+  }
+
   if (!isTeacher) {
     return (
       <div>
@@ -224,7 +232,7 @@ function TestContent() {
       <div className="my-4 mx-5 md:mx-60">
         <p className="text-4xl mb-5 text-center">
           {topicId
-            ? "Formulár na úpravu existujúcej témy a aktualizáciu jej obsahu"
+            ? "Formulár na úpravu existujúcej témy"
             : "Formulár na pridanie novej témy"}
         </p>
 

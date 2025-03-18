@@ -75,12 +75,12 @@ const Topics = () => {
               className="w-full border border-gray-400 bg-background max-w-[25rem] mx-auto"
             >
               <CardHeader>
-                <CardTitle style={{ lineHeight: "1.5" }}>
-                  {topic.title}
-                </CardTitle>
+              <CardTitle style={{ lineHeight: "1.5", wordWrap: "break-word", overflowWrap: "break-word" }}>
+                {topic.title}
+              </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription>{topic.description}</CardDescription>
+                <CardDescription className="break-words">{topic.description}</CardDescription>
               </CardContent>
               <CardFooter className="flex justify-center">
                 <Link

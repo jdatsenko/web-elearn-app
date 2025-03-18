@@ -27,7 +27,7 @@ const PodmienkyOchranyOsobnychUdajov = () => {
       <br />
       <footer>
         <p>
-          Ak máte akékoľvek otázky o ochrane vašich osobných údajov, kontaktujte správcu aplikácie na e-mailovej adrese: :{" "}
+          Ak máte akékoľvek otázky o ochrane vašich osobných údajov, kontaktujte správcu aplikácie na e-mailovej adrese: {" "}
               <Link
                 href="mailto:yu.datsenko@gmail.com"
                 className="text-blue-400 underline hover:text-blue-600 transition-colors"

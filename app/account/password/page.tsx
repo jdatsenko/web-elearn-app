@@ -11,6 +11,7 @@ const Password = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [repeatPassword, setRepeatPassword] = useState<string>("");
 
   function changePassword() {
     if (newPassword.length < 8) {
@@ -20,6 +21,11 @@ const Password = () => {
       setErrorMessage("Vaše doterajšie heslo je nesprávne.");
       return;
     }
+    if (newPassword !== repeatPassword) {
+      setErrorMessage("Nové heslo a jeho potvrdenie sa nezhodujú.");
+      return;
+    }
+
     axios
       .post("/api/update", {
         oldPassword: password,
@@ -48,12 +54,21 @@ const Password = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+
       <PasswordInput
         className="w-64"
         placeholder="Nové heslo"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
       />
+
+      <PasswordInput
+        className="w-64"
+        placeholder="Zadajte znova nové heslo"
+        value={newPassword}
+        onChange={(e) => setRepeatPassword(e.target.value)}
+      />
+
       <div className="flex space-x-2">
         <Button onClick={() => router.push("/account/data")} variant="secondary">
           Späť

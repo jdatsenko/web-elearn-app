@@ -13,7 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { UserCircleIcon } from "lucide-react";
 
@@ -62,7 +62,7 @@ const TopBar = () => {
             >
               Domov
             </Link>
-            {session && !loading && (
+            {!loading && (
               <div className="space-x-3">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border px-4 py-[0.48rem] rounded-md bg-secondary hover:bg-secondary/80 text-secondary-foreground">
@@ -70,35 +70,44 @@ const TopBar = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="border-2 border-gray-200">
                     <DropdownMenuItem className="justify-center">
-                      <Link className="text-center" href={"/account"}>
-                        Moj progress
-                      </Link>
+                      <Link href={"/videos"}>Zaujímavé videá</Link>
                     </DropdownMenuItem>
+                    {session && (
+                      <>
                     <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
-                    <DropdownMenuItem className="justify-center">
-                      <Link href={"/account/data"}>Spravovať údaje</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
-                    {!isAdmin && !isTeacher && (
-                      <DropdownMenuItem className="justify-center">
-                        <Link className="text-center" href={"/teacherForm"}>
-                          Stať sa učiteľom
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                    {isAdmin && (
-                      <DropdownMenuItem>
-                        <Link className="text-center" href={"/adminPanel"}>
-                          Panel administrátora
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                    {isTeacher && (
-                      <DropdownMenuItem className="justify-center">
-                        <Link className="text-center" href={"/teacher"}>
-                          Pridať tému
-                        </Link>
-                      </DropdownMenuItem>
+                        <DropdownMenuItem className="justify-center">
+                          <Link className="text-center" href={"/account"}>
+                            Moj progress
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
+                        <DropdownMenuItem className="justify-center">
+                          <Link href={"/account/data"}>Spravovať údaje</Link>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
+                        {!isAdmin && !isTeacher && (
+                          <DropdownMenuItem className="justify-center">
+                            <Link className="text-center" href={"/teacherForm"}>
+                              Stať sa učiteľom
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
+                        {isAdmin && (
+                          <DropdownMenuItem>
+                            <Link className="text-center" href={"/adminPanel"}>
+                              Panel administrátora
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
+                        {isTeacher && (
+                          <DropdownMenuItem className="justify-center">
+                            <Link className="text-center" href={"/teacher"}>
+                              Pridať tému
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
+                      </>
                     )}
                   </DropdownMenuContent>
                 </DropdownMenu>

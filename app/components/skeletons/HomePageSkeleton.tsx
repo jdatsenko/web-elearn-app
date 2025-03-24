@@ -18,7 +18,7 @@ const HomePageSkeleton = () => {
             <Skeleton height={50} width={100} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mx-auto">
-            {[1, 2, 3].map((_, index) => (
+            {[1, 2, 3, 4, 5, 6].map((_, index) => (
               <div key={index} className="border border-gray-400 rounded-lg p-4 shadow-md mb-4">
                 <SkeletonTheme
                   baseColor={isDark ? "#2a2a2a" : "#bdbdbd"}

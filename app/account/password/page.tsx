@@ -65,7 +65,7 @@ const Password = () => {
       <PasswordInput
         className="w-64"
         placeholder="Zadajte znova nové heslo"
-        value={newPassword}
+        value={repeatPassword}
         onChange={(e) => setRepeatPassword(e.target.value)}
       />
 

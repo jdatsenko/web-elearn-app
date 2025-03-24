@@ -28,16 +28,16 @@ export default function TopicLayout({
   }, []);
 
   const maxTopicId = topics.length;
-  const topicId = parseInt(params.id, 10) || 1;
+  const topicId = parseInt(params.id, 10) || null;
 
   const goToPrevious = () => {
-    if (topicId > 1) {
+    if (topicId && topicId > 1) {
       router.push(`/topics/${topicId - 1}`);
     }
   };
 
   const goToNext = () => {
-    if (topicId < maxTopicId) {
+    if (topicId && topicId < maxTopicId) {
       router.push(`/topics/${topicId + 1}`);
     }
   };
@@ -60,7 +60,7 @@ export default function TopicLayout({
     <>
       <div className="flex h-full w-full">
         <ArrowToTop className="fixed md:bottom-6 bottom-12   right-6 z-[999]"/>
-        {params.id !== "1" && (
+        {topicId && topicId !== 1 && (
           <div
             className=" cursor-pointer fixed h-full flex justify-center items-center px-6 md:px-10"
             onClick={goToPrevious}
@@ -71,7 +71,7 @@ export default function TopicLayout({
         <div className="flex flex-wrap justify-center h-full w-full overflow-y-auto">
           {children}
         </div>
-        {params.id !== topics.length.toString() && (
+        {topicId && topicId !== topics.length && (
           <div>
             <div
               className="fixed cursor-pointer h-full flex justify-center items-center px-6 md:px-10 right-0"

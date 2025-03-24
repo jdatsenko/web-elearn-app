@@ -76,7 +76,7 @@ const Topics = () => {
             >
               <CardHeader>
               <CardTitle style={{ lineHeight: "1.5", wordWrap: "break-word", overflowWrap: "break-word" }}>
-                {topic.title}
+                {index + 1}. {topic.title}
               </CardTitle>
               </CardHeader>
               <CardContent>

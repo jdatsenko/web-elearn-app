@@ -88,7 +88,7 @@ const TopBar = () => {
                         <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                         {!isAdmin && !isTeacher && (
                           <DropdownMenuItem className="justify-center">
-                            <Link className="text-center" href={"/teacherForm"}>
+                            <Link className="text-center" href={"/teacherRequestForm"}>
                               Stať sa učiteľom
                             </Link>
                           </DropdownMenuItem>

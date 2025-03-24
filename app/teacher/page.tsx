@@ -222,7 +222,7 @@ function TestContent() {
           Nemáte prístup. Najprv treba podať{" "}
           <Link
             className="underline font-bold hover:text-red-700"
-            href={"/teacherForm"}
+            href={"/teacherRequestForm"}
           >
             žiadosť o rolu učiteľa.
           </Link>

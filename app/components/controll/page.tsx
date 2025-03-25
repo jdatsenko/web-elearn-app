@@ -54,7 +54,7 @@ const TestControll = (props: any) => {
   return (
     <>
       <div className="flex justify-between mb-5 items-end">
-        <Button onClick={() => router.back()} className="mr-4">
+        <Button variant="secondary" onClick={() => router.back()} className="mr-4">
           Späť
         </Button>
         <Button

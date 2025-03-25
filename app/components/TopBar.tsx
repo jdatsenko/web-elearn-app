@@ -55,7 +55,7 @@ const TopBar = () => {
         )}
       >
         <div className="flex flex-grow justify-between">
-          <div className="flex gap-3 self-start">
+          <div className="flex gap-1 md:gap-3 self-start">
             <Link
               className={cn(buttonVariants({ variant: "secondary" }))}
               href={"/."}
@@ -114,7 +114,7 @@ const TopBar = () => {
               </div>
             )}
           </div>
-          <div className="flex gap-3 self-end">
+          <div className="flex gap-1 md:gap-3 self-end">
             {!session && !loading ? (
               <>
                 <Link

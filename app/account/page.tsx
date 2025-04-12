@@ -28,27 +28,25 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const topics = [
-  "LPWAN: technológie a aplikácie",
-  "LoRaWAN: Lora Alliance, obmedzenia a výhody",
-  "Architektúra LoRaWAN",
-  "NB-IoT: špecifikácie a výhody",
-  "NB-IoT: aplikácie",
-  "Porovnanie technológií LPWAN",
-];
-
 const Admin = () => {
   const [solvedTests, setSolvedTests] = useState<SolvedTest[]>([]);
+  const [topics, setTopics] = useState<string[]>([]);
   const { data: session } = useSession();
   const [progress, setProgress] = useState<number>(0);
   const router = useRouter();
-  const isTeacher = session?.user?.role === "TEACHER";
-  const isAdmin = session?.user?.role === "ADMIN";
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get("/api/user/test/solved").then((response) => {
       setSolvedTests(response.data);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get("/api/topic/getTopicsTitles").then((response) => {
+      setTopics(response.data.data);
+      console.log(response.data.data);
       setLoading(false);
     });
   }, []);
@@ -69,8 +67,8 @@ const Admin = () => {
   let chartConfig: ChartConfig[] = [];
   const chartData: { [key: number]: any[] } = {};
   
-  Object.entries(groupTestsByTopic()).forEach(([topicId, tests]) => {
-    const topicIndex = parseInt(topicId, 10) - 1;
+  Object.entries(groupTestsByTopic()).forEach(([topic, tests]) => {
+    const topicIndex = parseInt(topic, 10) - 1;
     const topicName = topics[topicIndex];
     chartConfig[topicIndex] = {
       "topic": {
@@ -132,12 +130,11 @@ const Admin = () => {
 
           <section className="max-w-7xl mx-auto px-4 py-12">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
               {chartConfig.map((config, index) => (
                 <Card>
                   <CardHeader>
                   <CardTitle>
-                  <Link href={`/topics/${index+1}`} className="text-blue-400 underline hover:text-blue-600 transition-colors">{topics[index]}</Link>
+                  <Link href={`/topics/${index+1}`} className="text-blue-400 underline hover:text-blue-600 transition-colors">{index+1}. {topics[index]}</Link>
                   </CardTitle>
                     <CardDescription>Výsledky testovania</CardDescription>
                   </CardHeader>
@@ -170,7 +167,6 @@ const Admin = () => {
                         />
 
                         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-
 
                         <defs>
                           <linearGradient id={`filltopic`} x1="0" y1="0" x2="0" y2="1">

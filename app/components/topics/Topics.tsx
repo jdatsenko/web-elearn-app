@@ -76,12 +76,20 @@ const Topics = () => {
               className="w-full border border-gray-400 bg-background max-w-[25rem] mx-auto"
             >
               <CardHeader>
-              <CardTitle style={{ lineHeight: "1.5", wordWrap: "break-word", overflowWrap: "break-word" }}>
-                {index + 1}. {topic.title}
-              </CardTitle>
+                <CardTitle
+                  style={{
+                    lineHeight: "1.5",
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
+                  }}
+                >
+                  {index + 1}. {topic.title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="break-words">{topic.description}</CardDescription>
+                <CardDescription className="break-words">
+                  {topic.description}
+                </CardDescription>
               </CardContent>
               <CardFooter className="flex justify-center">
                 <Link
@@ -100,18 +108,22 @@ const Topics = () => {
         <section className="max-w-6xl mx-auto px-4 py-12">
           <h2 className="text-4xl font-bold text-center mb-4">O kurze</h2>
           <p className="text-center text-muted-foreground mb-12">
-            Spoznajte svet LPWAN technológií a naučte sa ich využívať v praxi – či už ste študent, učiteľ alebo zvedavý technológ!
+            Zoznámte sa so základmi LPWAN a ich praktickým využitím – najmä s
+            technológiami LoRaWAN a NB-IoT.
           </p>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader>
                 <CardTitle>Vstúpte do sveta LPWAN</CardTitle>
-                <CardDescription>Úvod do LPWAN technológií</CardDescription>
+                <CardDescription>Praktický sprievodca základmi</CardDescription>
               </CardHeader>
               <CardContent>
                 <p>
-                  Tento kurz vás uvedie do sveta Low-Power Wide-Area Networks (LPWAN). Je určený pre všetkých, ktorí sa chcú naučiť moderné technológie s praktickým využitím.
+                  Objavte, ako fungujú nízkoenergetické širokopásmové siete
+                  (LPWAN) a kde nachádzajú využitie. Kurz je ideálny pre
+                  začiatočníkov, ktorí chcú porozumieť základom a možnostiam
+                  týchto technológií.
                 </p>
               </CardContent>
             </Card>
@@ -123,7 +135,10 @@ const Topics = () => {
               </CardHeader>
               <CardContent>
                 <p>
-                Počas kurzu sa oboznámite so základnými princípmi LPWAN technológií vrátane NB-IoT a LoRaWAN. Získate prehľad o ich architektúre, bezpečnostných otázkach a praktických aplikáciách. 
+                  Počas kurzu sa oboznámite so základnými princípmi LPWAN
+                  technológií vrátane NB-IoT a LoRaWAN. Získate prehľad o ich
+                  architektúre, bezpečnostných otázkach a praktických
+                  aplikáciách.
                 </p>
               </CardContent>
             </Card>
@@ -135,7 +150,9 @@ const Topics = () => {
               </CardHeader>
               <CardContent>
                 <p>
-                  Kurz spája teóriu s interaktívnymi cvičeniami. Vyskúšajte si získané vedomosti v testoch, sledujte svoj pokrok a objavte, ako LPWAN využiť vo vlastných projektoch.
+                  Kurz spája teóriu s interaktívnymi cvičeniami. Vyskúšajte si
+                  získané vedomosti v testoch, sledujte svoj pokrok a objavte,
+                  ako LPWAN využiť vo vlastných projektoch.
                 </p>
               </CardContent>
             </Card>
@@ -145,41 +162,28 @@ const Topics = () => {
         <Separator className="my-2 sm:my-[10px]" />
 
         <section className="max-w-6xl mx-auto px-4 py-12">
-          <h2 className="text-4xl font-bold text-center mb-4">Role používateľov</h2>
+          <h2 className="text-4xl font-bold text-center mb-4">
+            Role používateľov
+          </h2>
           <p className="text-center text-muted-foreground mb-12">
-            V závislosti od typu používateľa máte prístup k rôznym funkciám kurzu. Zistite, čo vám prináša registrácia alebo aké možnosti máte ako učiteľ.
+            V závislosti od typu používateľa máte prístup k rôznym funkciám
+            kurzu. Zistite, čo vám prináša registrácia alebo aké možnosti máte
+            ako učiteľ.
           </p>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader>
                 <CardTitle>👤 Hosť</CardTitle>
-                <CardDescription>Základný prístup bez registrácie</CardDescription>
+                <CardDescription>
+                  Základný prístup bez registrácie
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <p>
-                Ako hosť si môžete prečítať všetky dostupné témy kurzu. Nemáte však možnosť absolvovať testy, ukladať si pokrok alebo získať výsledky štúdia.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-              <CardTitle>
-              {session ? <p>👥 Registrovaný</p> : (
-                <Link 
-                  href="/auth/registration" 
-                  className="text-blue-400 underline hover:text-blue-600 transition-colors"
-                >
-                  👥 Registrovaný
-                </Link>
-              )}
-            </CardTitle>
-                <CardDescription>Interaktívne učenie s pokrokom</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>
-                  Registrovaní používatelia môžu absolvovať testy, sledovať svoj pokrok a získať personalizovanú spätnú väzbu. Účet vám umožňuje pokračovať v učení tam, kde ste skončili.
+                  Ako hosť si môžete prečítať všetky dostupné témy kurzu. Nemáte
+                  však možnosť absolvovať testy, ukladať si pokrok alebo získať
+                  výsledky štúdia.
                 </p>
               </CardContent>
             </Card>
@@ -187,25 +191,54 @@ const Topics = () => {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  {isTeacher || !session ? <p>👨‍🏫 Učiteľ</p> : (
-                <Link 
-                  href="/teacherRequestForm" 
-                  className="text-blue-400 underline hover:text-blue-600 transition-colors"
-                >
-                  👨‍🏫 Učiteľ
-                </Link>
-              )}</CardTitle>
+                  {session ? (
+                    <p>👥 Registrovaný</p>
+                  ) : (
+                    <Link
+                      href="/auth/registration"
+                      className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                    >
+                      👥 Registrovaný
+                    </Link>
+                  )}
+                </CardTitle>
+                <CardDescription>
+                  Interaktívne učenie s pokrokom
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Registrovaní používatelia môžu absolvovať testy, sledovať svoj
+                  pokrok a získať personalizovanú spätnú väzbu. Účet vám
+                  umožňuje pokračovať v učení tam, kde ste skončili.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  {isTeacher || !session ? (
+                    <p>👨‍🏫 Učiteľ</p>
+                  ) : (
+                    <Link
+                      href="/teacherRequestForm"
+                      className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                    >
+                      👨‍🏫 Učiteľ
+                    </Link>
+                  )}
+                </CardTitle>
                 <CardDescription>Správa obsahu a testov</CardDescription>
               </CardHeader>
               <CardContent>
                 <p>
-                  Ako učiteľ máte možnosť vytvárať a upravovať témy a testy. Môžete spravovať obsah kurzu, monitorovať študentov a prispôsobovať materiály podľa potreby.
+                Môžete spravovať obsah kurzu, sledovať štatistiky pre každú tému, ako napríklad popularitu jednotlivých tém na základe počtu študentov, ktorí absolvovali test k danej téme.
                 </p>
               </CardContent>
             </Card>
           </div>
         </section>
-
 
         <Separator className="my-8 sm:my-[40px]" />
 
@@ -272,42 +305,42 @@ const Topics = () => {
       </section>
       <Separator className="my-8 sm:my-[40px]" />
       <footer className="flex flex-col md:flex-row items-center w-full px-12 rounded-lg shadow-xl pb-8 sm:pb-[40px]">
-          <div className="w-full md:w-2/5">
-            <p className="text-sm text-gray-700 dark:text-[#696969]">
-              Informácie o ochrane osobných údajov a zásadách nájdete{" "}
-              <Link
-                href={"/policy"}
-                className="text-blue-400 underline hover:text-blue-600 transition-colors"
-              >
-                tu.
-              </Link>
-            </p>
-            <p className="mt-2 text-sm text-gray-700 dark:text-[#696969]">
-              Ak nájdete akékoľvek chyby, neváhajte mi napísať na email:{" "}
-              <Link
-                href="mailto:yu.datsenko@gmail.com"
-                className="text-blue-400 underline hover:text-blue-600 transition-colors"
-              >
-                yu.datsenko@gmail.com
-              </Link>
-              .
-            </p>
-          </div>
+        <div className="w-full md:w-2/5">
+          <p className="text-sm text-gray-700 dark:text-[#696969]">
+            Informácie o ochrane osobných údajov a zásadách nájdete{" "}
+            <Link
+              href={"/policy"}
+              className="text-blue-400 underline hover:text-blue-600 transition-colors"
+            >
+              tu.
+            </Link>
+          </p>
+          <p className="mt-2 text-sm text-gray-700 dark:text-[#696969]">
+            Ak nájdete akékoľvek chyby, neváhajte mi napísať na email:{" "}
+            <Link
+              href="mailto:yu.datsenko@gmail.com"
+              className="text-blue-400 underline hover:text-blue-600 transition-colors"
+            >
+              yu.datsenko@gmail.com
+            </Link>
+            .
+          </p>
+        </div>
 
-          <div className="w-full md:w-1/2 mt-8 md:text-justify md:ml-8">
-            <p className="text-base dark:text-gray-400">
-              Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv
-              na rôzne aspekty každodenného života, je dôležité, aby obyčajní
-              obyvatelia mali základné pochopenie tejto technológie, aby mohli
-              efektívne využívať výhody, ktoré prináša, a zároveň chrániť svoje
-              súkromie a bezpečnosť.
-              <br />
-              <br />
-              Táto webová e-learningová aplikácia poskytuje tieto dôležité
-              informácie a vzdelávanie.
-            </p>
-          </div>
-        </footer>
+        <div className="w-full md:w-1/2 mt-8 md:text-justify md:ml-8">
+          <p className="text-base dark:text-gray-400">
+            Vzhľadom na široké využitie LPWAN v modernom živote a jeho vplyv na
+            rôzne aspekty každodenného života, je dôležité, aby obyčajní
+            obyvatelia mali základné pochopenie tejto technológie, aby mohli
+            efektívne využívať výhody, ktoré prináša, a zároveň chrániť svoje
+            súkromie a bezpečnosť.
+            <br />
+            <br />
+            Táto webová e-learningová aplikácia poskytuje tieto dôležité
+            informácie a vzdelávanie.
+          </p>
+        </div>
+      </footer>
     </>
   );
 };

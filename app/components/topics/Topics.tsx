@@ -69,7 +69,7 @@ const Topics = () => {
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
           Témy
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 mb-5 gap-10 mx-auto">
           {topics.map((topic, index) => (
             <Card
               key={index}
@@ -95,7 +95,7 @@ const Topics = () => {
           ))}
         </div>
 
-        <Separator className="my-8 sm:my-[40px]" />
+        <Separator className="my-8 sm:my-[10px]" />
 
         <section className="max-w-6xl mx-auto px-4 py-12">
           <h2 className="text-4xl font-bold text-center mb-4">O kurze</h2>
@@ -106,7 +106,7 @@ const Topics = () => {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader>
-                <CardTitle>Vitajte v kurze</CardTitle>
+                <CardTitle>Vstúpte do sveta LPWAN</CardTitle>
                 <CardDescription>Úvod do LPWAN technológií</CardDescription>
               </CardHeader>
               <CardContent>
@@ -118,12 +118,12 @@ const Topics = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Čo sa naučíte</CardTitle>
+                <CardTitle>Obsah kurzu</CardTitle>
                 <CardDescription>Získajte praktické vedomosti</CardDescription>
               </CardHeader>
               <CardContent>
                 <p>
-                  Počas kurzu sa zoznámite so základmi LPWAN technológií, ich architektúrou, bezpečnostnými aspektmi a konkrétnymi štandardmi ako Wi-Fi HaLow alebo LTE-M.
+                Počas kurzu sa oboznámite so základnými princípmi LPWAN technológií vrátane NB-IoT a LoRaWAN. Získate prehľad o ich architektúre, bezpečnostných otázkach a praktických aplikáciách. 
                 </p>
               </CardContent>
             </Card>
@@ -142,7 +142,7 @@ const Topics = () => {
           </div>
         </section>
 
-        <Separator className="my-8 sm:my-[40px]" />
+        <Separator className="my-2 sm:my-[10px]" />
 
         <section className="max-w-6xl mx-auto px-4 py-12">
           <h2 className="text-4xl font-bold text-center mb-4">Role používateľov</h2>

@@ -101,7 +101,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+     @apply border-border break-words;
   }
   body {
     @apply bg-background text-foreground;

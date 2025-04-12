@@ -12,6 +12,36 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { TrendingUp, TrendingDown } from "lucide-react"
+import { Area, AreaChart, CartesianGrid, Line, XAxis, YAxis } from "recharts"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+interface TestStats {
+  topicNumber: number;
+  day: Date;
+  users_completed: number;
+}
+
 export default function Topic({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession() as {
     data: any;
@@ -30,6 +60,16 @@ export default function Topic({ params }: { params: { id: string } }) {
     () => import("@/app/components/skeletons/TopicSkeleton"),
     { ssr: false }
   );
+
+  const [testStats, setTestStats] = useState<TestStats[]>([]);
+
+  let chartConfig: ChartConfig = {
+    "topic": {
+      label: 'Štatistika testovania',
+      color: `hsl(var(--chart-2))`,
+    },
+  }
+  const chartData: { date: string; users: number }[] = [];
 
   useEffect(() => {
     const fetchTopic = async () => {
@@ -95,6 +135,33 @@ export default function Topic({ params }: { params: { id: string } }) {
     }
   }, [loading, editorData]);
 
+  useEffect(() => {
+    const fetchTestStats = async () => {
+      try {
+        const response = await axios.get(`/api/topic/stats?id=${topicId}`);
+        if (!response.data) {
+          throw new Error("Chyba pri načítaní štatistík.");
+        }
+        setTestStats(response.data.data);
+      }
+      catch (error) {
+        setErrorMessage("Chyba pri načítaní štatistík.");
+      }
+    };
+    fetchTestStats();
+  }, []);
+
+  testStats.forEach((topic) => {
+    chartData.push({
+      date: new Date(topic.day).toLocaleDateString("sk-SK", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }),
+      users: topic.users_completed,
+    });
+  });
+
   if (loading) {
     return <TopicSkeleton />;
   }
@@ -108,7 +175,83 @@ export default function Topic({ params }: { params: { id: string } }) {
       <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
         {isTeacher && (
           <div className="md:absolute md:top-20 md:left-4 mx-auto mb-5 md:mb-0 mt-5 md:mt-0">
-            <Button onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
+            <Button className="mr-4" onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive" className="px-4 py-2 rounded-lg">
+                  Štatistika
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px] shadow-lg rounded-xl p-6">
+                <p className="text-lg text-center mt-2 font-semibold">
+                  Tu môžete vidieť počet používateľov, ktorí úspešne dokončili testovanie tejto témy.
+                </p>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>
+                    </CardTitle>
+                    <CardDescription>Výsledky testovania</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={chartConfig}>
+                      <AreaChart
+                        accessibilityLayer
+                        data={chartData}
+                        margin={{
+                          left: 12,
+                          right: 12,
+                        }}
+                      >
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                          dataKey="date"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          tickFormatter={(value) => `${value}`}
+                        />
+  
+                        <YAxis
+                          dataKey="users"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          domain={[0, 10]}
+                          tickFormatter={(value) => `${value}`}
+                        />
+  
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+  
+  
+                        <defs>
+                          <linearGradient id={`filltopic`} x1="0" y1="0" x2="0" y2="1">
+                            <stop
+                              offset="5%"
+                              stopColor={`var(--color-topic)`}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor={`var(--color-topic)`}
+                              stopOpacity={0.1}
+                            />
+                          </linearGradient>
+                        </defs>
+                        <Area
+                          key={`area`}
+                          dataKey={`users`}
+                          type="natural"
+                          fill={`url(#filltopic)`}
+                          fillOpacity={0.4}
+                          stroke={`var(--color-topic)`}
+                          stackId="a"
+                        />
+                      </AreaChart>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
         <div className="mx-14 md:mx-20" id="editorjs"></div>

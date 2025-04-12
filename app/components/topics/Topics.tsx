@@ -37,6 +37,7 @@ const Topics = () => {
     () => import("../skeletons/HomePageSkeleton"),
     { ssr: false }
   );
+  const isTeacher = session?.user?.role === "TEACHER";
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -93,6 +94,118 @@ const Topics = () => {
             </Card>
           ))}
         </div>
+
+        <Separator className="my-8 sm:my-[40px]" />
+
+        <section className="max-w-6xl mx-auto px-4 py-12">
+          <h2 className="text-4xl font-bold text-center mb-4">O kurze</h2>
+          <p className="text-center text-muted-foreground mb-12">
+            Spoznajte svet LPWAN technológií a naučte sa ich využívať v praxi – či už ste študent, učiteľ alebo zvedavý technológ!
+          </p>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>Vitajte v kurze</CardTitle>
+                <CardDescription>Úvod do LPWAN technológií</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Tento kurz vás uvedie do sveta Low-Power Wide-Area Networks (LPWAN). Je určený pre všetkých, ktorí sa chcú naučiť moderné technológie s praktickým využitím.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Čo sa naučíte</CardTitle>
+                <CardDescription>Získajte praktické vedomosti</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Počas kurzu sa zoznámite so základmi LPWAN technológií, ich architektúrou, bezpečnostnými aspektmi a konkrétnymi štandardmi ako Wi-Fi HaLow alebo LTE-M.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Ako kurz funguje</CardTitle>
+                <CardDescription>Teória + prax</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Kurz spája teóriu s interaktívnymi cvičeniami. Vyskúšajte si získané vedomosti v testoch, sledujte svoj pokrok a objavte, ako LPWAN využiť vo vlastných projektoch.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <Separator className="my-8 sm:my-[40px]" />
+
+        <section className="max-w-6xl mx-auto px-4 py-12">
+          <h2 className="text-4xl font-bold text-center mb-4">Role používateľov</h2>
+          <p className="text-center text-muted-foreground mb-12">
+            V závislosti od typu používateľa máte prístup k rôznym funkciám kurzu. Zistite, čo vám prináša registrácia alebo aké možnosti máte ako učiteľ.
+          </p>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>👤 Hosť</CardTitle>
+                <CardDescription>Základný prístup bez registrácie</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                Ako hosť si môžete prečítať všetky dostupné témy kurzu. Nemáte však možnosť absolvovať testy, ukladať si pokrok alebo získať výsledky štúdia.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+              <CardTitle>
+              {session ? <p>👥 Registrovaný</p> : (
+                <Link 
+                  href="/auth/registration" 
+                  className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                >
+                  👥 Registrovaný
+                </Link>
+              )}
+            </CardTitle>
+                <CardDescription>Interaktívne učenie s pokrokom</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Registrovaní používatelia môžu absolvovať testy, sledovať svoj pokrok a získať personalizovanú spätnú väzbu. Účet vám umožňuje pokračovať v učení tam, kde ste skončili.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  {isTeacher || !session ? <p>👨‍🏫 Učiteľ</p> : (
+                <Link 
+                  href="/teacherRequestForm" 
+                  className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                >
+                  👨‍🏫 Učiteľ
+                </Link>
+              )}</CardTitle>
+                <CardDescription>Správa obsahu a testov</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Ako učiteľ máte možnosť vytvárať a upravovať témy a testy. Môžete spravovať obsah kurzu, monitorovať študentov a prispôsobovať materiály podľa potreby.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
 
         <Separator className="my-8 sm:my-[40px]" />
 

@@ -11,6 +11,23 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
 
+import { TrendingUp, TrendingDown } from "lucide-react"
+import { Area, AreaChart, CartesianGrid, Line, XAxis, YAxis } from "recharts"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
 const topics = [
   "LPWAN: technológie a aplikácie",
   "LoRaWAN: Lora Alliance, obmedzenia a výhody",
@@ -49,6 +66,30 @@ const Admin = () => {
     return groupedTests;
   };
 
+  let chartConfig: ChartConfig[] = [];
+  const chartData: { [key: number]: any[] } = {};
+  
+  Object.entries(groupTestsByTopic()).forEach(([topicId, tests]) => {
+    const topicIndex = parseInt(topicId, 10) - 1;
+    const topicName = topics[topicIndex];
+    chartConfig[topicIndex] = {
+      "topic": {
+        label: topicName,
+        color: `hsl(var(--chart-${topicIndex + 1}))`,
+      },
+    }
+    chartData[topicIndex] = [];
+    for (let i = 0; i < tests.length; i++) {
+      const test = tests[i];
+      chartData[topicIndex].push({
+        attempt: i == 0 ? 'Pokus 1' : `${i + 1}`,
+        topic: test.score,
+      });
+      if (test.score === 100)
+        break;
+    }
+  });
+
   useEffect(() => {
     const completed = Object.values(groupTestsByTopic()).length;
     const newProgress = (completed / 6) * 100;
@@ -61,14 +102,6 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {isTeacher && (
-        <div className="text-center">
-          <h3 className="text-2xl font-bold my-9">
-            Máte k dispozícii funkciu na pridanie novej témy.
-          </h3>
-        </div>
-      )}
-
       {Object.entries(groupTestsByTopic()).length === 0 ? (
         <div>
           <div className="text-center">
@@ -96,54 +129,101 @@ const Admin = () => {
           <div className="mb-5">
             <Progress value={progress} />
           </div>
-          {Object.entries(groupTestsByTopic()).map(([topic, tests]) => {
-            let i = 1;
-            const topicIndex = parseInt(topic, 10) - 1;
-            let isTopicSolved = false;
-            return (
-              <div key={topic}>
-                <Link
-                  href={`/topics/${topicIndex + 1}`}
-                  className="text-lg hover:underline"
-                >
-                  {topicIndex + 1}. {topics[topicIndex]}
-                </Link>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {tests.map((test, index) => {
-                    if (!isTopicSolved) {
-                      if (test.score === 100) {
-                        isTopicSolved = true;
-                        return (
-                          <div
-                            key={index}
-                            className="border border-gray-400 mb-6 rounded-lg p-4 bg-green-600"
-                          >
-                            <p className="mb-2">Pokus: {i++}</p>{" "}
-                            <p className="mb-2">Úspech: {test.score} %</p>
-                            <p className="text-green-900 font-bold">
-                              Téma ukončená!
-                            </p>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <div
-                            key={index}
-                            className="border border-gray-400 mb-6 rounded-lg p-4"
-                          >
-                            <p className="mb-2">Pokus: {i++}</p>{" "}
-                            <p className="mb-2">Úspech: {test.score} %</p>
-                            <Progress value={test.score} />
-                          </div>
-                        );
-                      }
-                    }
-                    return null;
-                  })}
-                </div>
-              </div>
-            );
-          })}
+
+          <section className="max-w-7xl mx-auto px-4 py-12">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+              {chartConfig.map((config, index) => (
+                <Card>
+                  <CardHeader>
+                  <CardTitle>
+                  <Link href={`/topics/${index+1}`} className="text-blue-400 underline hover:text-blue-600 transition-colors">{topics[index]}</Link>
+                  </CardTitle>
+                    <CardDescription>Výsledky testovania</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={config}>
+                      <AreaChart
+                        accessibilityLayer
+                        data={chartData[index]}
+                        margin={{
+                          left: 12,
+                          right: 12,
+                        }}
+                      >
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                          dataKey="attempt"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          tickFormatter={(value) => `${value}`}
+                        />
+
+                        <YAxis
+                          dataKey="topic"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          domain={[0, 100]}
+                          tickFormatter={(value) => `${value}%`}
+                        />
+
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+
+
+                        <defs>
+                          <linearGradient id={`filltopic`} x1="0" y1="0" x2="0" y2="1">
+                            <stop
+                              offset="5%"
+                              stopColor={`var(--color-topic)`}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor={`var(--color-topic)`}
+                              stopOpacity={0.1}
+                            />
+                          </linearGradient>
+                        </defs>
+                        <Area
+                          key={`area`}
+                          dataKey={`topic`}
+                          type="natural"
+                          fill={`url(#filltopic)`}
+                          fillOpacity={0.4}
+                          stroke={`var(--color-topic)`}
+                          stackId="a"
+                        />
+                      </AreaChart>
+                    </ChartContainer>
+                  </CardContent>
+                  <CardFooter>
+
+                  { chartData[index].length > 0 && chartData[index][chartData[index].length - 1].topic === 100 ? (
+                    <div className="flex w-full items-start gap-2 text-sm">
+                      <div className="grid gap-2">
+                        <div className="flex items-center gap-2 font-medium leading-none">
+                          Téma ukončená! <TrendingUp className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex w-full items-start gap-2 text-sm">
+                      <div className="grid gap-2">
+                        <div className="flex items-center gap-2 font-medium leading-none">
+                          Téma nie je ukončená! <TrendingDown className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  </CardFooter>
+                </Card>
+              ))}
+
+            </div>
+          </section>
+          
         </div>
       )}
       <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>

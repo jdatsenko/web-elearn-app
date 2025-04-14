@@ -196,7 +196,7 @@ const Topics = () => {
                   ) : (
                     <Link
                       href="/auth/registration"
-                      className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                      className="text-blue-400 hover:text-blue-600 transition-colors"
                     >
                       👥 Registrovaný
                     </Link>
@@ -223,7 +223,7 @@ const Topics = () => {
                   ) : (
                     <Link
                       href="/teacherRequestForm"
-                      className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                      className="text-blue-400 hover:text-blue-600 transition-colors"
                     >
                       👨‍🏫 Učiteľ
                     </Link>

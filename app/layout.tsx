@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Webová e-learningová aplikácia pre LPWAN",
+  title: "IoT Lab",
 };
 
 export default function RootLayout({

@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
       FROM public."SolvedTest" ST
       WHERE ST.score = 100 AND ST."testId" = ${topicNumber}
       GROUP BY ST."testId", day
-      ORDER BY ST."testId";
+      ORDER BY ST."testId", day;
     ` as {
       topicNumber: number;
       day: Date;
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
     const serializedResult = result.map((row: any) => ({
       ...row,
-      users_completed: Number(row.users_completed), // or String(row.users_completed) if you're worried about large numbers
+      users_completed: Number(row.users_completed), 
     }));
 
     return NextResponse.json({ data: serializedResult });

@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
 
-import { TrendingUp, TrendingDown } from "lucide-react"
-import { Area, AreaChart, CartesianGrid, Line, XAxis, YAxis } from "recharts"
+import { TrendingUp, TrendingDown } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, Line, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -20,15 +20,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
-const Admin = () => {
+const UserProgress = () => {
   const [solvedTests, setSolvedTests] = useState<SolvedTest[]>([]);
   const [topics, setTopics] = useState<string[]>([]);
   const { data: session } = useSession();
@@ -39,6 +39,7 @@ const Admin = () => {
   useEffect(() => {
     axios.get("/api/user/test/solved").then((response) => {
       setSolvedTests(response.data);
+      console.log("DATA from the api:", response.data);
       setLoading(false);
     });
   }, []);
@@ -46,7 +47,6 @@ const Admin = () => {
   useEffect(() => {
     axios.get("/api/topic/getTopicsTitles").then((response) => {
       setTopics(response.data.data);
-      console.log(response.data.data);
       setLoading(false);
     });
   }, []);
@@ -66,25 +66,24 @@ const Admin = () => {
 
   let chartConfig: ChartConfig[] = [];
   const chartData: { [key: number]: any[] } = {};
-  
+
   Object.entries(groupTestsByTopic()).forEach(([topic, tests]) => {
     const topicIndex = parseInt(topic, 10) - 1;
     const topicName = topics[topicIndex];
     chartConfig[topicIndex] = {
-      "topic": {
+      topic: {
         label: topicName,
         color: `hsl(var(--chart-${topicIndex + 1}))`,
       },
-    }
+    };
     chartData[topicIndex] = [];
     for (let i = 0; i < tests.length; i++) {
       const test = tests[i];
       chartData[topicIndex].push({
-        attempt: i == 0 ? 'Pokus 1' : `${i + 1}`,
+        attempt: i == 0 ? "Pokus 1" : `${i + 1}`,
         topic: test.score,
       });
-      if (test.score === 100)
-        break;
+      if (test.score === 100) break;
     }
   });
 
@@ -133,9 +132,14 @@ const Admin = () => {
               {chartConfig.map((config, index) => (
                 <Card>
                   <CardHeader>
-                  <CardTitle>
-                  <Link href={`/topics/${index+1}`} className="text-blue-400 underline hover:text-blue-600 transition-colors">{index+1}. {topics[index]}</Link>
-                  </CardTitle>
+                    <CardTitle>
+                      <Link
+                        href={`/topics/${index + 1}`}
+                        className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                      >
+                        {index + 1}. {topics[index]}
+                      </Link>
+                    </CardTitle>
                     <CardDescription>Výsledky testovania</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -166,10 +170,19 @@ const Admin = () => {
                           tickFormatter={(value) => `${value}%`}
                         />
 
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                        <ChartTooltip
+                          cursor={false}
+                          content={<ChartTooltipContent />}
+                        />
 
                         <defs>
-                          <linearGradient id={`filltopic`} x1="0" y1="0" x2="0" y2="1">
+                          <linearGradient
+                            id={`filltopic`}
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
                             <stop
                               offset="5%"
                               stopColor={`var(--color-topic)`}
@@ -195,36 +208,61 @@ const Admin = () => {
                     </ChartContainer>
                   </CardContent>
                   <CardFooter>
+                    {chartData[index].length > 0 &&
+                    chartData[index][chartData[index].length - 1].topic ===
+                      100 ? (
+                      <div className="flex w-full items-start gap-2 text-sm">
+                        <div className="grid gap-2">
+                          <div className="flex items-center gap-2 font-medium leading-none">
+                            Téma bola ukončená!{" "}
+                            {
+                              // Find solvedAt from the solvedTests array
+                              (() => {
+                                const solved = solvedTests.find(
+                                  (t) =>
+                                    t.testId === index + 1 && t.score === 100
+                                );
+                                if (!solved) return null;
 
-                  { chartData[index].length > 0 && chartData[index][chartData[index].length - 1].topic === 100 ? (
-                    <div className="flex w-full items-start gap-2 text-sm">
-                      <div className="grid gap-2">
-                        <div className="flex items-center gap-2 font-medium leading-none">
-                          Téma ukončená! <TrendingUp className="h-4 w-4" />
+                                const formatted = new Intl.DateTimeFormat(
+                                  "sk-SK",
+                                  {
+                                    dateStyle: "long",
+                                    timeStyle: "short",
+                                  }
+                                ).format(new Date(solved.solvedAt));
+
+                                return (
+                                  <span className="text-muted-foreground ml-1">
+                                    {formatted}
+                                  </span>
+                                );
+                              })()
+                            }
+                            <TrendingUp className="h-4 w-4" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="flex w-full items-start gap-2 text-sm">
-                      <div className="grid gap-2">
-                        <div className="flex items-center gap-2 font-medium leading-none">
-                          Téma nie je ukončená! <TrendingDown className="h-4 w-4" />
+                    ) : (
+                      <div className="flex w-full items-start gap-2 text-sm">
+                        <div className="grid gap-2">
+                          <div className="flex items-center gap-2 font-medium leading-none">
+                            Téma nie je ukončená!{" "}
+                            <TrendingDown className="h-4 w-4" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                   </CardFooter>
                 </Card>
               ))}
-
             </div>
           </section>
-          
         </div>
       )}
-      <ArrowToTop className="fixed bottom-6 right-6 z-[999]"/>
+      <ArrowToTop className="fixed bottom-6 right-6 z-[999]" />
     </div>
   );
 };
 
-export default Admin;
+export default UserProgress;

@@ -3,6 +3,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
+import { Button } from "@/components/ui/button";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 
 export default function TopicLayout({
   children,
@@ -59,13 +61,15 @@ export default function TopicLayout({
   return (
     <>
       <div className="flex h-full w-full">
-        <ArrowToTop className="fixed md:bottom-6 bottom-12   right-6 z-[999]"/>
+        <ArrowToTop className="fixed md:bottom-6 bottom-12   right-6 z-[999]" />
         {topicId && topicId !== 1 && (
           <div
             className=" cursor-pointer fixed h-full flex justify-center items-center px-6 md:px-10"
             onClick={goToPrevious}
           >
-            <i className="bi bi-arrow-left text-base md:text-2xl"></i>
+            <Button variant="outline" size="icon">
+              <ChevronLeft />
+            </Button>
           </div>
         )}
         <div className="flex flex-wrap justify-center h-full w-full overflow-y-auto">
@@ -77,7 +81,9 @@ export default function TopicLayout({
               className="fixed cursor-pointer h-full flex justify-center items-center px-6 md:px-10 right-0"
               onClick={goToNext}
             >
-              <i className="bi bi-arrow-right text-base md:text-2xl absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2" />
+              <Button variant="outline" size="icon">
+                <ChevronRight />
+              </Button>
             </div>
           </div>
         )}

@@ -55,6 +55,12 @@ export async function GET(req: NextRequest) {
   if (topicId) {
     const test = await prisma.test.findMany({
       include: {
+        topic: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
         questions: {
           include: {
             answers: true

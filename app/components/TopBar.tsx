@@ -1,6 +1,7 @@
 "use client";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useState, useEffect, use } from "react";
@@ -54,13 +55,15 @@ const TopBar = () => {
           "p-4 flex bg-background flex-col sm:flex-row w-full justify-between border-b h-fit sticky top-0 z-10"
         )}
       >
-        <div className="flex flex-grow justify-between">
-          <div className="flex gap-1 md:gap-3 self-start">
-            <Link
-              className={cn(buttonVariants({ variant: "secondary" }))}
-              href={"/."}
-            >
-              Domov
+        <div className="flex flex-grow justify-between items-center">
+          <div className="flex gap-1 md:gap-3 items-center">
+            <Link href={"/."}>
+              <Image
+                src="/images/logo.png"
+                alt="Logo"
+                width={150}
+                height={50}
+              />
             </Link>
             {!loading && (
               <div className="space-x-3">
@@ -114,7 +117,7 @@ const TopBar = () => {
               </div>
             )}
           </div>
-          <div className="flex gap-1 md:gap-3 self-end">
+          <div className="flex gap-1 md:gap-3 items-center">
             {!session && !loading ? (
               <>
                 <Link

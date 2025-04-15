@@ -255,8 +255,8 @@ export default function Topic({ params }: { params: { id: string } }) {
           </div>
         )}
         <div className="mx-14 md:mx-20" id="editorjs"></div>
-        <div className="mx-14 md:mx-30">
-          <div id="ckstyle" className="mx-4 md:mx-60">
+        <div className="mx-14 md:mx-0 md:mt-10">
+          <div id="ckstyle" className="mx-4 md:w-5/6 lg:w-1/2 md:mx-auto">
             <p className="text-3xl font-bold my-5">{ editorData.topicNumber }. { editorData.title }</p>
           </div>
         </div>

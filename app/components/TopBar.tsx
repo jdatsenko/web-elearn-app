@@ -59,13 +59,13 @@ const TopBar = () => {
       >
         <div className="flex flex-grow justify-between items-center">
           <div className="flex gap-1 md:gap-3 items-center">
-            <Link href={"/."}>
+            <Link href={"/."} className="hover:scale-105 transition duration-500 ease-in-out">
               <Image
                 src="/images/logo.png"
                 alt="Logo"
                 width={150}
                 height={50}
-                className={isDark ? "" : "brightness-0 contrast-100"}
+                className={isDark ? "h-15 w-40 md:h-10 md:w-[9rem]" : "brightness-0 h-15 w-40 md:h-10 md:w-[9rem]"}
               />
             </Link>
             {!loading && (

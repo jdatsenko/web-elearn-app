@@ -23,6 +23,29 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { Bar, BarChart } from "recharts"
+
+
+
+import { CartesianGrid, XAxis, YAxis } from "recharts"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+interface TestStats {
+  testId: number;
+  users_completed: number;
+}
+
 interface Topic {
   topicNumber: number;
   title: string;
@@ -54,7 +77,39 @@ const Topics = () => {
     };
 
     fetchTopics();
+
+    const fetchTestStats = async () => {
+      try {
+        const response = await fetch(`/api/topic/getGlobalStats`);
+        const data = await response.json();
+        if (!data.data) {
+          throw new Error("Chyba pri načítaní štatistík.");
+        }
+        console.log("Fetched test stats:", data.data);
+        setTestStats(data.data);
+      }
+      catch (error) {
+        console.error("Error fetching test stats:", error);
+      }
+    };
+    fetchTestStats();
   }, []);
+
+  const [testStats, setTestStats] = useState<TestStats[]>([]);
+  const chartData: { topic: string; users: number }[] = [];
+  let chartConfig: ChartConfig = {
+    "topic": {
+      label: 'Štatistika testovania',
+      color: `hsl(var(--chart-2))`,
+    },
+  }
+
+  testStats.forEach((stat) => {
+    chartData.push({
+      topic: `#${stat.testId}. ${topics[stat.testId - 1]?.title}`,
+      users: stat.users_completed,
+    });
+  });
 
   if (loading) {
     return <HomePageSkeleton />;
@@ -66,9 +121,48 @@ const Topics = () => {
         <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[40px]">
           Webová e-learningová aplikácia pre LPWAN
         </h1>
-        <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
+        <Dialog>
+          <DialogTrigger asChild>
+          <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
           Témy
         </h1>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] shadow-lg rounded-xl p-6">
+            <p className="text-lg text-center mt-2 font-semibold">
+              Tu môžete vidieť počet používateľov, ktorí úspešne dokončili testovanie tejto témy.
+            </p>
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                </CardTitle>
+                <CardDescription>Výsledky testovania</CardDescription>
+              </CardHeader>
+              <CardContent>
+
+              <ChartContainer config={chartConfig} className="">
+                <BarChart accessibilityLayer data={chartData}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="topic"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    tickFormatter={(value) => value.slice(0, value.indexOf('.'))}
+                  />
+                  <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={10}
+                    tickFormatter={(value) => value.toString()}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Bar dataKey="users" fill="var(--color-topic)" radius={4} />
+                </BarChart>
+              </ChartContainer>
+              </CardContent>
+            </Card>
+          </DialogContent>
+        </Dialog>
         <div className="grid grid-cols-1 md:grid-cols-3 mb-5 gap-10 mx-auto">
           {topics.map((topic, index) => (
             <Card

@@ -123,9 +123,9 @@ const Topics = () => {
         </h1>
         <Dialog>
           <DialogTrigger asChild>
-          <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px]">
-          Témy
-        </h1>
+          <h1 className="text-4xl font-bold text-center mt-8 sm:mt-[20px] underline cursor-pointer">
+            Témy
+          </h1>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] shadow-lg rounded-xl p-6">
             <p className="text-lg text-center mt-2 font-semibold">

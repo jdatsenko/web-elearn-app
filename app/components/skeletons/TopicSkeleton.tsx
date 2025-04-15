@@ -8,7 +8,7 @@ const TopicSkeleton = () => {
   const isDark = resolvedTheme === "dark";
 
   return (
-    <div className="flex flex-col w-2/3 md:mx-20 min-h-screen space-y-4">
+    <div className="flex flex-col mx-4 md:w-5/6 lg:w-1/2 md:mx-auto md:mt-12 min-h-screen space-y-4">
       <SkeletonTheme
         baseColor={isDark ? "#2a2a2a" : "#bdbdbd"}
         highlightColor={isDark ? "#444" : "#e0e0e0"}

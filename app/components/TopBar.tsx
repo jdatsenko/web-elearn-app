@@ -28,6 +28,8 @@ const TopBar = () => {
   const TopBarSkeleton = dynamic(() => import("./skeletons/TopBarSkeleton"), {
     ssr: false,
   });
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   useEffect(() => {
     if (status === "loading") {
@@ -63,6 +65,7 @@ const TopBar = () => {
                 alt="Logo"
                 width={150}
                 height={50}
+                className={isDark ? "" : "brightness-0 contrast-100"}
               />
             </Link>
             {!loading && (
@@ -77,7 +80,7 @@ const TopBar = () => {
                     </DropdownMenuItem>
                     {session && (
                       <>
-                    <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
+                        <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                         <DropdownMenuItem className="justify-center">
                           <Link className="text-center" href={"/account"}>
                             Moj progress
@@ -91,7 +94,10 @@ const TopBar = () => {
                         <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                         {!isAdmin && !isTeacher && (
                           <DropdownMenuItem className="justify-center">
-                            <Link className="text-center" href={"/teacherRequestForm"}>
+                            <Link
+                              className="text-center"
+                              href={"/teacherRequestForm"}
+                            >
                               Stať sa učiteľom
                             </Link>
                           </DropdownMenuItem>

@@ -5,6 +5,7 @@ interface TopicRequest {
     title: string;
     description: string;
     content: string[];
+    createdBy: number;
 }
 
 export async function POST(req: Request) {
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
                 title: body.title,
                 description: body.description,
                 content: body.content,
+                createdById: body.createdBy, 
             },
         });
 

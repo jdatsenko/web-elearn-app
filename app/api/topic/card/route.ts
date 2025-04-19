@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
         topicNumber: true,
         title: true,
         description: true,
+        createdById: true,
       },
       orderBy: {
         topicNumber: "asc", 

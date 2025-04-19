@@ -118,6 +118,7 @@ function TestContent() {
         title: newTopic.title,
         description: newTopic.description,
         content: newTopic.content,
+        createdBy: session?.user?.id,
       };
       setErrorMessage("");
       if (!topicData.title || topicData.title.trim() === "") {

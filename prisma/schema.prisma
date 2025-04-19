@@ -22,6 +22,7 @@ model User {
   role            UserRole     @default(USER)
   solvedTests     SolvedTest[] @relation("solver")
   topicsCompleted Int          @default(0)
+  createdTopics   Topic[]      @relation("CreatedTopics")
 }
 
 model SolvedTest {
@@ -53,11 +54,11 @@ model Question {
 }
 
 model Answer {
-  id           Int      @id @default(autoincrement())
-  text         String
-  isCorrect    Boolean
-  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  questionId   Int
+  id         Int      @id @default(autoincrement())
+  text       String
+  isCorrect  Boolean
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId Int
 }
 
 model TeacherRequests {
@@ -72,10 +73,12 @@ model TeacherRequests {
 }
 
 model Topic {
-  id          Int    @id @default(autoincrement())
-  topicNumber Int    @unique
+  id          Int      @id @default(autoincrement())
+  topicNumber Int      @unique
   content     String[]
   title       String
   description String
   Test        Test[]
+  createdById Int
+  createdBy   User     @relation("CreatedTopics", fields: [createdById], references: [id])
 }

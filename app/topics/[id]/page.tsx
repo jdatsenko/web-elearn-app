@@ -155,17 +155,11 @@ export default function Topic({ params }: { params: { id: string } }) {
         </div>
         <div className="mx-auto my-5">
           {status !== "loading" && (
-            <div className={`mb-10 justify-center items-center ${isAuthorized && session?.user?.topicsCompleted >= topicId - 1 ? "flex" : ""}`}>
+            <div className={`mb-10 justify-center items-center ${isAuthorized ? "flex" : ""}`}>
               {isAuthorized ? (
-                session?.user?.topicsCompleted >= topicId - 1 ? (
-                  <Button className="mr-4" onClick={() => router.push(`/test/${topicId}`)}>
+                  <Button className="mr-2" onClick={() => router.push(`/test/${topicId}`)}>
                     Začať testovanie
                   </Button>
-                ) : (
-                  <div className="test-warning text-red-500 text-center mb-2">
-                    Pre testovanie tejto témy musíte dokončiť predchádzajúce témy.
-                  </div>
-                )
               ) : (
                 <div className="auth-warn text-red-500 text-center mb-2">
                   Musíte byť autorizovaný, aby ste mohli začať testovanie.

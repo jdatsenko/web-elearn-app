@@ -2,7 +2,6 @@
 import TestControll from "@/app/components/controll/page";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 

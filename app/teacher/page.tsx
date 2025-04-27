@@ -15,17 +15,9 @@ import { Separator } from "@/components/ui/separator";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import TeacherPageSkeleton from "../components/skeletons/TeacherPageSkeleton";
-
-export interface Question {
-  label: string;
-  answers: Answer[];
-}
-
-export interface Answer {
-  label: string;
-  isRight: boolean;
-  number: number;
-}
+import { validate } from "./validate";
+import QuestionForm from "./QuestionForm";
+import { Question } from '@/app/types';
 
 interface Topic {
   title?: string;
@@ -41,12 +33,12 @@ const ClassicCKEditor = dynamic(
 export default function Test() {
   return (
     <Suspense>
-      <TestContent />
+      <CreateTopicForm />
     </Suspense>
   );
 }
 
-function TestContent() {
+function CreateTopicForm() {
   const [newTopic, setNewTopic] = useState<Topic>({
     title: "",
     description: "",
@@ -120,43 +112,11 @@ function TestContent() {
         content: newTopic.content,
         createdBy: session?.user?.id,
       };
-      setErrorMessage("");
-      if (!topicData.title || topicData.title.trim() === "") {
-        setErrorMessage("Názov témy nemôže byť prázdny");
-        return;
-      } else if (
-        !topicData.description ||
-        topicData.description.trim() === ""
-      ) {
-        setErrorMessage("Popis témy nemôže byť prázdny");
-        return;
-      } else if (
-        !topicData.content ||
-        topicData.content.length === 0 ||
-        topicData.content.every((c) => c.trim() === "")
-      ) {
-        setErrorMessage("Obsah témy nemôže byť prázdny");
-        return;
-      }
 
-      if (questions.length === 0) {
-        setErrorMessage("Zadajte aspoň jednu otázku");
-        return;
-      } else if (questions.some((q) => q.label.trim() === "")) {
-        setErrorMessage("Otázky nemôžu byť prázdne");
-        return;
-      } else if (questions.some((q) => !q.answers.some((a) => a.isRight))) {
-        setErrorMessage(
-          "Každá otázka musí obsahovať aspoň jednu správnu odpoveď"
-        );
-        return;
-      } else if (
-        questions.some((q) => q.answers.some((a) => a.label.trim() === ""))
-      ) {
-        setErrorMessage("Odpovede nemôžu byť prázdne");
-        return;
-      } else if (questions.some((q) => q.answers.length < 2)) {
-        setErrorMessage(`Otázka musí mať aspoň 2 odpovede`);
+      setErrorMessage("");
+      const validationError = validate(topicData, questions);
+      if (validationError) {
+        setErrorMessage(validationError);
         return;
       }
 
@@ -288,111 +248,20 @@ function TestContent() {
       <div className="px-4 mx-5 md:mx-20 mt-2">
         <p className="text-3xl mt-10 text-center">Pridanie testu do témy</p>
         {questions?.map((question, index) => (
-          <div key={index}>
-            <div className="my-4">
-              <p className="inline-block px-2 py-2 bg-gray-500 mb-3 text-background rounded-lg shadow-md font-semibold">
-                Otázka {index + 1}
-              </p>
-              <div className="flex">
-                <span className="mr-1 flex items-center text-xl">
-                  {index + 1}.
-                </span>
-                <Input
-                  id="question"
-                  className="border border-gray-400"
-                  value={question.label}
-                  onChange={(e) => {
-                    const newQuestions = [...questions];
-                    newQuestions[index] = {
-                      ...newQuestions[index],
-                      label: e.target.value,
-                    };
-                    setQuestions(newQuestions);
-                    setErrorMessage("");
-                  }}
-                />
-              </div>
-            </div>
-            <div>
-              <RadioGroup key={index}>
-                {question.answers.map((answer, index2) => (
-                  <>
-                    <div className="flex flex-row gap-4 align-center justify-center items-center">
-                      <RadioGroupItem
-                        key={index2}
-                        value={""}
-                        checked={answer.isRight}
-                        id="answer"
-                        onClick={(e) => {
-                          const newQuestions = [...questions];
-                          //all answers are not right
-                          newQuestions[index].answers.forEach(
-                            (a) => (a.isRight = false)
-                          );
-                          // set the right answer
-                          newQuestions[index].answers[index2] = {
-                            ...newQuestions[index].answers[index2],
-                            isRight: true,
-                          };
-                          setQuestions(newQuestions);
-                          setErrorMessage("");
-                        }}
-                      ></RadioGroupItem>
-                      <Input
-                        id="answer"
-                        className="border border-gray-400"
-                        value={answer.label}
-                        onChange={(e) => {
-                          const newQuestions = [...questions];
-                          newQuestions[index].answers[index2] = {
-                            ...newQuestions[index].answers[index2],
-                            label: e.target.value,
-                          };
-                          setQuestions(newQuestions);
-                          setErrorMessage("");
-                        }}
-                      />
-                      <Button
-                        onClick={() => {
-                          const newQuestions = [...questions];
-                          newQuestions[index].answers.splice(index2, 1);
-                          setQuestions(newQuestions);
-                          setErrorMessage("");
-                        }}
-                      >
-                        Odstrániť
-                      </Button>
-                    </div>
-                  </>
-                ))}
-              </RadioGroup>
-              <Button
-                onClick={() => {
-                  const newQuestions = [...questions];
-                  newQuestions[index].answers.push({
-                    label: "",
-                    isRight: false,
-                    number: 0,
-                  });
-                  setQuestions(newQuestions);
-                  setErrorMessage("");
-                }}
-                className="mt-2 mr-2"
-              >
-                Pridať odpoveď
-              </Button>
-              <Button
-                onClick={() => {
-                  const newQuestions = questions.filter((_, i) => i !== index);
-                  setQuestions(newQuestions);
-                  setErrorMessage("");
-                }}
-                className={cn(buttonVariants({ variant: "secondary" }))}
-              >
-                Vymazať túto otázku
-              </Button>
-            </div>
-          </div>
+          <QuestionForm
+            key={index}
+            question={question}
+            index={index}
+            onChange={(updatedQuestion) => {
+              const updatedQuestions = [...questions];
+              updatedQuestions[index] = updatedQuestion;
+              setQuestions(updatedQuestions);
+            }}
+            onRemove={() => {
+              const updatedQuestions = questions.filter((_, i) => i !== index);
+              setQuestions(updatedQuestions);
+            }}
+          />
         ))}
         <div className="mt-10 flex flex-row gap-4">
           <Button onClick={addQuestion}>Pridať otázku</Button>

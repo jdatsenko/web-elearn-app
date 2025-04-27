@@ -5,6 +5,7 @@ import Provider from "@/components/ui/Provider";
 import "./globals.css";
 import TopBar from "./components/TopBar";
 import { Toaster } from "@/components/ui/toaster";
+import { DayPickerProvider } from "react-day-picker";
 
 const inter = Inter({ subsets: ["latin"] });
 

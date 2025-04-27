@@ -5,13 +5,13 @@ export const revalidate = 0;
 
 export async function DELETE(req: NextRequest) {
     try {
-        const { id } = await req.json();
-        if (!id) {
-            return NextResponse.json({ error: "Topic ID is required" }, { status: 400 });
+        const { topicNumber } = await req.json();
+        if (!topicNumber) {
+            return NextResponse.json({ error: "Topic number is required" }, { status: 400 });
         }
         const topic = await prisma.topic.delete({
             where: {
-                id: parseInt(id), 
+                topicNumber: parseInt(topicNumber), 
             },
         });
 

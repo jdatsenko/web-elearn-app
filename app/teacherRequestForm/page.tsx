@@ -86,7 +86,7 @@ const TeacherRequestForm: React.FC = () => {
               <p className="text-lg text-center mt-2 font-semibold">
                 Čo môže učiteľ urobiť?
               </p>
-              <p>V rámci tejto platformy môže učiteľ prispievať k vzdelávaciemu procesu pridaním nových tém a testov. Okrem toho má možnosť upravovať existujúce témy, čím neustále zlepšuje obsah a zaisťuje aktuálnosť materiálov. <br /> <br /> Aby ste sa stali učiteľom na tejto platforme, je potrebné vyplniť túto žiadosť a zdieľať svoje odborné kvalifikácie a zručnosti, ktoré preukazujú vašu odbornosť a schopnosť prispievať k vzdelávaniu študentov.</p>
+              <p>V rámci tejto platformy môže učiteľ prispievať k vzdelávaciemu procesu pridaním nových tém a testov. Okrem toho má možnosť upravovať alebo vymazávať existujúce témy, čím neustále zlepšuje obsah a zaisťuje aktuálnosť materiálov. <br /> <br /> Aby ste sa stali učiteľom na tejto platforme, je potrebné vyplniť túto žiadosť a zdieľať svoje odborné kvalifikácie a zručnosti, ktoré preukazujú vašu odbornosť a schopnosť prispievať k vzdelávaniu študentov.</p>
               <DialogFooter className="flex justify-center gap-2 mt-4">
                 <DialogClose className="flex">
                   <Button className="px-4 py-2 rounded-lg" variant="secondary">

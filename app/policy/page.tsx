@@ -46,7 +46,7 @@ const PodmienkyOchranyOsobnychUdajov = () => {
           .
         </p>
       </footer>
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-4 mb-7">
         <Button
           onClick={() => router.push("/")}
           variant="secondary"

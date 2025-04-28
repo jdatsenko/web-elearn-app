@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
-
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, Line, XAxis, YAxis } from "recharts";
 import {
@@ -120,7 +119,7 @@ const UserProgress = () => {
           <div className="text-center">
             <h2 className="text-4xl font-bold my-9">
               {" "}
-              Váš priebeh štúdia, {session?.user?.name}
+              Váš priebeh štúdia, <Link href="./data" className="text-blue-400 underline hover:text-blue-600 transition-colors">{session?.user?.name}</Link>
             </h2>
           </div>
           <div className="mb-5">

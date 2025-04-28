@@ -1,24 +1,6 @@
 import prisma from "@/lib/prisma";
-import { Prisma, Test } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { number } from "zod";
-
-export interface TestRequest {
-  topicId: number;
-  topicNumber: number;
-  questions: Question[];
-}
-
-export interface Question {
-  label: string
-  answers: Answer[]
-}
-
-export interface Answer {
-  label: string
-  isRight: boolean
-  number: number
-}
+import { TestRequest } from "./types";
 
 export async function POST(req: NextRequest) {
   try {
@@ -50,14 +32,14 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const topicId = req.nextUrl.searchParams.get("id");
+  const topicNumber = req.nextUrl.searchParams.get("id");
 
-  if (topicId) {
+  if (topicNumber) {
     const test = await prisma.test.findMany({
       include: {
         topic: {
           select: {
-            id: true,
+            topicNumber: true,
             title: true,
           },
         },
@@ -68,7 +50,7 @@ export async function GET(req: NextRequest) {
         },
       },
       where: {
-        topicId: parseInt(topicId),
+        topicNumber: parseInt(topicNumber),
       }
     });
 

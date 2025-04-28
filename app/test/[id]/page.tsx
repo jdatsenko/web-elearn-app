@@ -129,19 +129,18 @@ const TestPage = ({ params }: { params: { id: string } }) => {
           </>
         ))
       )}
-      {session &&
-        session?.user?.topicsCompleted !== undefined &&
-        session?.user?.topicsCompleted >= topicId - 1 && (
-          <div className="flex justify-center">
-            {test && (
-              <TestControll
-                answers={answers}
-                testId={topicId}
-                onResults={handleAnswersUpdate}
-              />
-            )}
-          </div>
-        )}
+      {session && 
+      (
+        <div className="flex justify-center">
+          {test && (
+            <TestControll
+              answers={answers}
+              testId={topicId}
+              onResults={handleAnswersUpdate}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

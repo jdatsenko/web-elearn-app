@@ -12,7 +12,7 @@ const AboutCourse = () => {
     <>
       <section className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-4xl font-bold text-center mb-4">O kurze</h2>
-        <p className="text-cenPter text-muted-foreground mb-12">
+        <p className="text-center text-muted-foreground mb-12">
           Zoznámte sa so základmi LPWAN a ich praktickým využitím – najmä s
           technológiami LoRaWAN a NB-IoT.
         </p>

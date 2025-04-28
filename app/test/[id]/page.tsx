@@ -135,7 +135,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
           {test && (
             <TestControll
               answers={answers}
-              testId={topicId}
+              topicNumber={topicId}
               onResults={handleAnswersUpdate}
             />
           )}

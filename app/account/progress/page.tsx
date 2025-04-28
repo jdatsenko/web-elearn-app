@@ -119,7 +119,7 @@ const UserProgress = () => {
           <div className="text-center">
             <h2 className="text-4xl font-bold my-9">
               {" "}
-              Váš priebeh štúdia, <Link href="./data" className="text-blue-400 underline hover:text-blue-600 transition-colors">{session?.user?.name}</Link>
+              Váš priebeh štúdia, <Link href="./data" className="text-blue-500 underline hover:text-blue-600 transition-colors">{session?.user?.name}</Link>
             </h2>
           </div>
           <div className="mb-5">
@@ -134,7 +134,7 @@ const UserProgress = () => {
                     <CardTitle>
                       <Link
                         href={`/topics/${index + 1}`}
-                        className="text-blue-400 underline hover:text-blue-600 transition-colors"
+                        className="text-blue-500 underline hover:text-blue-600 transition-colors"
                       >
                         {index + 1}. {topics[index]}
                       </Link>

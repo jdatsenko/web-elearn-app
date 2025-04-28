@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { useSession } from "next-auth/react";
 
 export interface Answers {
   answers: Answer[];
@@ -16,13 +15,22 @@ export interface Answer {
 export async function POST(req: Request) {
   const body = (await req.json());
   const answers = body.answers as Answer[];
-  const testId = body.testId as number;
+  const topicNumber = body.topicNumber as number;
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ message: "Not logged in" }, { status: 401 });
   }
-  console.log(session)
   const userId = session.user.id;
+  const test = await prisma.test.findFirst({
+    where: {
+      topicNumber: topicNumber,
+    },
+  });
+
+  if(!test) 
+    return NextResponse.json({ message: "Test not found" }, { status: 404 });
+
+  const testId = test?.id;
 
   const testResults = await Promise.all(
     answers.map(async (answer) => {

@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast"
 const TestControll = (props: any) => {
   const router = useRouter();
   const answers = props.answers as { questionId: number; answer: number }[];
-  const testId = props.testId as number;
+  const topicNumber = props.topicNumber as number;
   const onResults = props.onResults as Function;
   const { toast } = useToast()
 
@@ -27,7 +27,7 @@ const TestControll = (props: any) => {
     axios
       .post("/api/user/test/submit", {
         answers: answers,
-        testId: testId,
+        topicNumber: topicNumber,
       })
       .then((response) => {
         setResults(response.data);
@@ -37,9 +37,9 @@ const TestControll = (props: any) => {
         const totalQuestions = response.data.results.length;
        
         if (response.data.score === "100%") {
-          update({ topicsCompleted: testId });
+          update({ topicsCompleted: topicNumber });
           setTimeout(() => {
-            router.push(`/topics/${testId + 1}`);
+            router.push(`/topics/${topicNumber + 1}`);
           }, 300);
           return;
         }

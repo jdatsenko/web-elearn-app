@@ -14,6 +14,22 @@ export async function GET(req: Request) {
     where: {
       userId: userId,
     },
+    select: {
+      id: true,
+      score: true,
+      solvedAt: true,
+      testId: true,
+      test: {
+        select: {
+          topic: {
+            select: {
+              title: true,
+              topicNumber: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return NextResponse.json(solvedTests);

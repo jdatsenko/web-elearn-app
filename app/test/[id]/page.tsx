@@ -58,7 +58,6 @@ const TestPage = ({ params }: { params: { id: string } }) => {
       })
       .then((res) => {
         const resTest = res.data as TestResponse;
-        console.log("test", resTest);
         setTest(res.data);
         setTopicTitle(resTest.topic?.title ?? "");
         setAnswers(

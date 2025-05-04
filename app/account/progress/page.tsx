@@ -23,10 +23,10 @@ import {
   ChartConfig,
 } from "@/components/ui/chart";
 import ProgressChart from "./ProgressChart";
+import test from "node:test";
 
 const UserProgress = () => {
   const [solvedTests, setSolvedTests] = useState<SolvedTest[]>([]);
-  const [topics, setTopics] = useState<string[]>([]);
   const { data: session } = useSession();
   const [progress, setProgress] = useState<number>(0);
   const router = useRouter();
@@ -39,16 +39,8 @@ const UserProgress = () => {
     });
   }, []);
 
-  useEffect(() => {
-    axios.get("/api/topic/getTopicsTitles").then((response) => {
-      setTopics(response.data.data);
-      console.log(response.data.data);
-      setLoading(false);
-    });
-  }, []);
-
   const groupTestsByTopic = () => {
-    const groupedTests: { [key: number]: SolvedTest[] } = {};
+    const groupedTests: { [key: number]: any[] } = {};
 
     solvedTests.forEach((test) => {
       if (!groupedTests[test.testId]) {
@@ -63,13 +55,11 @@ const UserProgress = () => {
   let chartConfig: ChartConfig[] = [];
   const chartData: { [key: number]: any[] } = {};
 
-  //todo 'topic' is an id and not a topic number
   Object.entries(groupTestsByTopic()).forEach(([topic, tests]) => {
-    const topicIndex = parseInt(topic, 10) - 1;
-    const topicName = topics[topicIndex];
+    const topicIndex = parseInt(tests[0].test.topic.topicNumber, 10) - 1;
     chartConfig[topicIndex] = {
       topic: {
-        label: topicName,
+        label: tests[0].test.topic.title,
         color: `hsl(var(--chart-${topicIndex + 1}))`,
       },
     };
@@ -140,7 +130,7 @@ const UserProgress = () => {
                         href={`/topics/${index + 1}`}
                         className="text-blue-500 underline hover:text-blue-600 transition-colors"
                       >
-                        {index + 1}. {topics[index]}
+                        {index + 1}. {config.topic.label}
                       </Link>
                     </CardTitle>
                     <CardDescription>Výsledky testovania</CardDescription>

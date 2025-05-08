@@ -23,8 +23,9 @@ export interface Question {
       return "Názov témy nemôže byť prázdny";
     } else if (!topicData.description || topicData.description.trim() === "") {
       return "Popis témy nemôže byť prázdny";
-    } else if (!topicData.content || topicData.content.length === 0 || topicData.content.every((c) => c.trim() === "")) {
-      return "Obsah témy nemôže byť prázdny";
+      //todo
+    // } else if (!topicData.content || topicData.content.length === 0 || topicData.content.every((c) => c.trim() === "")) {
+      // return "Obsah témy nemôže byť prázdny";
     }
   
     if (questions.length === 0) {

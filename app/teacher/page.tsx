@@ -173,7 +173,8 @@ function CreateTopicForm() {
   };
 
   if(loading){
-    return <TeacherPageSkeleton />
+    // todo
+    // return <TeacherPageSkeleton />
   }
 
   if (!isTeacher) {

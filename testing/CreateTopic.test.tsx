@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import '@testing-library/jest-dom';
 import { useRouter } from 'next/navigation';
+import { act } from 'react';
 
 // Mock next-auth and next/navigation
 const pushMock = jest.fn();
@@ -18,11 +19,17 @@ jest.mock('next/navigation', () => ({
     replace: jest.fn(),
     refresh: jest.fn(),
   }),
-  useSearchParams: () => new URLSearchParams('tab=topics'),
+  useSearchParams: () => new URLSearchParams(''),
 }));
 
 // Mock axios
 jest.mock('axios');
+
+// jest.mock('@ckeditor/ckeditor5-react', () => ({
+//   CKEditor: () => <div data-testid="ckeditor" />,
+// }));
+
+jest.mock('next/dynamic', () => () => (props) => <div {...props} />);
 
 describe('CreateTopicForm', () => {
   beforeEach(() => {
@@ -36,9 +43,13 @@ describe('CreateTopicForm', () => {
     });
 
     // Mock axios responses for the two requests
-    (axios.get as jest.Mock)
-      .mockResolvedValueOnce({
-        data: { data: { title: 'Test Title', description: 'Test Description', content: ['content'] } },
+    (axios.post as jest.Mock).mockResolvedValueOnce({
+        data: { 
+          topic: {
+            id: 1,
+            topicNumber: 1,
+          }
+        },
       }) // Mock first GET request (for topic)
       .mockResolvedValueOnce({
         data: { questions: [{ text: 'Question 1', answers: [{ text: 'Answer 1', isCorrect: true, id: 1 }] }] },
@@ -46,22 +57,53 @@ describe('CreateTopicForm', () => {
   });
 
   it('should create a new topic successfully', async () => {
-    const { getByLabelText, getByText } = render(<CreateTopicForm />);
+    const { getByLabelText, getByText, getByRole, getAllByRole, debug, container } = render(<CreateTopicForm />);
 
-    // fireEvent.change(getByLabelText(/názov/i), { target: { value: 'Test Topic' } });
-    // fireEvent.change(getByLabelText(/popis/i), { target: { value: 'Description' } });
+    await act(async () => {
+      fireEvent.change(getByLabelText(/Názov/i), { target: { value: 'Test Title' } });
+      fireEvent.change(getByLabelText(/Popis/i), { target: { value: 'Test Description' } });
+    });
 
-    // fireEvent.click(getByText(/uložiť tému/i));
+    await act(async () => fireEvent.click(getByText(/Pridať otázku/i)));
+    await act(async () => fireEvent.click(getByText(/Pridať odpoveď/i)));
+    
+    await act(async () => {
+      const inputs = getAllByRole('textbox');
+      fireEvent.change(inputs[inputs.length - 3], { target: { value: 'Question 1' } });
+      fireEvent.change(inputs[inputs.length - 2], { target: { value: 'Answer 1' } });
+      fireEvent.change(inputs[inputs.length - 1], { target: { value: 'Answer 2' } });
+    
+      const radioButtons = getAllByRole('radio');
+      fireEvent.click(radioButtons[0]);
+    });
+    await act(async () => fireEvent.click(getByText(/Uložiť tému/i)));
 
-    // await waitFor(() => {
-    //   expect(getByText('Téma bola úspešne vytvorená.')).toBeInTheDocument();
-    // });
+    await waitFor(() => {
+      expect(getByText('Téma bola úspešne vytvorená.')).toBeInTheDocument();
+    });
 
-    expect(axios.get).toHaveBeenCalledWith(
-      '/api/topic/get?id=1', // assuming topicId is 1
+    expect(axios.post).toHaveBeenCalledWith(
+      '/api/topic/create',
+      {
+        content: [''],
+        createdBy: 1,
+        title: 'Test Title',
+        description: 'Test Description',
+      },
     );
-    expect(axios.get).toHaveBeenCalledWith(
-      '/api/tests/test?id=1', // assuming topicId is 1
+    expect(axios.post).toHaveBeenCalledWith(
+      '/api/tests/test', 
+      {
+        topicId: 1,
+        topicNumber: 1,
+        questions: [{
+          label: 'Question 1',
+          answers: [
+            { label: 'Answer 1', isRight: true, number: 0 },
+            { label: 'Answer 2', isRight: false, number: 0 },
+          ],
+        }]
+      }
     );
   });
 });

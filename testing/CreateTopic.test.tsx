@@ -1,48 +1,40 @@
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor} from '@testing-library/react';
 import CreateTopicForm from '@/app/teacher/page';  
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/navigation';
 import { act } from 'react';
-
-// Mock next-auth and next/navigation
-const pushMock = jest.fn();
 
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }));
 
+const mockPush = jest.fn();
+
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: pushMock,
+    push: mockPush,
     replace: jest.fn(),
     refresh: jest.fn(),
   }),
   useSearchParams: () => new URLSearchParams(''),
 }));
 
-// Mock axios
 jest.mock('axios');
 
-// jest.mock('@ckeditor/ckeditor5-react', () => ({
-//   CKEditor: () => <div data-testid="ckeditor" />,
-// }));
-
+// @ts-ignore
 jest.mock('next/dynamic', () => () => (props) => <div {...props} />);
 
 describe('CreateTopicForm', () => {
   beforeEach(() => {
-    pushMock.mockReset();
+    mockPush.mockReset();
 
-    // Mock session
     (useSession as jest.Mock).mockReturnValue({
       data: {
         user: { role: 'TEACHER', id: 1 },
       },
     });
 
-    // Mock axios responses for the two requests
     (axios.post as jest.Mock).mockResolvedValueOnce({
         data: { 
           topic: {
@@ -50,14 +42,18 @@ describe('CreateTopicForm', () => {
             topicNumber: 1,
           }
         },
-      }) // Mock first GET request (for topic)
+      }) 
       .mockResolvedValueOnce({
         data: { questions: [{ text: 'Question 1', answers: [{ text: 'Answer 1', isCorrect: true, id: 1 }] }] },
-      }); // Mock second GET request (for test)
+      }); 
   });
 
   it('should create a new topic successfully', async () => {
-    const { getByLabelText, getByText, getByRole, getAllByRole, debug, container } = render(<CreateTopicForm />);
+    const { getByLabelText, getByText, getAllByRole } = render(<CreateTopicForm />);
+
+    await waitFor(() => {
+      expect(getByLabelText(/Názov/i)).toBeInTheDocument();
+    });    
 
     await act(async () => {
       fireEvent.change(getByLabelText(/Názov/i), { target: { value: 'Test Title' } });

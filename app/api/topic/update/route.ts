@@ -12,7 +12,7 @@ export async function PUT(req: NextRequest) {
         { status: 400 }
       );
     }
-    const existingTopic = await prisma.topic.findUnique({ where: { id: parseInt(topicNumber) } });
+    const existingTopic = await prisma.topic.findUnique({ where: { topicNumber: parseInt(topicNumber) } });
 
     if (!existingTopic) {
       return NextResponse.json(

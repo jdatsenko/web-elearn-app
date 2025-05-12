@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -55,8 +54,6 @@ const FormLogin = () => {
         redirect: false,
       });
 
-      console.log("log:: ", loginData);
-
       if (loginData?.status === 401) {
         if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.identifier)) {
           setError("Tento e-mail alebo heslo nie je správne.");
@@ -101,7 +98,9 @@ const FormLogin = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage>
+                    {form.formState.errors.identifier?.message}
+                  </FormMessage>
                 </FormItem>
               )}
             />
@@ -118,7 +117,9 @@ const FormLogin = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage>
+                    {form.formState.errors.password?.message}
+                  </FormMessage>
                 </FormItem>
               )}
             />
@@ -132,7 +133,11 @@ const FormLogin = () => {
       </Form>
 
       <div className="flex justify-center mt-5">
-        {error && <p className="text-red-500 font-bold mt-1">{error}</p>}
+        {error && (
+          <p className="text-red-500 font-bold mt-1">
+            {error}
+          </p>
+        )}
       </div>
 
       <div className="flex justify-center mt-5">

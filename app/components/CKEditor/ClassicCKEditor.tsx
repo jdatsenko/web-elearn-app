@@ -63,7 +63,6 @@ function ClassicCKEditor({
         }
         }}
       onReady={(editor) => {
-        console.log("ClassicCKEditor is ready to use!", editor);
       }}
       onChange={(event, editor) => {
         const data = editor.getData();

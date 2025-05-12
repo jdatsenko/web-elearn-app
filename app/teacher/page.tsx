@@ -1,7 +1,5 @@
 "use client";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowToTop } from "@/components/ui/arrow-to-top";
@@ -10,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { Suspense, useCallback } from "react";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -274,7 +272,7 @@ function CreateTopicForm() {
         </div>
       )}
       {errorMessage && (
-        <div className="text-red-500 my-5 font-bold text-center">
+        <div role="alert" className="text-red-500 my-5 font-bold text-center">
           {errorMessage}
         </div>
       )}

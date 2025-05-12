@@ -2,7 +2,7 @@
 import TestControll from "@/app/components/controll/page";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 interface Question {
@@ -86,7 +86,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
       ) : (
         test &&
         test.questions.map((question, i) => (
-          <>
+          <React.Fragment key={question.id}>
             <RadioGroup
               key={question.id}
               className={`flex flex-col space-y-1 mb-2 border-solid border-2 m-5 rounded-md p-3
@@ -104,7 +104,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
                 {i + 1}. {question.text}
               </h3>
               {question.answers.map((answer, j) => (
-                <div className="flex gap-2 items-center" key={answer.id}>
+                <div key={answer.id} className="flex gap-2 items-center">
                   <RadioGroupItem
                     key={i}
                     value={answer.text}
@@ -125,11 +125,10 @@ const TestPage = ({ params }: { params: { id: string } }) => {
                 </div>
               ))}
             </RadioGroup>
-          </>
+          </React.Fragment>
         ))
       )}
-      {session && 
-      (
+      {session && (
         <div className="flex justify-center">
           {test && (
             <TestControll

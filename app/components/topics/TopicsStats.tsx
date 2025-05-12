@@ -61,7 +61,7 @@ const TopicStats = ({ topics }: { topics: Topic[] }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <h1 className={`text-4xl ${isDark ? 'text-blue-300' : 'text-blue-500'} hover:text-blue-400 transition-colors font-bold text-center my-4 sm:mt-[20px] cursor-pointer`}>
+      <h1 className={`text-4xl ${isDark ? 'text-blue-300' : 'text-blue-500'} hover:text-blue-400 transition-colors underline font-bold text-center my-4 sm:mt-[20px] cursor-pointer`}>
           Témy
         </h1>
       </DialogTrigger>

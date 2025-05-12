@@ -50,14 +50,14 @@ function CreateTopicForm() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const topicId = parseInt(searchParams.get("topicId") || "0");
+  const topicNumber = parseInt(searchParams.get("topic") || "0");
   const isTeacher = session?.user?.role === "TEACHER";
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (topicId) {
+    if (topicNumber) {
       axios
-        .get(`/api/topic/get?id=${topicId}`)
+        .get(`/api/topic/get?id=${topicNumber}`)
         .then((res) => {
           const { title, description, content } = res.data.data;
           setNewTopic({ title, description, content });
@@ -65,7 +65,7 @@ function CreateTopicForm() {
         .catch(() => setErrorMessage("Chyba pri načítaní témy."));
 
       axios
-        .get(`/api/tests/test?id=${topicId}`)
+        .get(`/api/tests/test?id=${topicNumber}`)
         .then((res) => {
           if (res.data) {
             setQuestions(
@@ -95,7 +95,7 @@ function CreateTopicForm() {
         setLoading(false);
       }, 300);
     }
-  }, [topicId]);
+  }, [topicNumber]);
 
   const onCKChange = useCallback((event: any, value: any) => {
     setNewTopic((prevState) => ({
@@ -120,10 +120,10 @@ function CreateTopicForm() {
         return;
       }
 
-      if (topicId) {
-        await axios.put(`/api/topic/update`, { topicId, ...topicData });
+      if (topicNumber) {
+        await axios.put(`/api/topic/update`, { topicNumber, ...topicData });
         await axios.put(`/api/tests/test`, {
-          topicId,
+          topicNumber,
           questions: questions.map((question) => ({
             label: question.label,
             answers: question.answers.map((answer) => ({
@@ -135,7 +135,7 @@ function CreateTopicForm() {
         });
         setSuccessMessage("Téma bola úspešne upravená.");
         setTimeout(() => {
-          router.push(`/topics/${topicId}`);
+          router.push(`/topics/${topicNumber}`);
         }, 300);
         return;
       }
@@ -196,7 +196,7 @@ function CreateTopicForm() {
     <>
       <div className="my-4 mx-5 md:mx-60">
         <p className="text-4xl mb-5 text-center">
-          {topicId
+          {topicNumber
             ? "Formulár na úpravu existujúcej témy"
             : "Formulár na pridanie novej témy"}
         </p>

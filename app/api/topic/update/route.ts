@@ -4,15 +4,15 @@ import prisma from "@/lib/prisma";
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
-    const { topicId, title, description, content } = body;
+    const { topicNumber, title, description, content } = body;
 
-    if (!topicId || !title || !description || !content) {
+    if (!topicNumber || !title || !description || !content) {
       return NextResponse.json(
         { message: "Všetky polia sú povinné." },
         { status: 400 }
       );
     }
-    const existingTopic = await prisma.topic.findUnique({ where: { id: parseInt(topicId) } });
+    const existingTopic = await prisma.topic.findUnique({ where: { id: parseInt(topicNumber) } });
 
     if (!existingTopic) {
       return NextResponse.json(
@@ -22,7 +22,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const updatedTopic = await prisma.topic.update({
-      where: { id: parseInt(topicId) },
+      where: { topicNumber: parseInt(topicNumber) },
       data: {
         title,
         description,

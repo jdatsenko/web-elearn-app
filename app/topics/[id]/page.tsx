@@ -143,7 +143,7 @@ export default function Topic({ params }: { params: { id: string } }) {
       <div className="h-full mx-auto flex flex-col justify-center align-center w-full overflow-y-auto">
         {isTeacher && (
           <div className="md:absolute md:top-20 md:left-4 mx-auto mb-3 md:mb-0 mt-5 md:mt-0">
-            <Button className="mr-2" onClick={() => router.push(`/teacher?topicId=${topicId}`)}>Upraviť tému</Button>
+            <Button className="mr-2" onClick={() => router.push(`/teacher?topic=${topicId}`)}>Upraviť tému</Button>
             <Stats chartData={chartData} />
           </div>
         )}

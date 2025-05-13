@@ -51,7 +51,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     axios
-      .get("/api/tests/test", {
+      .get("/api/tests/get", {
         params: {
           id: topicId,
         },

@@ -88,7 +88,7 @@ describe('CreateTopicForm', () => {
       },
     );
     expect(axios.post).toHaveBeenCalledWith(
-      '/api/tests/test', 
+      '/api/tests/post', 
       {
         topicId: 1,
         topicNumber: 1,

@@ -63,7 +63,7 @@ function CreateTopicForm() {
         .catch(() => setErrorMessage("Chyba pri načítaní témy."));
 
       axios
-        .get(`/api/tests/test?id=${topicNumber}`)
+        .get(`/api/tests/get?id=${topicNumber}`)
         .then((res) => {
           if (res.data) {
             setQuestions(
@@ -120,7 +120,7 @@ function CreateTopicForm() {
 
       if (topicNumber) {
         await axios.put(`/api/topic/update`, { topicNumber, ...topicData });
-        await axios.put(`/api/tests/test`, {
+        await axios.put(`/api/tests/put`, {
           topicNumber,
           questions: questions.map((question) => ({
             label: question.label,
@@ -153,7 +153,7 @@ function CreateTopicForm() {
           })),
         })),
       };
-      await axios.post("/api/tests/test", testData);
+      await axios.post("/api/tests/post", testData);
       setTimeout(() => {
         router.push(`/topics/${topicRes.data.topic.topicNumber}`);
       }, 300);

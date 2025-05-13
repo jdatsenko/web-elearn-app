@@ -56,7 +56,7 @@ describe("CreateTopicForm - Update Topic", () => {
           },
         });
       }
-      if (url.includes("/api/tests/test")) {
+      if (url.includes("/api/tests/get")) {
         return Promise.resolve({
           data: {
             questions: [
@@ -96,15 +96,15 @@ describe("CreateTopicForm - Update Topic", () => {
 
     await waitFor(() => {
       expect(axios.put).toHaveBeenCalledWith("/api/topic/update", {
-        topicId: 123,
+        topicNumber: 123,
         title: "Updated Title",
         description: "Updated Description",
         content: ["Old content"], 
         createdBy: "teacher1",
       });
 
-      expect(axios.put).toHaveBeenCalledWith("/api/tests/test", {
-        topicId: 123,
+      expect(axios.put).toHaveBeenCalledWith("/api/tests/put", {
+        topicNumber: 123,
         questions: [
           {
             label: "Old question?",

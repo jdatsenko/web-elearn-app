@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 
 export async function PUT(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ message: "Musíte sa prihlásiť." }, { status: 401 });
+    }
+    
+    if (session.user.role !== "TEACHER")
+      return NextResponse.json(
+        { message: "You are not authorized to update topic" },
+        { status: 403 }
+      );
   try {
     const body = await req.json();
     const { topicNumber, title, description, content } = body;

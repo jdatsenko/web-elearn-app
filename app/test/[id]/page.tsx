@@ -30,6 +30,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
   const [loading, setLoading] = useState(true);
   const [test, setTest] = useState<TestResponse>();
   const [topicTitle, setTopicTitle] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [answers, setAnswers] = useState<
     { questionId: number; answer: number; answerId: number }[]
   >([]);
@@ -71,10 +72,15 @@ const TestPage = ({ params }: { params: { id: string } }) => {
       })
       .catch((error) => {
         console.error("Error fetching test data:", error);
+        setErrorMessage(error.response?.data?.message || "Nastala chyba pri načítaní testu.");
+        setLoading(false);
       });
   }, []);
 
   if (loading) return <p className="text-center text-lg">Načítava sa...</p>;
+
+  if (errorMessage)
+    return <div className="text-red-600 text-center mt-4">{errorMessage}</div>;
 
   return (
     <div>

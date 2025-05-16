@@ -27,7 +27,7 @@ const Password = () => {
     }
 
     axios
-      .post("/api/update", {
+      .post("/api/updatePassword", {
         oldPassword: password,
         newPassword: newPassword,
       })

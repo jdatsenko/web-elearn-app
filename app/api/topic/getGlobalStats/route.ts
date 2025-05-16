@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 
 export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ message: "Musíseísa prihtásrť.hlásiť." }, { status: 401 });
+  }
+  if (session.user.role !== "TEACHER")
+    return NextResponse.json(
+      { message: "You are not authorized to get global statistics of topics" },
+      { status: 403 }
+    );
+
   try {
     let result = await prisma.$queryRaw`
       SELECT

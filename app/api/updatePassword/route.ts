@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ message: "Not logged in" }, { status: 401 });
+    return NextResponse.json({ message: "Musíte sa prihlásiť.hlásiť." }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({

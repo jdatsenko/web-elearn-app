@@ -4,14 +4,15 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useToast } from "@/hooks/use-toast"
 
 const Password = () => {
   const router = useRouter();
   const [password, setPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
-  const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
+  const { toast } = useToast()
 
   function changePassword() {
     if (newPassword.length < 8) {
@@ -32,7 +33,11 @@ const Password = () => {
         newPassword: newPassword,
       })
       .then((response) => {
-        setSuccessMessage("Heslo bolo úspešne aktualizované!");
+        toast({
+          title: "Heslo bolo úspešne aktualizované!",
+          description: "Zmeny sú uložené.",
+          variant: "default",
+        });
         setTimeout(() => {
           router.push("./");
         }, 700);
@@ -77,9 +82,6 @@ const Password = () => {
           Zmeniť heslo
         </Button>
       </div>
-      {successMessage && (
-        <p className="text-green-600 mt-4">{successMessage}</p>
-      )}
       {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
     </div>
   );

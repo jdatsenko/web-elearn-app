@@ -1,5 +1,5 @@
 "use client";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -36,6 +36,9 @@ export default function Stats({ chartData }: Props) {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] shadow-lg rounded-xl p-6">
+        <DialogTitle className="text-center text-2xl font-bold">
+          Štatistika testovania
+        </DialogTitle>
         <p className="text-lg text-center mt-2 font-semibold">
           Tu môžete vidieť počet používateľov, ktorí úspešne dokončili
           testovanie tejto témy.

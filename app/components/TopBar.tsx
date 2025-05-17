@@ -83,7 +83,7 @@ const TopBar = () => {
                         <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                         <DropdownMenuItem className="justify-center">
                           <Link className="text-center" href={"/account/progress"}>
-                            Moj progress
+                            Môj pokrok
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>

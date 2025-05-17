@@ -16,6 +16,7 @@ import TeacherPageSkeleton from "../components/skeletons/TeacherPageSkeleton";
 import { validate } from "./validate";
 import QuestionForm from "./QuestionForm";
 import { Question } from '@/app/types';
+import { useToast } from "@/hooks/use-toast";
 
 interface Topic {
   title?: string;
@@ -43,7 +44,6 @@ function CreateTopicForm() {
     content: [""],
   });
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { data: session } = useSession();
   const router = useRouter();
@@ -51,6 +51,7 @@ function CreateTopicForm() {
   const topicNumber = parseInt(searchParams.get("topic") || "0");
   const isTeacher = session?.user?.role === "TEACHER";
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (topicNumber) {
@@ -131,15 +132,21 @@ function CreateTopicForm() {
             })),
           })),
         });
-        setSuccessMessage("Téma bola úspešne upravená.");
-        setTimeout(() => {
-          router.push(`/topics/${topicNumber}`);
-        }, 300);
+        toast({
+          title: "Téma bola úspešne upravená!",
+          description: "Zmeny sú uložené.",
+          variant: "default",
+        });
+        router.push(`/topics/${topicNumber}`);
         return;
       }
 
       const topicRes = await axios.post("/api/topic/create", topicData);
-      setSuccessMessage("Téma bola úspešne vytvorená.");
+      toast({
+        title: "Téma bola úspešne vytvorená.",
+        description: "Zmeny sú uložené.",
+        variant: "default",
+      });
 
       const testData = {
         topicId: topicRes.data.topic.id,
@@ -154,9 +161,7 @@ function CreateTopicForm() {
         })),
       };
       await axios.post("/api/tests/post", testData);
-      setTimeout(() => {
-        router.push(`/topics/${topicRes.data.topic.topicNumber}`);
-      }, 300);
+      router.push(`/topics/${topicRes.data.topic.topicNumber}`);
     } catch (error) {
       console.error("Error creating topic or test:", error);
       setErrorMessage("Chyba pri vytváraní témy alebo testu");
@@ -266,11 +271,6 @@ function CreateTopicForm() {
         </div>
       </div>
 
-      {successMessage && (
-        <div className="text-green-600 my-5 font-bold text-center">
-          {successMessage}
-        </div>
-      )}
       {errorMessage && (
         <div role="alert" className="text-red-500 my-5 font-bold text-center">
           {errorMessage}

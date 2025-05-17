@@ -14,6 +14,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 const TeacherRequestForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -24,8 +25,8 @@ const TeacherRequestForm: React.FC = () => {
   });
 
   const [error, setError] = useState<string>("");
-  const [successMessage, setSuccessMessage] = useState<string>("");
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -59,9 +60,11 @@ const TeacherRequestForm: React.FC = () => {
     axios
       .post("/api/user/teacherRequest", formData)
       .then((response) => {
-        setSuccessMessage(
-          "Žiadosť bola úspešne odoslaná! Počkajte na schválenie."
-        );
+        toast({
+          title: "Žiadosť bola úspešne odoslaná!",
+          description: "Počkajte na schválenie.",
+          variant: "default",
+        });
         setError("");
         setTimeout(() => {
           router.push("/");
@@ -69,7 +72,6 @@ const TeacherRequestForm: React.FC = () => {
       })
       .catch((error: any) => {
         setError(error.response.data.message);
-        setSuccessMessage("");
       });
   };
 
@@ -155,11 +157,6 @@ const TeacherRequestForm: React.FC = () => {
         {error && (
           <p className="text-red-600 mt-2 font-bold text-center mb-4">
             {error}
-          </p>
-        )}
-        {successMessage && (
-          <p className="text-green-600 mt-2 font-bold text-center mb-4">
-            {successMessage}
           </p>
         )}
       </form>

@@ -11,8 +11,10 @@ import {
   Dialog,
   DialogContent,
   DialogFooter,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast"
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -27,9 +29,9 @@ const ProfilePage = () => {
   const [newEmail, setNewEmail] = useState("");
   const [keepCurrentName, setKeepCurrentName] = useState(true);
   const [keepCurrentEmail, setKeepCurrentEmail] = useState(true);
-  const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
+  const { toast } = useToast()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -60,7 +62,11 @@ const ProfilePage = () => {
       });
 
       if (res.status === 200) {
-        setSuccessMessage("Údaje boli úspešne aktualizované.");
+        toast({
+          title: "Údaje boli úspešne aktualizované.",
+          description: "Zmeny sú uložené.",
+          variant: "default",
+        });
         setUser({
           name: keepCurrentName ? user!.name : newName,
           email: keepCurrentEmail ? user!.email : newEmail,
@@ -106,6 +112,9 @@ const ProfilePage = () => {
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] shadow-lg rounded-xl p-6">
+            <DialogTitle className="text-center text-2xl font-bold">
+              Vymazanie konta
+            </DialogTitle>
             <p className="text-lg text-center mt-2 font-semibold">
               Ste si istí, že chcete vymazať svoje konto?
             </p>
@@ -199,7 +208,6 @@ const ProfilePage = () => {
                   <Button
                     onClick={() => {
                       setErrorMessage(" ");
-                      setSuccessMessage(" ");
                       handleUpdate();
                     }}
                     className="w-full"
@@ -212,7 +220,6 @@ const ProfilePage = () => {
                     onClick={() => {
                       setEditing(false);
                       setErrorMessage(" ");
-                      setSuccessMessage(" ");
                     }}
                   >
                     Zrušiť
@@ -225,10 +232,7 @@ const ProfilePage = () => {
               Údaje sa nenašli.
             </p>
           )}
-
-          {successMessage && (
-            <p className="text-green-600 mt-4 text-center">{successMessage}</p>
-          )}
+          
           {errorMessage && (
             <p className="text-red-600 text-center mt-4">{errorMessage}</p>
           )}

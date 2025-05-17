@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bar, BarChart } from "recharts";
 import { CartesianGrid, XAxis, YAxis } from "recharts";
@@ -66,12 +66,12 @@ const TopicStats = ({ topics }: { topics: Topic[] }) => {
         </h1>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] shadow-lg rounded-xl p-6">
-        <p className="text-lg text-center mt-2 font-semibold">
-          Tu môžete vidieť počet používateľov, ktorí úspešne dokončili testovanie tejto témy.
-        </p>
+        <DialogTitle className="text-center text-2xl font-bold">
+          Štatistika počtu úspešného absolvovania testov
+        </DialogTitle>
         <Card>
           <CardHeader>
-            <CardTitle>Výsledky testovania</CardTitle>
+            <CardTitle></CardTitle>
             <CardDescription>Štatistiky pre témy</CardDescription>
           </CardHeader>
           <CardContent>

@@ -10,20 +10,31 @@ const Password = () => {
   const router = useRouter();
   const [password, setPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
   const { toast } = useToast()
 
   function changePassword() {
     if (newPassword.length < 8) {
-      setErrorMessage("Heslo musí obsahovať aspoň 8 znakov.");
+      toast({
+        title: "Nepodarilo sa aktualizovať heslo.",
+        description: "Heslo musí obsahovať aspoň 8 znakov.",
+        variant: "destructive",
+      });
       return;
     } else if (password.length < 8) {
-      setErrorMessage("Vaše doterajšie heslo je nesprávne.");
+        toast({
+          title: "Nepodarilo sa aktualizovať heslo.",
+          description: "Vaše doterajšie heslo je nesprávne.",
+          variant: "destructive",
+        });
       return;
     }
     if (newPassword !== repeatPassword) {
-      setErrorMessage("Nové heslo a jeho potvrdenie sa nezhodujú.");
+      toast({
+        title: "Nepodarilo sa aktualizovať heslo.",
+        description: "Nové heslo a jeho potvrdenie sa nezhodujú.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -32,7 +43,7 @@ const Password = () => {
         oldPassword: password,
         newPassword: newPassword,
       })
-      .then((response) => {
+      .then(() => {
         toast({
           title: "Heslo bolo úspešne aktualizované!",
           description: "Zmeny sú uložené.",
@@ -42,11 +53,12 @@ const Password = () => {
           router.push("./");
         }, 700);
       })
-      .catch((error) => {
-        console.log(error.response.data);
-        setErrorMessage(
-          "Nepodarilo sa aktualizovať heslo. Vaše doterajšie heslo je nesprávne."
-        );
+      .catch(() => {
+        toast({
+          title: "Nepodarilo sa aktualizovať heslo.",
+          description: "Vaše doterajšie heslo je nesprávne.",
+          variant: "destructive",
+        });
       });
   }
 
@@ -82,7 +94,6 @@ const Password = () => {
           Zmeniť heslo
         </Button>
       </div>
-      {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
     </div>
   );
 };

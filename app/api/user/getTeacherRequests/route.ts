@@ -14,6 +14,5 @@ export async function GET(req: Request) {
     );
 
   const requests = await prisma.teacherRequests.findMany();
-  console.log(requests);
   return NextResponse.json(requests);
 }

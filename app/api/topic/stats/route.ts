@@ -8,44 +8,51 @@ export const revalidate = 0;
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
-    return NextResponse.json({ message: "Musíte sa prihlásiť.hlásiť." }, { status: 401 });
+    return NextResponse.json(
+      { message: "Musíte sa prihlásiť." },
+      { status: 401 }
+    );
   }
-  
-  if (session.user.role !== "TEACHER")
+
+  if (session.user.role !== "TEACHER") {
     return NextResponse.json(
       { message: "You are not authorized to get statistics of topic" },
       { status: 403 }
     );
+  }
 
   try {
-    let topicNumber = Number(req.nextUrl.searchParams.get("id"));
-    let result = (await prisma.$queryRaw`
+    const topicNumber = Number(req.nextUrl.searchParams.get("id"));
+    if (isNaN(topicNumber)) {
+      return NextResponse.json({ message: "Invalid topic number" }, { status: 400 });
+    }
+
+    const result = (await prisma.$queryRaw`
       SELECT
         ST."testId",
         DATE_TRUNC('day', ST."solvedAt") AS day,
         COUNT(ST."testId") AS users_completed
       FROM public."SolvedTest" ST
-      WHERE ST.score = 100 AND ST."testId" = ${topicNumber}
+      JOIN public."Test" T ON ST."testId" = T.id
+      WHERE ST.score = 100 AND T."topicNumber" = ${topicNumber}
       GROUP BY ST."testId", day
       ORDER BY ST."testId", day;
     `) as {
-      topicNumber: number;
+      testId: number;
       day: Date;
       users_completed: number;
     }[];
 
-    const serializedResult = result.map((row: any) => ({
+    const serializedResult = result.map((row) => ({
       ...row,
       users_completed: Number(row.users_completed),
     }));
 
     return NextResponse.json({ data: serializedResult });
   } catch (error) {
-    console.error("Error fetching topic:", error);
+    console.error("Error fetching topic stats:", error);
     return NextResponse.json(
-      {
-        test: `hello ${error}`,
-      },
+      { message: "Internal server error", error: String(error) },
       { status: 500 }
     );
   }

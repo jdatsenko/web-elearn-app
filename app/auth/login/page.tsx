@@ -63,7 +63,6 @@ const FormLogin = () => {
       } else if (loginData?.ok) {
         router.refresh();
         router.push(".././");
-        console.log("Authentication successful:", loginData);
       } else {
         setError("Vyskytla sa neočakávaná chyba. Skúste to prosím znova.");
       }

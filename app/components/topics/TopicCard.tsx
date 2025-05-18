@@ -36,7 +36,7 @@ const TopicCard = ({ topic, index, isTeacher, currentUserId, onDelete }: TopicCa
       <CardHeader>
         <CardTitle className="leading-[1.5] break-words flex w-full justify-between">
           <span>
-            {index + 1}. {topic.title}
+            {topic.topicNumber}. {topic.title}
           </span>
           {isTeacher && topic.createdById === currentUserId && (
             <Trash2Icon

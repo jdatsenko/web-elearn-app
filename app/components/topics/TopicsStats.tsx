@@ -9,6 +9,7 @@ import { useTheme } from "next-themes";
 interface TestStats {
   testId: number;
   users_completed: number;
+  topicNumber: number;
 }
 
 interface Topic {
@@ -49,10 +50,10 @@ const TopicStats = ({ topics }: { topics: Topic[] }) => {
   };
 
   testStats.forEach((stat) => {
-    const topic = topics.find((t) => t.topicNumber === stat.testId);
+    const topic = topics.find((t) => t.topicNumber === stat.topicNumber);
     if (topic) {
       chartData.push({
-        topic: `#${stat.testId}. ${topic.title}`,
+        topic: `#${stat.topicNumber}. ${topic.title}`,
         users: stat.users_completed,
       });
     }

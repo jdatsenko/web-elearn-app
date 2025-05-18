@@ -1,10 +1,18 @@
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const HomePageSkeleton = () => {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
+  const [windowWidth, setWindowWidth] = useState<number>(typeof window !== "undefined" ? window.innerWidth : 1200);
+  useEffect(() => {
+      const handleResize = () => setWindowWidth(window.innerWidth);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  const skeletonWidth = windowWidth > 1150 || windowWidth <= 770 ? 330 : 200;
 
   return (
     <>
@@ -24,7 +32,7 @@ const HomePageSkeleton = () => {
                   baseColor={isDark ? "#2a2a2a" : "#bdbdbd"}
                   highlightColor={isDark ? "#444" : "#e0e0e0"}
                 >
-                  <Skeleton height={250} width={330} />
+                  <Skeleton height={250} width={skeletonWidth} />
                 </SkeletonTheme>
               </div>
             ))}

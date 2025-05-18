@@ -17,26 +17,44 @@ export async function GET(req: NextRequest) {
     );
 
   try {
-    let result = await prisma.$queryRaw`
-      SELECT
-        ST."testId",
-        COUNT(ST."testId") AS users_completed
-      FROM public."SolvedTest" ST
-      WHERE ST.score = 100
-      GROUP BY ST."testId"
-      ORDER BY ST."testId";
-    ` as {
-      topicNumber: number;
-      day: Date;
-      users_completed: number;
-    }[];
+    const completedTests = await prisma.solvedTest.groupBy({
+      by: ['testId'],
+      where: {
+        score: 100,
+      },
+      _count: {
+        testId: true,
+      },
+      orderBy: {
+        testId: 'asc',
+      },
+    });
 
-    const serializedResult = result.map((row: any) => ({
-      ...row,
-      users_completed: Number(row.users_completed), 
-    }));
+    const enrichedResult = await Promise.all(
+      completedTests.map(async (group) => {
+        const test = await prisma.test.findUnique({
+          where: {
+            id: group.testId,
+          },
+          select: {
+            topic: {
+              select: {
+                topicNumber: true,
+              },
+            },
+          },
+        });
 
-    return NextResponse.json({ data: serializedResult });
+        return {
+          testId: group.testId,
+          topicNumber: test?.topic?.topicNumber ?? null,
+          users_completed: group._count.testId,
+        };
+      })
+    );
+
+return NextResponse.json({ data: enrichedResult });
+
   } catch (error) {
     console.error("Error fetching topic:", error);
     return NextResponse.json({ 

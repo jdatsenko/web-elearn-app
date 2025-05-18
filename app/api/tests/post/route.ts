@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ data: body });
   } catch (error) {
-    console.log("Error creating test:", error);
     return NextResponse.json(
       { error: JSON.stringify(error, Object.getOwnPropertyNames(error), 2) },
       { status: 500 }

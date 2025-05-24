@@ -1,5 +1,5 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import CreateTopicForm from '@/app/teacher/page';  
+import CreateTopicForm from '@/app/createTopic/page';  
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";

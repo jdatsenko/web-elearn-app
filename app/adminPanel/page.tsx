@@ -3,17 +3,39 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 const AdminPanel: React.FC = () => {
   const [requests, setRequests] = useState([]);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const isAdmin = session?.user?.role === "ADMIN";
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get("/api/user/getTeacherRequests").then((response) => {
-      setRequests(response.data);
-    });
+    fetchRequests();
   }, []);
+
+  const fetchRequests = async () => {
+    const res = await axios.get("/api/user/admin/getTeacherRequests");
+    setRequests(res.data);
+  };
 
   const updateRequestStatus = async (
     id: string,
@@ -21,23 +43,31 @@ const AdminPanel: React.FC = () => {
   ) => {
     try {
       await axios.post(
-        `/api/user/${
+        `/api/user/admin/${
           status === "approved"
             ? "approveTeacherRequest"
             : "declineTeacherRequest"
         }`,
         { id }
       );
-      axios.get("/api/user/getTeacherRequests").then((response) => {
-        setRequests(response.data);
-      });
+      const res = await axios.get("/api/user/admin/getTeacherRequests");
+      fetchRequests();
     } catch (error) {
-      console.error(
-        `Chyba pri ${
-          status === "approved" ? "schválení" : "zamietnutí"
-        } žiadosti:`,
-        error
-      );
+      console.error(`Chyba pri ${status} žiadosti:`, error);
+    }
+  };
+
+  const handleDeleteRequest = async () => {
+    if (!deleteTargetId) return;
+
+    try {
+      await axios.delete("/api/user/admin/deleteTeacherRequest", {
+        data: { id: deleteTargetId },
+      });
+      setDeleteTargetId(null);
+      fetchRequests();
+    } catch (error) {
+      console.error("Chyba pri mazání žiadosti:", error);
     }
   };
 
@@ -50,36 +80,36 @@ const AdminPanel: React.FC = () => {
   }
 
   return (
-    <div className="w-2/3 mx-auto">
-      <h1 className="text-2xl font-bold text-center my-4">
+    <div className="w-11/12 md:w-2/3 mx-auto my-6">
+      <h1 className="text-2xl font-bold text-center mb-6">
         Žiadosti o učiteľské konto
       </h1>
-      <div className="overflow-x-auto mb-10">
-        <table className="table-auto w-full border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Meno</th>
-              <th className="px-4 py-2">Priezvisko</th>
-              <th className="px-4 py-2">Kvalifikácia</th>
-              <th className="px-4 py-2">Skúsenosti</th>
-              <th className="px-4 py-2">E-mail</th>
-              <th className="px-4 py-2">Stav</th>
-            </tr>
-          </thead>
-          <tbody>
-            {requests.map((request: any) => (
-              <tr key={request.id}>
-                <td className="px-4 text-center py-2">{request.name}</td>
-                <td className="px-4 text-center py-2">{request.surname}</td>
-                <td className="px-4 text-center py-2">
-                  {request.qualification}
-                </td>
-                <td className="px-4 text-center py-2">{request.experience}</td>
-                <td className="px-4 text-center py-2">{request.email}</td>
-                {request.status === "pending" && (
-                  <td className="px-4 text-center py-2">
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Meno</TableHead>
+            <TableHead>Priezvisko</TableHead>
+            <TableHead>Kvalifikácia</TableHead>
+            <TableHead>Skúsenosti</TableHead>
+            <TableHead>E-mail</TableHead>
+            <TableHead className="text-center">Stav</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {requests.map((request: any) => (
+            <TableRow key={request.id}>
+              <TableCell>{request.name}</TableCell>
+              <TableCell>{request.surname}</TableCell>
+              <TableCell>{request.qualification}</TableCell>
+              <TableCell>{request.experience}</TableCell>
+              <TableCell>{request.email}</TableCell>
+              <TableCell className="text-center">
+                {request.status === "pending" ? (
+                  <div className="flex flex-col gap-2 items-center">
                     <Button
-                      className="mb-4 mr-2"
+                      className="w-full"
+                      variant="default"
                       onClick={() =>
                         updateRequestStatus(request.id, "approved")
                       }
@@ -87,25 +117,64 @@ const AdminPanel: React.FC = () => {
                       Schváliť
                     </Button>
                     <Button
+                      className="w-full"
+                      variant="destructive"
                       onClick={() =>
                         updateRequestStatus(request.id, "declined")
                       }
                     >
                       Zamietnuť
                     </Button>
-                  </td>
-                )}
-                {request.status !== "pending" && (
-                  <td className="px-4 text-center py-2">
+                  </div>
+                ) : (
+                  <span>
                     Žiadosť{" "}
                     {request.status === "approved" ? "schválená" : "zamietnutá"}
-                  </td>
+                  </span>
                 )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              </TableCell>
+              <TableCell className="text-center">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="text-red-600 border-red-600 hover:bg-red-500"
+                      onClick={() => setDeleteTargetId(request.id)}
+                    >
+                      Vymazať
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Vymazať žiadosť</DialogTitle>
+                      <DialogDescription>
+                        Naozaj si prajete vymazať túto žiadosť? Táto akcia je
+                        nezvratná.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose className="flex">
+                        <Button
+                          variant="ghost"
+                          onClick={() => setDeleteTargetId(null)}
+                        >
+                          Zrušiť
+                        </Button>
+                      </DialogClose>
+                      <Button
+                        variant="destructive"
+                        onClick={handleDeleteRequest}
+                      >
+                        Vymazať
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };

@@ -17,14 +17,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Nemáte oprávnenie" }, { status: 401 });
   }
 
-  const updatedRequest = await prisma.teacherRequests.update({
+  await prisma.teacherRequests.update({
     where: {
       id: id,
     },
     data: {
-      status: 'rejected',
+      status: "rejected",
     },
-  })
+  });
 
   return NextResponse.json({ message: "Žiadosť zamietnutá" });
 }

@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  if (session.user.role !== "TEACHER") {
+  if (session.user.role !== "TEACHER" && session.user.role !== "ADMIN") {
     return NextResponse.json(
       { message: "You are not authorized to get statistics of topic" },
       { status: 403 }

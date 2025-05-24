@@ -1,5 +1,5 @@
 import { render, fireEvent, waitFor} from '@testing-library/react';
-import CreateTopicForm from '@/app/teacher/page';  
+import CreateTopicForm from '@/app/createTopic/page';  
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import '@testing-library/jest-dom';

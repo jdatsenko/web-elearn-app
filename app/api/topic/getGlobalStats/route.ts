@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   if (!session) {
     return NextResponse.json({ message: "Musíseísa prihtásrť.hlásiť." }, { status: 401 });
   }
-  if (session.user.role !== "TEACHER")
+  if (session.user.role !== "TEACHER" && session.user.role !== "ADMIN")
     return NextResponse.json(
       { message: "You are not authorized to get global statistics of topics" },
       { status: 403 }

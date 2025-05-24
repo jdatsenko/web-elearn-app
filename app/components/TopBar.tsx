@@ -7,7 +7,6 @@ import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useState, useEffect, use } from "react";
 import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
   DropdownMenu,
@@ -22,7 +21,6 @@ const TopBar = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const { theme, setTheme } = useTheme();
-  const router = useRouter();
   const isTeacher = session?.user?.role === "TEACHER";
   const isAdmin = session?.user?.role === "ADMIN";
   const TopBarSkeleton = dynamic(() => import("./skeletons/TopBarSkeleton"), {
@@ -59,13 +57,20 @@ const TopBar = () => {
       >
         <div className="flex flex-grow justify-between items-center">
           <div className="flex gap-1 md:gap-3 items-center">
-            <Link href={"/."} className="hover:scale-105 transition duration-500 ease-in-out">
+            <Link
+              href={"/."}
+              className="hover:scale-105 transition duration-500 ease-in-out"
+            >
               <Image
                 src="/images/logo.png"
                 alt="Logo"
                 width={150}
                 height={50}
-                className={isDark ? "h-15 w-40 md:h-10 md:w-[9rem]" : "brightness-0 h-15 w-40 md:h-10 md:w-[9rem]"}
+                className={
+                  isDark
+                    ? "h-15 w-40 md:h-10 md:w-[9rem]"
+                    : "brightness-0 h-15 w-40 md:h-10 md:w-[9rem]"
+                }
               />
             </Link>
             {!loading && (
@@ -82,7 +87,10 @@ const TopBar = () => {
                       <>
                         <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
                         <DropdownMenuItem className="justify-center">
-                          <Link className="text-center" href={"/account/progress"}>
+                          <Link
+                            className="text-center"
+                            href={"/account/progress"}
+                          >
                             Môj pokrok
                           </Link>
                         </DropdownMenuItem>
@@ -96,22 +104,28 @@ const TopBar = () => {
                           <DropdownMenuItem className="justify-center">
                             <Link
                               className="text-center"
-                              href={"/teacherRequestForm"}
+                              href={"/teacherRequest"}
                             >
                               Stať sa učiteľom
                             </Link>
                           </DropdownMenuItem>
                         )}
                         {isAdmin && (
-                          <DropdownMenuItem>
-                            <Link className="text-center" href={"/adminPanel"}>
-                              Panel administrátora
-                            </Link>
-                          </DropdownMenuItem>
+                          <div>
+                            <DropdownMenuItem>
+                              <Link
+                                className="text-center"
+                                href={"/adminPanel"}
+                              >
+                                Panel administrátora
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator className="bg-gray-300"></DropdownMenuSeparator>
+                          </div>
                         )}
-                        {isTeacher && (
+                        {(isTeacher || isAdmin) && (
                           <DropdownMenuItem className="justify-center">
-                            <Link className="text-center" href={"/teacher"}>
+                            <Link className="text-center" href={"/createTopic"}>
                               Pridať tému
                             </Link>
                           </DropdownMenuItem>

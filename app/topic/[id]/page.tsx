@@ -29,7 +29,7 @@ export default function Topic({ params }: { params: { id: string } }) {
   const router = useRouter();
   const topicId = parseInt(params.id);
   const [loading, setLoading] = useState(true);
-  const isTeacher = session?.user?.role === "TEACHER";
+  const isTeacher = session?.user?.role === "TEACHER" || session?.user?.role === "ADMIN";
   const [editorData, setEditorData] = useState<any>(null);
   const editor = useRef<EditorJS | null>(null);
   const [length, setLength] = useState(0);
@@ -157,7 +157,7 @@ export default function Topic({ params }: { params: { id: string } }) {
           <div className="md:absolute md:top-20 md:left-4 mx-auto mb-3 md:mb-0 mt-5 md:mt-0">
             <Button
               className="mr-2"
-              onClick={() => router.push(`/teacher?topic=${topicId}`)}
+              onClick={() => router.push(`/createTopic?topic=${topicId}`)}
             >
               Upraviť tému
             </Button>

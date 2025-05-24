@@ -25,11 +25,12 @@ export async function POST(req: Request) {
     },
   });
 
-  if (teacherRequestExists && teacherRequestExists.status == 'pending') {
-    return NextResponse.json(
-      { message: "Žiadosť už existuje" },
-      { status: 400 }
-    );
+  if (teacherRequestExists) {
+    await prisma.teacherRequests.delete({
+      where: {
+        id: teacherRequestExists.id,
+      },
+    });
   }
 
   await prisma.teacherRequests.create({
@@ -43,5 +44,5 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ message: "Heslo bolo úspešne aktualizované" });
+  return NextResponse.json({ message: "Žiadosť bola úspešne odoslaná!" }, { status: 200 });
 }

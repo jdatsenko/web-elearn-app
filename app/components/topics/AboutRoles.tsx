@@ -69,11 +69,11 @@ const AboutRoles = ({ session, isTeacher }: AboutRolesProps) => {
           <Card>
             <CardHeader>
               <CardTitle>
-                {isTeacher || !session ? (
+                {(isTeacher || !session) ? (
                   <p>👨‍🏫 Učiteľ</p>
                 ) : (
                   <Link
-                    href="/teacherRequestForm"
+                    href="/teacherRequest"
                     className="text-blue-400 hover:text-blue-600 transition-colors"
                   >
                     👨‍🏫 Učiteľ

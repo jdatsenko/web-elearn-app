@@ -48,7 +48,7 @@ function CreateTopicForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const topicNumber = parseInt(searchParams.get("topic") || "0");
-  const isTeacher = session?.user?.role === "TEACHER";
+  const isTeacher = session?.user?.role === "TEACHER" || session?.user?.role === "ADMIN";
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -204,7 +204,7 @@ function CreateTopicForm() {
           Nemáte prístup. Najprv treba podať{" "}
           <Link
             className="underline font-bold hover:text-red-700"
-            href={"/teacherRequestForm"}
+            href={"/teacherRequest"}
           >
             žiadosť o rolu učiteľa.
           </Link>

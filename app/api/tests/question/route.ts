@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   if (!session)
     return NextResponse.json({ message: "Musíte sa prihlásiť.hlásiť." }, { status: 401 });
 
-  if (session.user.role !== "TEACHER")
+  if (session.user.role !== "TEACHER" && session.user.role !== "ADMIN")
     return NextResponse.json(
       { message: "You are not authorized to create test" },
       { status: 403 }

@@ -27,7 +27,7 @@ const Topics = () => {
     () => import("../skeletons/HomePageSkeleton"),
     { ssr: false }
   );
-  const isTeacher = session?.user?.role === "TEACHER";
+  const isTeacher = session?.user?.role === "TEACHER" || session?.user?.role === "ADMIN";
 
   const deleteTopic = async (topicNumber: number) => {
     try {

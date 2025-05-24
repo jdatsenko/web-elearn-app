@@ -9,7 +9,7 @@ export async function PUT(req: NextRequest) {
   if (!session)
     return NextResponse.json({ message: "Musíte sa prihlásiť." }, { status: 401 });
 
-  if (session.user.role !== "TEACHER")
+  if (session.user.role !== "TEACHER" && session.user.role !== "ADMIN")
     return NextResponse.json(
       { message: "You are not authorized to update tests" },
       { status: 403 }

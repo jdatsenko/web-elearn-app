@@ -1,4 +1,4 @@
-import Topics from "@/app/components/topics/Topics"
+import Topics from "@/app/components/topics/HomePage"
 
 const Home = () => {
   return (

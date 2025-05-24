@@ -39,7 +39,7 @@ const TestControll = (props: any) => {
         if (response.data.score === "100%") {
           update({ topicsCompleted: topicNumber });
           setTimeout(() => {
-            router.push(`/topics/${topicNumber + 1}`);
+            router.push(`/topic/${topicNumber + 1}`);
           }, 300);
           return;
         }

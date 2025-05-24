@@ -12,6 +12,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import Stats from "./Stats";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface TestStats {
   topicNumber: number;
@@ -27,12 +28,12 @@ export default function Topic({ params }: { params: { id: string } }) {
   const isAuthorized = status === "authenticated";
   const router = useRouter();
   const topicId = parseInt(params.id);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const isTeacher = session?.user?.role === "TEACHER";
   const [editorData, setEditorData] = useState<any>(null);
   const editor = useRef<EditorJS | null>(null);
   const [length, setLength] = useState(0);
+  const { toast } = useToast();
   const TopicSkeleton = dynamic(
     () => import("@/app/components/skeletons/TopicSkeleton"),
     { ssr: false }
@@ -45,13 +46,16 @@ export default function Topic({ params }: { params: { id: string } }) {
     const fetchTopic = async () => {
       try {
         const response = await axios.get(`/api/topic/get?id=${topicId}`);
-        if (!response.data) {
-          throw new Error("Téma nebola nájdená alebo neexistuje.");
-        }
         setEditorData(response.data.data);
         setLength(response.data.length);
       } catch (error) {
-        setErrorMessage("Téma nebola nájdená alebo neexistuje.");
+        toast({
+          variant: "destructive",
+          title: "Chyba pri načítaní témy",
+          description:
+            (error as any).response?.data?.message ||
+            "Téma nebola nájdená alebo neexistuje.",
+        });
       } finally {
         setLoading(false);
       }
@@ -71,7 +75,11 @@ export default function Topic({ params }: { params: { id: string } }) {
     try {
       if (!loading && editorData && !editor.current) {
         if (!editorData) {
-          setErrorMessage("Téma nebola nájdená alebo neexistuje.");
+          toast({
+            variant: "destructive",
+            title: "Chyba pri načítaní témy",
+            description: "Téma nebola nájdená alebo neexistuje.",
+          });
         }
         const holderElement = document.getElementById("editorjs");
         if (holderElement) {
@@ -134,8 +142,13 @@ export default function Topic({ params }: { params: { id: string } }) {
 
   if (loading) return <TopicSkeleton />;
 
-  if (errorMessage)
-    return <div className="text-red-600 text-center mt-4">{errorMessage}</div>;
+  if (!editorData) {
+    return (
+      <div className="text-red-500 text-3xl font-bold text-center mt-10">
+        Téma s ID {topicId} nebola nájdená alebo neexistuje.
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -189,7 +202,7 @@ export default function Topic({ params }: { params: { id: string } }) {
                   <div>
                     <Button
                       className={cn(buttonVariants({ variant: "secondary" }))}
-                      onClick={() => router.push(`/topics/${topicId + 1}`)}
+                      onClick={() => router.push(`/topic/${topicId + 1}`)}
                     >
                       Ďalšia téma
                     </Button>
@@ -197,9 +210,6 @@ export default function Topic({ params }: { params: { id: string } }) {
                 )}
               </div>
             </div>
-          )}
-          {errorMessage && (
-            <p className="text-red-600 text-center mt-4">{errorMessage}</p>
           )}
         </div>
 

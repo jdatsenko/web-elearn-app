@@ -44,7 +44,6 @@ function CreateTopicForm() {
     content: [""],
   });
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -61,7 +60,13 @@ function CreateTopicForm() {
           const { title, description, content } = res.data.data;
           setNewTopic({ title, description, content });
         })
-        .catch(() => setErrorMessage("Chyba pri načítaní témy."));
+        .catch(() => {
+          toast({
+            title: "Chyba",
+            description: "Chyba pri načítaní témy.",
+            variant: "destructive",
+          });
+        });
 
       axios
         .get(`/api/tests/get?id=${topicNumber}`)
@@ -82,7 +87,13 @@ function CreateTopicForm() {
             setLoading(false);
           }, 300);
         })
-        .catch(() => setErrorMessage("Chyba pri načítaní testu."));
+        .catch(() => {
+          toast({
+            title: "Chyba",
+            description: "CChyba pri načítaní testu.",
+            variant: "destructive",
+          });
+        });
     } else {
       setNewTopic({
         title: "",
@@ -112,10 +123,13 @@ function CreateTopicForm() {
         createdBy: session?.user?.id,
       };
 
-      setErrorMessage("");
       const validationError = validate(topicData, questions);
       if (validationError) {
-        setErrorMessage(validationError);
+        toast({
+          title: "Chyba",
+          description: validationError,
+          variant: "destructive",
+        });
         return;
       }
 
@@ -137,7 +151,7 @@ function CreateTopicForm() {
           description: "Zmeny sú uložené.",
           variant: "default",
         });
-        router.push(`/topics/${topicNumber}`);
+        router.push(`/topic/${topicNumber}`);
         return;
       }
 
@@ -161,10 +175,14 @@ function CreateTopicForm() {
         })),
       };
       await axios.post("/api/tests/post", testData);
-      router.push(`/topics/${topicRes.data.topic.topicNumber}`);
+      router.push(`/topic/${topicRes.data.topic.topicNumber}`);
     } catch (error) {
       console.error("Error creating topic or test:", error);
-      setErrorMessage("Chyba pri vytváraní témy alebo testu");
+      toast({
+        title: "Chyba",
+        description: "Chyba pri vytváraní témy alebo testu.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -215,7 +233,6 @@ function CreateTopicForm() {
               value={newTopic.title}
               onChange={(e) => {
                 setNewTopic({ ...newTopic, title: e.target.value });
-                setErrorMessage("");
               }}
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             />
@@ -231,7 +248,6 @@ function CreateTopicForm() {
               value={newTopic.description}
               onChange={(e) => {
                 setNewTopic({ ...newTopic, description: e.target.value });
-                setErrorMessage("");
               }}
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             />
@@ -271,11 +287,6 @@ function CreateTopicForm() {
         </div>
       </div>
 
-      {errorMessage && (
-        <div role="alert" className="text-red-500 my-5 font-bold text-center">
-          {errorMessage}
-        </div>
-      )}
       <div className="flex justify-center items-center my-8 mx-auto">
         <Button
           onClick={onSave}

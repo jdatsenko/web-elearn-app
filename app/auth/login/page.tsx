@@ -14,8 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z.object({
   identifier: z
@@ -36,7 +36,7 @@ const formSchema = z.object({
 
 const FormLogin = () => {
   const router = useRouter();
-  const [error, setError] = useState<string>("");
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,19 +56,35 @@ const FormLogin = () => {
 
       if (loginData?.status === 401) {
         if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.identifier)) {
-          setError("Tento e-mail alebo heslo nie je správne.");
+          toast({
+            title: "Neplatný e-mail alebo heslo",
+            description: "Skúste to prosím znova.",
+            variant: "destructive",
+          });
         } else {
-          setError("Tento používateľské meno alebo heslo nie je správne.");
+          toast({
+            title: "Neplatné používateľské meno alebo heslo",
+            description: "Skúste to prosím znova.",
+            variant: "destructive",
+          });
         }
       } else if (loginData?.ok) {
         router.refresh();
         router.push(".././");
       } else {
-        setError("Vyskytla sa neočakávaná chyba. Skúste to prosím znova.");
+        toast({
+          title: "Chyba",
+          description: "Vyskytla sa neočakávaná chyba. Skúste to prosím znova.",
+          variant: "destructive",
+        });
       }
     } catch (error: unknown) {
       console.error("Vyskytla sa neočakávaná chyba:", error);
-      setError("Vyskytla sa neočakávaná chyba. Skúste to prosím neskôr.");
+      toast({
+        title: "Chyba",
+        description: "Vyskytla sa neočakávaná chyba. Skúste to prosím neskôr.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -130,14 +146,6 @@ const FormLogin = () => {
           </div>
         </form>
       </Form>
-
-      <div className="flex justify-center mt-5">
-        {error && (
-          <p className="text-red-500 font-bold mt-1">
-            {error}
-          </p>
-        )}
-      </div>
 
       <div className="flex justify-center mt-5">
         <p>Nemáte účet? </p>

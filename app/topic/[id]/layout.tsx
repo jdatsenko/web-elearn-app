@@ -34,13 +34,13 @@ export default function TopicLayout({
 
   const goToPrevious = () => {
     if (topicId && topicId > 1) {
-      router.push(`/topics/${topicId - 1}`);
+      router.push(`/topic/${topicId - 1}`);
     }
   };
 
   const goToNext = () => {
     if (topicId && topicId < maxTopicId) {
-      router.push(`/topics/${topicId + 1}`);
+      router.push(`/topic/${topicId + 1}`);
     }
   };
 

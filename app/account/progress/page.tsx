@@ -95,7 +95,7 @@ const UserProgress = () => {
           </div>
           <div className="flex justify-center items-center min-h-24">
             <Button
-              onClick={() => router.push(`/topics/1`)}
+              onClick={() => router.push(`/topic/1`)}
               className="px-8 py-6 text-xl"
             >
               Začať progress
@@ -127,7 +127,7 @@ const UserProgress = () => {
                   <CardHeader>
                     <CardTitle>
                       <Link
-                        href={`/topics/${index + 1}`}
+                        href={`/topic/${index + 1}`}
                         className="text-blue-500 underline hover:text-blue-600 transition-colors"
                       >
                         {index + 1}. {config.topic.label}

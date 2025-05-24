@@ -29,7 +29,6 @@ const ProfilePage = () => {
   const [newEmail, setNewEmail] = useState("");
   const [keepCurrentName, setKeepCurrentName] = useState(true);
   const [keepCurrentEmail, setKeepCurrentEmail] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
   const { toast } = useToast()
 
@@ -52,7 +51,11 @@ const ProfilePage = () => {
 
   const handleUpdate = async () => {
     if (!keepCurrentEmail && !emailRegex.test(newEmail)) {
-      setErrorMessage("Zadajte platný e-mail");
+      toast({
+        title: "Neplatný e-mail",
+        description: "Zadajte platný e-mail.",
+        variant: "destructive",
+      });
       return;
     }
     try {
@@ -75,7 +78,11 @@ const ProfilePage = () => {
       }
     } catch (error) {
       console.error("Chyba pri aktualizácii údajov:", error);
-      setErrorMessage("Chyba pri aktualizácii.");
+      toast({
+        title: "Chyba pri aktualizácii údajov",
+        description: "používateľ s týmto e‑mailom alebo menom už existuje.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -207,7 +214,6 @@ const ProfilePage = () => {
                 <div className="flex justify-between mt-4">
                   <Button
                     onClick={() => {
-                      setErrorMessage(" ");
                       handleUpdate();
                     }}
                     className="w-full"
@@ -219,7 +225,6 @@ const ProfilePage = () => {
                     variant="secondary"
                     onClick={() => {
                       setEditing(false);
-                      setErrorMessage(" ");
                     }}
                   >
                     Zrušiť
@@ -233,9 +238,6 @@ const ProfilePage = () => {
             </p>
           )}
           
-          {errorMessage && (
-            <p className="text-red-600 text-center mt-4">{errorMessage}</p>
-          )}
         </div>
       </div>
       <style>

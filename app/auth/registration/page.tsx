@@ -2,7 +2,6 @@
   import { zodResolver } from "@hookform/resolvers/zod";
   import { useForm } from "react-hook-form";
   import * as z from "zod";
-  import { useState } from "react";
   import { Button } from "@/components/ui/button";
   import { PasswordInput } from "@/components/ui/password-input";
   import {
@@ -15,6 +14,7 @@
   } from "@/components/ui/form";
   import { Input } from "@/components/ui/input";
   import { useRouter } from "next/navigation";
+  import { useToast } from "@/hooks/use-toast";
 
   const formSchema: z.Schema<any> = z
     .object({
@@ -32,8 +32,8 @@
     });
 
   const FormRegister = () => {
-    const [errorMessage, setErrorMessage] = useState<string>("");
     const router = useRouter();
+    const { toast } = useToast();
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
@@ -60,7 +60,11 @@
         router.push("/auth/login");
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message);
+        toast({
+          title: "Chyba",
+          description: errorData.message,
+          variant: "destructive",
+        });
       }
     };
 
@@ -144,9 +148,6 @@
           <a href="/auth/login" className="text-red-500 font-bold ml-3 underline">
             Prihlásiť sa
           </a>
-        </div>
-        <div className="flex justify-center mt-5">
-          {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
         </div>
       </>
     );

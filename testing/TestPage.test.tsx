@@ -71,7 +71,7 @@ describe('TestPage', () => {
         topicNumber: 1,
       });
 
-      expect(mockRouterPush).toHaveBeenCalledWith('/topics/2');
+      expect(mockRouterPush).toHaveBeenCalledWith('/topic/2');
 
       expect(useSession().update).toHaveBeenCalledWith({
         topicsCompleted: 1,

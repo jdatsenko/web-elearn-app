@@ -35,7 +35,7 @@ const TopicsNavMenu = () => {
       <div key={topic.topicNumber} className="mr-4 mb-4">
         <div key={topic.title}>
           <div className="">
-            <Link href={`/topics/${topic.topicNumber}`}>
+            <Link href={`/topic/${topic.topicNumber}`}>
               <span
                 className={cn(
                   buttonVariants({ variant: "ghost" }),

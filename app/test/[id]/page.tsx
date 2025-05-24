@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Question {
   id: number;
@@ -30,7 +31,7 @@ const TestPage = ({ params }: { params: { id: string } }) => {
   const [loading, setLoading] = useState(true);
   const [test, setTest] = useState<TestResponse>();
   const [topicTitle, setTopicTitle] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const { toast } = useToast();
   const [answers, setAnswers] = useState<
     { questionId: number; answer: number; answerId: number }[]
   >([]);
@@ -72,15 +73,26 @@ const TestPage = ({ params }: { params: { id: string } }) => {
       })
       .catch((error) => {
         console.error("Error fetching test data:", error);
-        setErrorMessage(error.response?.data?.message || "Nastala chyba pri načítaní testu.");
+        toast({
+          title: "Chyba",
+          description:
+            error.response?.data?.message ||
+            "Nastala chyba pri načítaní testu.",
+          variant: "destructive",
+        });
         setLoading(false);
       });
   }, []);
 
   if (loading) return <p className="text-center text-lg">Načítava sa...</p>;
 
-  if (errorMessage)
-    return <div className="text-red-600 text-center mt-4">{errorMessage}</div>;
+  if (!test || !test.questions || test.questions.length === 0) {
+    return (
+      <div className="text-red-500 text-3xl font-bold text-center mt-10">
+        Test pre túto tému nebol nájdený.
+      </div>
+    );
+  }
 
   return (
     <div>

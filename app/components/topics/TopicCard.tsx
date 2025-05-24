@@ -54,7 +54,7 @@ const TopicCard = ({ topic, index, isTeacher, currentUserId, onDelete }: TopicCa
       <CardFooter className="flex justify-center">
         <Link
           className={buttonVariants({ variant: "default" })}
-          href={`/topics/${topic.topicNumber}`}
+          href={`/topic/${topic.topicNumber}`}
         >
           Pozrieť
         </Link>

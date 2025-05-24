@@ -1,4 +1,4 @@
-import Topics from "./components/topics/Topics";
+import Topics from "./components/topics/HomePage";
 import dynamic from "next/dynamic";
 
 const App = async () => {

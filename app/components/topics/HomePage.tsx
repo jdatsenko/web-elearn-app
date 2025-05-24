@@ -1,5 +1,4 @@
 "use client";
-import "./topics.css";
 import { Separator } from "@/components/ui/separator";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";

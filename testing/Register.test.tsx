@@ -7,6 +7,16 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
+let mockToastFn: jest.Mock = jest.fn();
+
+jest.mock("@/hooks/use-toast", () => {
+  return {
+    useToast: () => ({
+      toast: mockToastFn,
+    }),
+  };
+});
+
 describe("FormRegister", () => {
   const pushMock = jest.fn();
   
@@ -103,7 +113,11 @@ describe("FormRegister", () => {
     fireEvent.click(screen.getByText("Zaregistrovať sa"));
 
     await waitFor(() => {
-      expect(screen.getByText("Chyba pri registrácii")).toBeInTheDocument();
+      expect(mockToastFn).toHaveBeenCalledWith({
+        title: "Chyba",
+        description: "Chyba pri registrácii",
+        variant: "destructive",
+      });
     });
   });
 });

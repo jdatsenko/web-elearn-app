@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import '@testing-library/jest-dom';
 import { act } from 'react';
+import { useToast } from "@/hooks/use-toast";
 
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
@@ -21,6 +22,16 @@ jest.mock('next/navigation', () => ({
 }));
 
 jest.mock('axios');
+
+let mockToastFn: jest.Mock = jest.fn();
+
+jest.mock("@/hooks/use-toast", () => {
+  return {
+    useToast: () => ({
+      toast: mockToastFn,
+    }),
+  };
+});
 
 // @ts-ignore
 jest.mock('next/dynamic', () => () => (props) => <div {...props} />);
@@ -75,7 +86,11 @@ describe('CreateTopicForm', () => {
     await act(async () => fireEvent.click(getByText(/Uložiť tému/i)));
 
     await waitFor(() => {
-      expect(getByText('Téma bola úspešne vytvorená.')).toBeInTheDocument();
+      expect(mockToastFn).toHaveBeenCalledWith({
+        title: "Téma bola úspešne vytvorená.",
+        description: "Zmeny sú uložené.",
+        variant: "default",
+      });
     });
 
     expect(axios.post).toHaveBeenCalledWith(
@@ -103,3 +118,4 @@ describe('CreateTopicForm', () => {
     );
   });
 });
+

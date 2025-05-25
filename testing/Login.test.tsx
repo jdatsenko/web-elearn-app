@@ -3,6 +3,7 @@ import FormLogin from "@/app/auth/login/page";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import '@testing-library/jest-dom';
+import { useToast } from "@/hooks/use-toast";
 
 jest.mock("next-auth/react", () => ({
   signIn: jest.fn(),
@@ -10,6 +11,16 @@ jest.mock("next-auth/react", () => ({
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
+
+let mockToastFn: jest.Mock = jest.fn();
+
+jest.mock("@/hooks/use-toast", () => {
+  return {
+    useToast: () => ({
+      toast: mockToastFn,
+    }),
+  };
+});
 
 describe("FormLogin", () => {
   const pushMock = jest.fn();
@@ -50,9 +61,13 @@ describe("FormLogin", () => {
     });
   
     fireEvent.click(screen.getByText("Prihlásiť sa"));
-  
-    const errorMessage = await screen.findByText(/Tento e-mail alebo heslo nie je správne/i);
-    expect(errorMessage).toBeInTheDocument();
+    await waitFor(() => {
+      expect(mockToastFn).toHaveBeenCalledWith({
+        title: "Neplatný e-mail alebo heslo",
+        description: "Skúste to prosím znova.",
+        variant: "destructive",
+      });
+    });
   });
   
 

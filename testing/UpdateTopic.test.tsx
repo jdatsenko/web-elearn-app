@@ -1,5 +1,5 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import CreateTopicForm from '@/app/createTopic/page';  
+import CreateTopicForm from "@/app/createTopic/page";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -15,14 +15,24 @@ jest.mock("next-auth/react", () => ({
   useSession: jest.fn(),
 }));
 
+let mockToastFn: jest.Mock = jest.fn();
+
+jest.mock("@/hooks/use-toast", () => {
+  return {
+    useToast: () => ({
+      toast: mockToastFn,
+    }),
+  };
+});
+
+
 beforeAll(() => {
-    global.ResizeObserver = class {
-      observe = jest.fn();
-      unobserve = jest.fn();
-      disconnect = jest.fn();
-    };
-  });
-  
+  global.ResizeObserver = class {
+    observe = jest.fn();
+    unobserve = jest.fn();
+    disconnect = jest.fn();
+  };
+});
 
 describe("CreateTopicForm - Update Topic", () => {
   beforeEach(() => {
@@ -41,7 +51,7 @@ describe("CreateTopicForm - Update Topic", () => {
     (useRouter as jest.Mock).mockReturnValue({ push: pushMock });
 
     (useSearchParams as jest.Mock).mockReturnValue({
-      get: () => "123", 
+      get: () => "123",
     });
 
     (axios.get as jest.Mock).mockImplementation((url: string) => {
@@ -99,7 +109,7 @@ describe("CreateTopicForm - Update Topic", () => {
         topicNumber: 123,
         title: "Updated Title",
         description: "Updated Description",
-        content: ["Old content"], 
+        content: ["Old content"],
         createdBy: "teacher1",
       });
 
@@ -117,6 +127,10 @@ describe("CreateTopicForm - Update Topic", () => {
       });
     });
 
-    expect(await screen.findByText(/Téma bola úspešne upravená/i)).toBeInTheDocument();
+    expect(mockToastFn).toHaveBeenCalledWith({
+      title: "Téma bola úspešne upravená!",
+      description: "Zmeny sú uložené.",
+      variant: "default",
+    });
   });
 });

@@ -49,6 +49,7 @@
     "@radix-ui/react-toggle-group": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@shadcn/ui": "^0.0.4",
+    "@tanstack/react-table": "^8.21.3",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "bootstrap-icons": "^1.11.3",

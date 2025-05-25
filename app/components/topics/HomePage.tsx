@@ -83,6 +83,7 @@ const Topics = () => {
               topic={topic}
               index={index}
               isTeacher={isTeacher}
+              isAdmin={session?.user?.role === "ADMIN"}
               currentUserId={session?.user?.id}
               onDelete={deleteTopic} 
             />

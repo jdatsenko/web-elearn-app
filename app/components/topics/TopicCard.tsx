@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -19,11 +18,12 @@ interface TopicCardProps {
   topic: Topic;
   index: number;
   isTeacher: boolean;
+  isAdmin: boolean;
   currentUserId: number | undefined;
   onDelete: (topicNumber: number) => void; 
 }
 
-const TopicCard = ({ topic, index, isTeacher, currentUserId, onDelete }: TopicCardProps) => {
+const TopicCard = ({ topic, index, isTeacher, isAdmin, currentUserId, onDelete }: TopicCardProps) => {
   const [topicToDelete, setTopicToDelete] = useState<number | null>(null);
 
   const handleDelete = async () => {
@@ -38,7 +38,7 @@ const TopicCard = ({ topic, index, isTeacher, currentUserId, onDelete }: TopicCa
           <span>
             {topic.topicNumber}. {topic.title}
           </span>
-          {isTeacher && topic.createdById === currentUserId && (
+          {((isTeacher && topic.createdById === currentUserId) || isAdmin) && (
             <Trash2Icon
               className="w-5 h-5 text-red-500 cursor-pointer"
               onClick={() => setTopicToDelete(topic.topicNumber)}

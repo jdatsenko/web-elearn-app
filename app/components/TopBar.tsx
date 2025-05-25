@@ -115,7 +115,7 @@ const TopBar = () => {
                             <DropdownMenuItem>
                               <Link
                                 className="text-center"
-                                href={"/adminPanel"}
+                                href={"/admin/panel"}
                               >
                                 Panel administrátora
                               </Link>

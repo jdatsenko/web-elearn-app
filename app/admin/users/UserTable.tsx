@@ -78,7 +78,7 @@ const UserTable: React.FC<UserTableProps> = ({
       <TableFooter>
         <TableRow>
           <TableCell className="font-bold" colSpan={columnsLength}>
-            Spolu: {count + 1} používateľov
+            Spolu: {count} používateľov
           </TableCell>
         </TableRow>
       </TableFooter>

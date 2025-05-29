@@ -14,6 +14,15 @@ pnpm dev
 bun dev
 ```
 
+To run the tests:
+//if not installed jest with TypeScript support:
+npm install --save-dev jest ts-jest @types/jest
+
+//if not installed:
+npm install babel-plugin-styled-components --save-dev
+
+npm test
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

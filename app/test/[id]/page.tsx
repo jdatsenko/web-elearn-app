@@ -1,5 +1,5 @@
 "use client";
-import TestControll from "@/app/components/controll/page";
+import TestControll from "@/app/controll/page";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import axios from "axios";
 import React, { useState, useEffect } from "react";

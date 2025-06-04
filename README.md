@@ -2,7 +2,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First install all the dependencies:
+
+```bash
+npm install
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
@@ -17,24 +23,12 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 To run the tests:
-npm:
-# If not installed jest with TypeScript support:
-npm install --save-dev jest ts-jest @types/jest
 
-# If not installed:
-npm install babel-plugin-styled-components --save-dev
-
+```bash
 npm test
-
-yarn:
-# If jest with TypeScript support is not installed:
-yarn add --dev jest ts-jest @types/jest
-
-# If babel-plugin-styled-components is not installed:
-yarn add --dev babel-plugin-styled-components
-
-# To run tests:
+# or
 yarn test
+```
 
 ## Learn More
 

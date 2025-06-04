@@ -92,9 +92,9 @@ export const useUserTableColumns = (
       cell: (info) => info.getValue(),
     },
     {
-      accessorKey: "_count.createdTopics",
+      accessorKey: "topics",
       header: "Vytvorené témy",
-      id: "_count.createdTopics",
+      id: "topics",
       cell: (info) => {
         const row = info.row.original;
         return row.role === "USER" ? "-" : info.getValue();
@@ -103,7 +103,7 @@ export const useUserTableColumns = (
     {
       accessorKey: "count",
       id: "count",
-      header: "Vyriešené testy",
+      header: "Vyriešené témy",
       cell: (info) => info.getValue() ?? "-",
     },
     {

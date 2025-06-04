@@ -37,7 +37,6 @@ export async function GET(req: Request) {
     }
   }
 
-  // todo amount of created topics (LEFT JOIN)
   const users = await prisma.$queryRaw`
      SELECT
         U.id,
@@ -46,12 +45,23 @@ export async function GET(req: Request) {
         U."createdAt",
         U.role,
         (
+          SELECT COUNT(DISTINCT T."id")
+          FROM public."Topic" T
+          WHERE T."createdById" = U.id
+        ) as topics,
+        (
           SELECT COUNT(DISTINCT ST."testId")
           FROM public."SolvedTest" ST
           WHERE ST."userId" = U.id AND ST."score" = 100
         ) AS count
       FROM public."User" U
+      ORDER BY u.name
     `;
+
+  (users as any).forEach((user: any) => {
+    user.topics = Number(user.topics) || 0;
+    user.count = Number(user.count) || 0;
+  });
 
   const count = await prisma.user.count({
     where: roleFilter,

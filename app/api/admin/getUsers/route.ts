@@ -1,4 +1,4 @@
-import { UserRole } from "@prisma/client"; 
+import { UserRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
@@ -37,29 +37,27 @@ export async function GET(req: Request) {
     }
   }
 
-  const users = await prisma.user.findMany({
-    where: roleFilter,
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      createdAt: true,
-      role: true,
-      _count: {
-        select: {
-          createdTopics: true,
-          solvedTests: true,
-        },
-      },
-    },
-  });
+  // todo amount of created topics (LEFT JOIN)
+  const users = await prisma.$queryRaw`
+     SELECT
+        U.id,
+        U.name,
+        U.email,
+        U."createdAt",
+        U.role,
+        (
+          SELECT COUNT(DISTINCT ST."testId")
+          FROM public."SolvedTest" ST
+          WHERE ST."userId" = U.id AND ST."score" = 100
+        ) AS count
+      FROM public."User" U
+    `;
 
   const count = await prisma.user.count({
     where: roleFilter,
   });
 
-  if (users.length === 0) {
+  if ((users as any).length === 0)
     return NextResponse.json({ message: "No users found" }, { status: 404 });
-  }
   return NextResponse.json({ users, count }, { status: 200 });
 }

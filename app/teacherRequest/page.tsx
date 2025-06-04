@@ -15,6 +15,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useSession } from "next-auth/react";
 
 const TeacherRequestForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -30,8 +31,8 @@ const TeacherRequestForm: React.FC = () => {
     null | "approved" | "rejected" | "pending"
   >(null);
   const [requestExists, setRequestExists] = useState(false);
-
-  const canSubmitForm = !requestExists || requestStatus === "rejected";
+  const { data: session } = useSession() as { data: any;};
+  const canSubmitForm = !requestExists || session?.user?.role === "USER";
 
   useEffect(() => {
     axios

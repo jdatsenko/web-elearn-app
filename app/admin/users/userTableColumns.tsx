@@ -101,8 +101,8 @@ export const useUserTableColumns = (
       },
     },
     {
-      accessorKey: "_count.solvedTests",
-      id: "_count.solvedTests",
+      accessorKey: "count",
+      id: "count",
       header: "Vyriešené testy",
       cell: (info) => info.getValue() ?? "-",
     },

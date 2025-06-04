@@ -112,20 +112,22 @@ export default function Topic({ params }: { params: { id: string } }) {
     }
   }, [loading, editorData]);
 
-  useEffect(() => {
-    const fetchTestStats = async () => {
-      try {
-        const response = await axios.get(`/api/topic/stats?id=${topicId}`);
-        if (!response.data) {
+  if (isTeacher) {
+    useEffect(() => {
+      const fetchTestStats = async () => {
+        try {
+          const response = await axios.get(`/api/topic/stats?id=${topicId}`);
+          if (!response.data) {
+            return;
+          }
+          setTestStats(response.data.data);
+        } catch (error) {
           return;
         }
-        setTestStats(response.data.data);
-      } catch (error) {
-        return;
-      }
-    };
-    fetchTestStats();
-  }, []);
+      };
+      fetchTestStats();
+    }, []);
+  }
 
   if (testStats) {
     testStats.forEach((topic) => {

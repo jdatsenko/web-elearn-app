@@ -30,6 +30,34 @@ npm test
 yarn test
 ```
 
+# Test accounts
+## Admin account
+Username:
+```
+roleadmin
+```
+Email:
+```
+roleadmin@gmail.com
+```
+Password:
+```
+roleadmin
+```
+## Teacher account
+Username:
+```
+userwithroleteacher
+```
+Email:
+```
+userwithroleteacher@gmail.com
+```
+Password:
+```
+userwithroleteacher
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

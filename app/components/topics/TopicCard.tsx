@@ -35,7 +35,7 @@ const TopicCard = ({ topic, index, isTeacher, isAdmin, currentUserId, onDelete }
     <Card className="w-full border border-gray-400 bg-background max-w-[25rem] mx-auto">
       <CardHeader>
         <CardTitle className="leading-[1.5] break-words flex w-full justify-between">
-          <span className="w-full">
+          <span className="header-width">
             {topic.topicNumber}. {topic.title}
           </span>
           {((isTeacher && topic.createdById === currentUserId) || isAdmin) && (
@@ -75,7 +75,7 @@ const TopicCard = ({ topic, index, isTeacher, isAdmin, currentUserId, onDelete }
               </Button>
               <Button
                 variant="destructive"
-                onClick={handleDelete} // Call the handleDelete function
+                onClick={handleDelete}
               >
                 Vymazať
               </Button>
@@ -83,6 +83,14 @@ const TopicCard = ({ topic, index, isTeacher, isAdmin, currentUserId, onDelete }
           </DialogContent>
         </Dialog>
       )}
+
+      <style>
+        {`
+          .header-width {
+            width: calc(100% - 1.25rem); /* Adjust width to account for icon */
+          }
+        `}
+      </style>
     </Card>
   );
 };
